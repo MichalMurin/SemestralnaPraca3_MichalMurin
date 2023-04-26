@@ -1,15 +1,20 @@
 using OSPABA;
 using simulation;
 using agents;
+using AgentSim.StkStation;
+
 namespace continualAssistants
 {
 	//meta! id="30"
 	public class CarInspectionProcess : Process
 	{
+		StkGenerator.InspectionTimeGenerator InspectionTimeGenerator { get; set; }
 		public CarInspectionProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-		}
+            InspectionTimeGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreateInspectionTimeGen();
+
+        }
 
 		override public void PrepareReplication()
 		{

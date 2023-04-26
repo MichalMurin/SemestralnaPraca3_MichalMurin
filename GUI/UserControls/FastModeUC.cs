@@ -30,19 +30,19 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            CurrentReplicationLbl.Text = simulation.ReplicationCounter.ToString();
-            AverageWaitingTimeLbl.Text = (simulation.SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
-            AverageTimeInSystemLbl.Text = (simulation.SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            AverageCustomersNumAtEndDayLbl.Text = simulation.SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
-            FreeTechniciansLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
-            FreeMechanicsLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
-            AverageNumberOfCustomersInFirstQueueLbl.Text = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
-            AvgNumberOfCustomersInSystem.Text = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            //CurrentReplicationLbl.Text = simulation.ReplicationCounter.ToString();
+            //AverageWaitingTimeLbl.Text = (simulation.SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
+            //AverageTimeInSystemLbl.Text = (simulation.SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            //AverageCustomersNumAtEndDayLbl.Text = simulation.SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
+            //FreeTechniciansLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            //FreeMechanicsLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
+            //AverageNumberOfCustomersInFirstQueueLbl.Text = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
+            //AvgNumberOfCustomersInSystem.Text = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
             // interval spolahlivosti
-            (double min, double max) interval = _simulator.SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
-            ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min/60} ; {interval.max/60}>";
-            interval = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
-            ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
+            //(double min, double max) interval = _simulator.SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
+            //ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min/60} ; {interval.max/60}>";
+            //interval = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
+            //ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
         }
 
         private void StartBtn_Click(object sender, EventArgs e)
@@ -61,8 +61,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            _simulator.MechanicsNumber = (int)MechanicsNumPad.Value;
-            _simulator.TechniciansNumber = (int)TechnicianNumPad.Value;
+            //_simulator.MechanicsNumber = (int)MechanicsNumPad.Value;
+            //_simulator.TechniciansNumber = (int)TechnicianNumPad.Value;
             int replications = (int)replicationsNumpad.Value;
             _isSimulationRunning = true;
             _simulator.Simulate(replications);
@@ -95,7 +95,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void SimStateChanged(Simulation sim, SimState state)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Refresh(Simulation sim)

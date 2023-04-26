@@ -31,6 +31,13 @@ namespace AgentSim.StkStation.Models
         {
             IsWorking = false;
             Id = id;
+            Work = Work.UNKNOWN;
+        }
+        public Worker(Worker other)
+        {
+            IsWorking = other.IsWorking;
+            Id = other.Id;
+            Work = other.Work;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

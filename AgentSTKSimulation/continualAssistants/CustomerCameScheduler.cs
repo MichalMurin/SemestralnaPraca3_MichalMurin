@@ -1,14 +1,18 @@
 using OSPABA;
 using simulation;
 using agents;
+using AgentSim.StkStation;
+
 namespace continualAssistants
 {
 	//meta! id="12"
 	public class CustomerCameScheduler : Scheduler
 	{
+        private StkGenerator.CustomerTimeGenerator _customerTimeGen;
 		public CustomerCameScheduler(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
+			_customerTimeGen = ((STKAgentSimulation)mySim).StkGenerators.CreateCustomerTimeGenerator();
 		}
 
 		override public void PrepareReplication()
@@ -20,13 +24,17 @@ namespace continualAssistants
 		//meta! sender="SurroundingAgent", id="13", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
-		}
+			message.Code = Mc.Finish;
+            Hold(_customerTimeGen.GetCustomerGapTime(),message);
+        }
 
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
 			switch (message.Code)
 			{
+				case Mc.Finish:
+					AssistantFinished(message); break;
 			}
 		}
 

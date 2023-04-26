@@ -1,11 +1,19 @@
+using AgentSim.StkStation.Models;
+using DISS_S2.StkStation;
 using OSPABA;
 namespace simulation
 {
 	public class StkMessage : MessageForm
 	{
-		public StkMessage(Simulation sim) :
+        public Customer Customer { get; set; }
+        public Worker Worker { get; set; }
+		public bool HasParkngReserved { get; set; }
+		public StkMessage(Simulation sim, Customer cus, Worker wor) :
 			base(sim)
 		{
+			HasParkngReserved = false;
+			Customer = cus;
+			Worker = wor;
 		}
 
 		public StkMessage(StkMessage original) :
@@ -23,7 +31,16 @@ namespace simulation
 		{
 			base.Copy(message);
 			StkMessage original = (StkMessage)message;
-			// Copy attributes
-		}
+			if (original.Customer != null)
+            {
+                Customer = new Customer(original.Customer);
+            }
+			if (original.Worker != null)
+            {
+                Worker = new Worker(original.Worker);
+            }
+            HasParkngReserved = original.HasParkngReserved;
+            // Copy attributes
+        }
 	}
 }

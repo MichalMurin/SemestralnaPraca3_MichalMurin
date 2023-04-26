@@ -27,12 +27,18 @@ namespace managers
 		//meta! sender="STKAgent", id="16", type="Response"
 		public void ProcessCustomerService(MessageForm message)
 		{
-		}
+            message.Code = Mc.CustomerLeft;
+            message.Addressee = MySim.FindAgent(SimId.SurroundingAgent);
+            Notice(message);
+        }
 
 		//meta! sender="SurroundingAgent", id="14", type="Notice"
 		public void ProcessCustomerCame(MessageForm message)
 		{
-		}
+            message.Code = Mc.CustomerService;
+            message.Addressee = MySim.FindAgent(SimId.STKAgent);
+			Request(message);
+        }
 
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)

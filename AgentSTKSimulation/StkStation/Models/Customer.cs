@@ -37,6 +37,14 @@ namespace DISS_S2.StkStation
             Situation = CustomerSituation.CREATED;
         }
 
+        public Customer(Customer other)
+        {
+            StartWaitingTime = other.StartWaitingTime;
+            CarType = other.CarType;
+            Id = other.Id;
+            Situation = other.Situation;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)

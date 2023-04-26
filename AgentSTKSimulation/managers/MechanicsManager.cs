@@ -2,51 +2,102 @@ using OSPABA;
 using simulation;
 using agents;
 using continualAssistants;
+using DISS_S2.SimulationCore.Statistics;
+using AgentSim.StkStation.Models;
+using System.Collections.Generic;
+
 namespace managers
 {
 	//meta! id="5"
 	public class MechanicsManager : Manager
 	{
+
+        public WeightedAritmeticAverage AvergaeNumberOfFreeMechanics { get; set; }
+        public StandartStaticstic SIMULATIONAvergaeNumberOfFreeMechanics { get; set; }
+		public GarageParking ParkingInGarage { get; set; }
+		public Queue<Mechanic> FreeMechanics { get; set; }
+		public int MechanicsNumber { get; set; }
 		public MechanicsManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
+			AvergaeNumberOfFreeMechanics = new WeightedAritmeticAverage();
+			SIMULATIONAvergaeNumberOfFreeMechanics = new StandartStaticstic();
+			ParkingInGarage = new GarageParking();
+			FreeMechanics = new Queue<Mechanic>();
+			MechanicsNumber = 5;
 			Init();
 		}
 
 		override public void PrepareReplication()
 		{
 			base.PrepareReplication();
-			// Setup component for the next replication
-
-			if (PetriNet != null)
+            // Setup component for the next replication
+            ResetReplicationStats();
+            ClearAllQueues();
+            InitializeMechanics(MechanicsNumber);
+            if (PetriNet != null)
 			{
 				PetriNet.Clear();
 			}
-		}
-
-		//meta! sender="STKAgent", id="22", type="Request"
-		public void ProcessCarInspection(MessageForm message)
+        }
+		/// <summary>
+		/// Inicializovanie pracovnikov
+		/// </summary>
+		/// <param name="numberOfMechanics"></param>
+		/// <param name="numberOfTechnicians"></param>
+		private void InitializeMechanics(int numberOfMechanic)
 		{
+			FreeMechanics.Clear();
+			Mechanic mech;
+			for (int i = 0; i < numberOfMechanic; i++)
+			{
+				mech = new Mechanic(i);
+				FreeMechanics.Enqueue(mech);
+			}
+		}
+        /// <summary>
+        /// Resetovanie replikacnych statistik
+        /// </summary>
+        private void ResetReplicationStats()
+        {
+            AvergaeNumberOfFreeMechanics.Reset();
+        }
+        /// <summary>
+        /// Vycistenie struktur pouzitych v simulacii
+        /// </summary>
+        private void ClearAllQueues()
+        {
+            FreeMechanics.Clear();
+        }
+
+        //meta! sender="STKAgent", id="22", type="Request"
+        public void ProcessCarInspection(MessageForm message)
+		{
+			// zapni process na kontrolu
 		}
 
 		//meta! sender="STKAgent", id="19", type="Request"
 		public void ProcessReserveParking(MessageForm message)
 		{
+			// zareservuj parkovisko , ak nie je tak cakaj kym sa neuvolni .. tzn dat do radu
 		}
 
 		//meta! sender="MechanicsLunchBreakScheduler", id="33", type="Finish"
 		public void ProcessFinishMechanicsLunchBreakScheduler(MessageForm message)
 		{
+			// uvolni pracovnika, daj mu robotku
 		}
 
 		//meta! sender="CarInspectionProcess", id="31", type="Finish"
 		public void ProcessFinishCarInspectionProcess(MessageForm message)
 		{
+			// posli zakaznika hore na platenie
 		}
 
 		//meta! sender="STKAgent", id="48", type="Notice"
 		public void ProcessLunchBreakStart(MessageForm message)
 		{
+			// nastav bool na obedy a posli volnych na obed
 		}
 
 		//meta! userInfo="Process messages defined in code", id="0"

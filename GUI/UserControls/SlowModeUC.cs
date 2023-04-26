@@ -17,6 +17,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using simulation;
+using agents;
+using managers;
 
 namespace SemestralnaPraca3_MichalMurin.UserControls
 {
@@ -35,13 +37,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             UpdateStyles();
             ////
-            _simulator.AllCustomers.CollectionChanged += ListChanged;
-            _simulator.AllWorkers.CollectionChanged += ListChanged;
+            ((SurroundingManager)_simulator.FindAgent(SimId.SurroundingAgent).MyManager).AllCustomers.CollectionChanged += ListChanged;
+            //_simulator.AllWorkers.CollectionChanged += ListChanged;
             ////
-            _bindingSourceCustomers.DataSource = _simulator.AllCustomers;
-            _bindingSourceWorkers.DataSource = _simulator.AllWorkers;
+            _bindingSourceCustomers.DataSource = ((SurroundingManager)_simulator.FindAgent(SimId.SurroundingAgent).MyManager).AllCustomers;
+            //_bindingSourceWorkers.DataSource = _simulator.AllWorkers;
             CustomersListBox.DataSource = _bindingSourceCustomers;
-            WorkersListBox.DataSource = _bindingSourceWorkers;
+            //WorkersListBox.DataSource = _bindingSourceWorkers;
         }
 
 
@@ -59,6 +61,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                     var list = (ObservableCollection<Worker>)sender;
                     list[list.Count - 1].PropertyChanged += PropertyChanged;
                 }
+                this.Invoke((MethodInvoker)delegate { UpdateCustomerListbox(); });
             }
         }
 
@@ -84,8 +87,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 QueueForAcceptanceListbox.DataSource = null;
                 QueueForPaymentListBox.DataSource = null;
-                QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
-                QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
+                //QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
+                //QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
             }
         }
         private void UpdateWorkersListbox()
@@ -100,10 +103,11 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulationThread = new Thread(new ThreadStart(this.RunSimulation));
                 _simulationThread.IsBackground = true;
                 var sleep = RychlostMenic.Maximum - RychlostMenic.Value;
-                _simulator.SetSimSpeed(60, sleep);
+                _simulator.SetSimSpeed(1, sleep/1000.0);
+
                 _simulator.Mode = AgentSim.StkStation.Models.SimulationMode.SLOW;
-                _simulator.MechanicsNumber = (int)MechanicCounter.Value;
-                _simulator.TechniciansNumber = (int)techniciansCounter.Value;
+                //_simulator.MechanicsNumber = (int)MechanicCounter.Value;
+                //_simulator.TechniciansNumber = (int)techniciansCounter.Value;
                 _simulationThread.Start();
             }
             else
@@ -121,7 +125,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.ResumeSimulation();
             }
             _isSimulationRunning = true;
-            _simulator.Simulate(1);
+            _simulator.Simulate(1,8*3600);
             _isSimulationRunning = false;
         }
 
@@ -133,25 +137,26 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private void RychlostMenic_Scroll(object sender, EventArgs e)
         {
             var sleep = RychlostMenic.Maximum - RychlostMenic.Value;
-            _simulator.SetSimSpeed(60, sleep);
+            _simulator.SetSimSpeed(1, sleep/1000.0);
         }
 
         private void Update(STKAgentSimulation simulation)
         {
             SystemTime.Text = simulation.GetCurentTimeInDatFormat().ToString("HH:mm:ss");
-            RadaNaPrijatieLbl.Text = simulation.CustomerQueueForAcceptance.Count.ToString();
-            RadaNaPlatenieLbl.Text = simulation.CustomerQueueForPayment.Count.ToString();
-            ZaparkovaneAutaLbl.Text = simulation.ParkingInGarage.GetCarParked().ToString();
-            VolnyParkingLbl.Text = simulation.ParkingInGarage.GetFreeSpots().ToString();
-            VolniTechniciLbl.Text = simulation.FreeTechnicians.Count.ToString();
-            VolniMechanicLbl.Text = simulation.FreeMechanics.Count.ToString();
-            CurrentNUmberOfCstomersLbl.Text = simulation.CurrentNumberOfCustomersInTheSystem.ToString();
-            NUmberAllCustomersLbl.Text = simulation.NumberOfCustomersInTheSystemAtAll.ToString();
+            RadaNaPrijatieLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).CustomerQueueForAcceptance.Count.ToString();
+            RadaNaPlatenieLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).CustomerQueueForPayment.Count.ToString();
+            //ZaparkovaneAutaLbl.Text = simulation.ParkingInGarage.GetCarParked().ToString();
+            //VolnyParkingLbl.Text = simulation.ParkingInGarage.GetFreeSpots().ToString();
+            //VolniTechniciLbl.Text = simulation.FreeTechnicians.Count.ToString();
+            //VolniMechanicLbl.Text = simulation.FreeMechanics.Count.ToString();
+
+            CurrentNUmberOfCstomersLbl.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).CurrentNumberOfCustomersInTheSystem.ToString();
+            NUmberAllCustomersLbl.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).NumberOfCustomersInTheSystemAtAll.ToString();
             // v minutach
-            AverageTWaitingTimeLbl.Text = (simulation.TimeWaitingForAcceptanceStatistics.GetAverage()/60).ToString();
-            AverageTimeInSystemLbl.Text = (simulation.TimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            AvgFreeMechanicsLbl.Text = simulation.AvergaeNumberOfFreeMechanics.GetAverage().ToString(); 
-            AvgFreeTechniciansLbl.Text = simulation.AvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            //AverageTWaitingTimeLbl.Text = (simulation.TimeWaitingForAcceptanceStatistics.GetAverage()/60).ToString();
+            AverageTimeInSystemLbl.Text = (((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).TimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            //AvgFreeMechanicsLbl.Text = simulation.AvergaeNumberOfFreeMechanics.GetAverage().ToString(); 
+            //AvgFreeTechniciansLbl.Text = simulation.AvergaeNumberOfFreeTechnicians.GetAverage().ToString();
 
         }
 
@@ -187,8 +192,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             if (QueueShowCheckbox.Checked)
             {
                 _showQueues = true;
-                QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
-                QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
+                //QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
+                //QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
             }
             else
             {
@@ -201,7 +206,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void SimStateChanged(Simulation sim, SimState state)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Refresh(Simulation sim)

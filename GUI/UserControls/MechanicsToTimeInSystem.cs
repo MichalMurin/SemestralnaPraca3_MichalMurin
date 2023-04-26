@@ -29,10 +29,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(Simulation simulation)
         {
-            var mechanics = simulation.MechanicsNumber;
-            var average = simulation.SIMULATIONTimeInTheSystemStatistics.GetAverage()/60;
-            chart1.Series[SERIES_NAME].Points.AddXY(mechanics, average);
-            resultsListBox.Items.Add($"{mechanics}      :{average}");
+            //var mechanics = simulation.MechanicsNumber;
+            //var average = simulation.SIMULATIONTimeInTheSystemStatistics.GetAverage()/60;
+            //chart1.Series[SERIES_NAME].Points.AddXY(mechanics, average);
+            //resultsListBox.Items.Add($"{mechanics}      :{average}");
         }
 
         public void StopSimulation()
@@ -78,13 +78,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            _simulator.MechanicsNumber = startNumberMechs;
-            _simulator.TechniciansNumber = numberOfTechnicscs;
+            //_simulator.MechanicsNumber = startNumberMechs;
+            //_simulator.TechniciansNumber = numberOfTechnicscs;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications);
-                _simulator.MechanicsNumber++;
+                //_simulator.MechanicsNumber++;
                 if (!_isSimulationRunning)
                 {
                     break;
@@ -100,14 +100,14 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void SimStateChanged(Simulation sim, SimState state)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Refresh(Simulation sim)
         {
             if (_isSimulationRunning)
             {
-                this.Invoke((MethodInvoker)delegate { Update(((STKAgentSimulation)simulation)); });
+                this.Invoke((MethodInvoker)delegate { Update(((STKAgentSimulation)sim)); });
             }
         }
     }

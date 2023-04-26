@@ -29,10 +29,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            var techNum = simulation.TechniciansNumber;
-            var average = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage();
-            chart1.Series[SERIES_NAME].Points.AddXY(techNum, average);
-            resultsListBox.Items.Add($"{techNum}       :{average}");
+            //var techNum = simulation.TechniciansNumber;
+            //var average = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage();
+            //chart1.Series[SERIES_NAME].Points.AddXY(techNum, average);
+            //resultsListBox.Items.Add($"{techNum}       :{average}");
         }
 
         public void StopSimulation()
@@ -78,13 +78,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            _simulator.TechniciansNumber = startNumberTechnics;
-            _simulator.MechanicsNumber = numberOfMechanics;
+            //_simulator.TechniciansNumber = startNumberTechnics;
+            //_simulator.MechanicsNumber = numberOfMechanics;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications);
-                _simulator.TechniciansNumber++;
+                //_simulator.TechniciansNumber++;
                 if (!_isSimulationRunning)
                 {
                     break;
@@ -100,7 +100,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void SimStateChanged(Simulation sim, SimState state)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void Refresh(Simulation sim)

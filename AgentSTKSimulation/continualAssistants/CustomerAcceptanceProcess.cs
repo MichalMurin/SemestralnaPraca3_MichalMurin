@@ -1,15 +1,20 @@
 using OSPABA;
 using simulation;
 using agents;
+using AgentSim.StkStation;
+
 namespace continualAssistants
 {
 	//meta! id="25"
 	public class CustomerAcceptanceProcess : Process
 	{
+		StkGenerator.AcceptanceCarGenerator AcceptanceCarGenerator { get; set; }
 		public CustomerAcceptanceProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-		}
+			AcceptanceCarGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreateAcceptanceTimeGen();
+
+        }
 
 		override public void PrepareReplication()
 		{

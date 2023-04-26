@@ -16,8 +16,19 @@ namespace agents
 		override public void PrepareReplication()
 		{
 			base.PrepareReplication();
-			// Setup component for the next replication
-		}
+			var mess = new StkMessage(MySim, null, null)
+			{
+				// posleme spravu agenotvi okolia ze moze zacat simulaciu
+				Addressee = MySim.FindAgent(SimId.SurroundingAgent),
+				Code = Mc.Initialize
+            };
+            MyManager.Notice(mess);
+
+			var messForStkAgent = mess.CreateCopy();
+			messForStkAgent.Addressee = MySim.FindAgent(SimId.STKAgent);
+			MyManager.Notice(messForStkAgent);
+            // Setup component for the next replication
+        }
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()
