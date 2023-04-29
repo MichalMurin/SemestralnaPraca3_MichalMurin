@@ -13,7 +13,6 @@ namespace simulation
 	public class STKAgentSimulation : Simulation
 	{
         public SimulationMode Mode { get; set; }
-        public int ReplicationCounter { get; private set; }
         private DateTime _startTime;
         public int Seed { get; set; }
         public StkGenerator StkGenerators { get; private set; }
@@ -25,10 +24,10 @@ namespace simulation
         /// Vazene statistiky
         public STKAgentSimulation(): base()
 		{
+            
             Seed = -1;
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
 
-            ReplicationCounter = 0;
             if (Seed > 0)
             {
                 _seedGenerator = new Random(Seed);
@@ -61,7 +60,12 @@ namespace simulation
 
 		override protected void ReplicationFinished()
 		{
-			// Collect local statistics into global, update UI, etc...
+            // Collect local statistics into global, update UI, etc...
+            foreach (var item in Delegates)
+            {
+                item.Refresh(this);
+            }
+
 			base.ReplicationFinished();
 		}
 

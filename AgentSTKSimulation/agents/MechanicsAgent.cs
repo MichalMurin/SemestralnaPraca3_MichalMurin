@@ -6,11 +6,13 @@ namespace agents
 {
 	//meta! id="5"
 	public class MechanicsAgent : Agent
-	{
-		public MechanicsAgent(int id, Simulation mySim, Agent parent) :
+    {
+        public int MechanicsNumber { get; set; }
+        public MechanicsAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
-		{
-			Init();
+        {
+            MechanicsNumber = 5;
+            Init();
 		}
 
 		override public void PrepareReplication()
@@ -30,5 +32,7 @@ namespace agents
 			AddOwnMessage(Mc.LunchBreakStart);
 		}
 		//meta! tag="end"
+
+
 	}
 }

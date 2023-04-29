@@ -47,8 +47,9 @@
             this.panel1.Controls.Add(this.header);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1481, 63);
+            this.panel1.Size = new System.Drawing.Size(1666, 79);
             this.panel1.TabIndex = 0;
             // 
             // header
@@ -57,11 +58,11 @@
             this.header.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
             this.header.Font = new System.Drawing.Font("Century Gothic", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.header.ForeColor = System.Drawing.Color.White;
-            this.header.Location = new System.Drawing.Point(430, 4);
+            this.header.Location = new System.Drawing.Point(484, 5);
             this.header.Name = "header";
-            this.header.Size = new System.Drawing.Size(510, 56);
+            this.header.Size = new System.Drawing.Size(642, 67);
             this.header.TabIndex = 2;
-            this.header.Text = "STK - Event Simulation";
+            this.header.Text = "STK - Agent Simulation";
             // 
             // panel2
             // 
@@ -72,16 +73,18 @@
             this.panel2.Controls.Add(this.FastModeBtn);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 63);
+            this.panel2.Location = new System.Drawing.Point(0, 79);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1481, 75);
+            this.panel2.Size = new System.Drawing.Size(1666, 94);
             this.panel2.TabIndex = 1;
             // 
             // GrafTechiciBtn
             // 
-            this.GrafTechiciBtn.Location = new System.Drawing.Point(480, 0);
+            this.GrafTechiciBtn.Location = new System.Drawing.Point(540, 0);
+            this.GrafTechiciBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.GrafTechiciBtn.Name = "GrafTechiciBtn";
-            this.GrafTechiciBtn.Size = new System.Drawing.Size(164, 75);
+            this.GrafTechiciBtn.Size = new System.Drawing.Size(184, 94);
             this.GrafTechiciBtn.TabIndex = 4;
             this.GrafTechiciBtn.Text = "GRAF 2";
             this.GrafTechiciBtn.UseVisualStyleBackColor = true;
@@ -89,9 +92,10 @@
             // 
             // MechanicsChartTabBtn
             // 
-            this.MechanicsChartTabBtn.Location = new System.Drawing.Point(320, 0);
+            this.MechanicsChartTabBtn.Location = new System.Drawing.Point(360, 0);
+            this.MechanicsChartTabBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MechanicsChartTabBtn.Name = "MechanicsChartTabBtn";
-            this.MechanicsChartTabBtn.Size = new System.Drawing.Size(164, 75);
+            this.MechanicsChartTabBtn.Size = new System.Drawing.Size(184, 94);
             this.MechanicsChartTabBtn.TabIndex = 3;
             this.MechanicsChartTabBtn.Text = "GRAF 1";
             this.MechanicsChartTabBtn.UseVisualStyleBackColor = true;
@@ -101,9 +105,10 @@
             // 
             this.FixedSeedCheckbox.AutoSize = true;
             this.FixedSeedCheckbox.BackColor = System.Drawing.Color.White;
-            this.FixedSeedCheckbox.Location = new System.Drawing.Point(919, 28);
+            this.FixedSeedCheckbox.Location = new System.Drawing.Point(1034, 35);
+            this.FixedSeedCheckbox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.FixedSeedCheckbox.Name = "FixedSeedCheckbox";
-            this.FixedSeedCheckbox.Size = new System.Drawing.Size(107, 20);
+            this.FixedSeedCheckbox.Size = new System.Drawing.Size(133, 24);
             this.FixedSeedCheckbox.TabIndex = 2;
             this.FixedSeedCheckbox.Text = "FIXED SEED";
             this.FixedSeedCheckbox.UseVisualStyleBackColor = false;
@@ -111,9 +116,10 @@
             // 
             // FastModeBtn
             // 
-            this.FastModeBtn.Location = new System.Drawing.Point(158, 0);
+            this.FastModeBtn.Location = new System.Drawing.Point(178, 0);
+            this.FastModeBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.FastModeBtn.Name = "FastModeBtn";
-            this.FastModeBtn.Size = new System.Drawing.Size(165, 75);
+            this.FastModeBtn.Size = new System.Drawing.Size(186, 94);
             this.FastModeBtn.TabIndex = 1;
             this.FastModeBtn.Text = "FAST MODE";
             this.FastModeBtn.UseVisualStyleBackColor = true;
@@ -122,8 +128,9 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(161, 75);
+            this.button1.Size = new System.Drawing.Size(181, 94);
             this.button1.TabIndex = 0;
             this.button1.Text = "SLOW MODE";
             this.button1.UseVisualStyleBackColor = true;
@@ -132,22 +139,24 @@
             // panelContainer
             // 
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(0, 138);
+            this.panelContainer.Location = new System.Drawing.Point(0, 173);
+            this.panelContainer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(1481, 834);
+            this.panelContainer.Size = new System.Drawing.Size(1666, 997);
             this.panelContainer.TabIndex = 2;
             // 
-            // StkEventGUI
+            // STKAgentGUI
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1481, 972);
+            this.ClientSize = new System.Drawing.Size(1666, 1170);
             this.Controls.Add(this.panelContainer);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "StkEventGUI";
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Name = "STKAgentGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "STK";
             this.panel1.ResumeLayout(false);

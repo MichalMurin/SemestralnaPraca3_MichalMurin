@@ -7,11 +7,11 @@ namespace simulation
 	{
         public Customer Customer { get; set; }
         public Worker Worker { get; set; }
-		public bool HasParkngReserved { get; set; }
+		public bool HasParkingReserved { get; set; }
 		public StkMessage(Simulation sim, Customer cus, Worker wor) :
 			base(sim)
 		{
-			HasParkngReserved = false;
+			HasParkingReserved = false;
 			Customer = cus;
 			Worker = wor;
 		}
@@ -39,7 +39,7 @@ namespace simulation
             {
                 Worker = new Worker(original.Worker);
             }
-            HasParkngReserved = original.HasParkngReserved;
+            HasParkingReserved = original.HasParkingReserved;
             // Copy attributes
         }
 	}

@@ -6,6 +6,7 @@ using AgentSim.StkStation;
 using DISS_S2.StkStation;
 using DISS_S2.SimulationCore.Statistics;
 using System.Collections.ObjectModel;
+using AgentSim.StkStation.Models;
 
 namespace managers
 {
@@ -77,7 +78,8 @@ namespace managers
 		{
 			CurrentNumberOfCustomersInTheSystem--;
 			var cus = ((StkMessage)message).Customer;
-			TimeInTheSystemStatistics.AddValue(MySim.CurrentTime - cus.StartWaitingTime);
+            cus.Situation = CustomerSituation.LEFT;
+            TimeInTheSystemStatistics.AddValue(MySim.CurrentTime - cus.StartWaitingTime);
             AverageNumberOfCustomersInSystem.Add(-1, MySim.CurrentTime);
             AllCustomers.Remove(cus);
         }

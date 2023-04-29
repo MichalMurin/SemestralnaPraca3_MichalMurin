@@ -1,4 +1,5 @@
 ﻿using DISS_S2.StkStation;
+using simulation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace AgentSim.StkStation.Models
         public const int MAX_CARS_IN_PARKING_GARAGE = 5;
         // 
         private int _freeSpotsCount;
-        private Queue<Customer> _parking;
+        private Queue<StkMessage> _parking;
 
         public GarageParking()
         {
-            _parking = new Queue<Customer>();
+            _parking = new Queue<StkMessage>();
             _freeSpotsCount = MAX_CARS_IN_PARKING_GARAGE;
         }
 
@@ -62,12 +63,12 @@ namespace AgentSim.StkStation.Models
             }
         }
 
-        public void ParkCustomersCarInGrage(Customer customer)
+        public void ParkCustomersCarInGrage(StkMessage customer)
         {
             if (_parking.Count < GarageParking.MAX_CARS_IN_PARKING_GARAGE)
             {
                 _parking.Enqueue(customer);
-                customer.Situation = CustomerSituation.WAITING_IN_GARAGE;
+                customer.Customer.Situation = CustomerSituation.WAITING_IN_GARAGE;
             }
             else
             {
@@ -87,7 +88,7 @@ namespace AgentSim.StkStation.Models
             }
         }
 
-        public Customer GetCustomersCarFromParking()
+        public StkMessage GetCustomersCarFromParking()
         {
             if (IsWaitingCar())
             {

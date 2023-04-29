@@ -10,13 +10,12 @@ using System;
 
 namespace managers
 {
-	//meta! id="4"
-	public class TechniciansManager : Manager
+    //meta! id="4"
+    public class TechniciansManager : Manager
     {
-		public Queue<Technician> FreeTechnicians { get; set; }
-		public int TechniciansNumber { get; set; }
-		public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
-		public Queue<StkMessage> CustomerQueueForPayment { get; set; }
+        public Queue<Technician> FreeTechnicians { get; set; }
+        public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
+        public Queue<StkMessage> CustomerQueueForPayment { get; set; }
         public StandartStaticstic TimeWaitingForAcceptanceStatistics { get; set; }
         public WeightedAritmeticAverage AverageNumberOfCustomersInQueueForAcceptance { get; set; }
         public WeightedAritmeticAverage AvergaeNumberOfFreeTechnicians { get; set; }
@@ -24,12 +23,11 @@ namespace managers
         public StandartStaticstic SIMULATIONAverageNumberOfCustomersInQueueForAcceptance { get; set; }
         public StandartStaticstic SIMULATIONAvergaeNumberOfFreeTechnicians { get; set; }
         public TechniciansManager(int id, Simulation mySim, Agent myAgent) :
-			base(id, mySim, myAgent)
-		{
-			CustomerQueueForAcceptance = new Queue<StkMessage>();
-			CustomerQueueForPayment = new Queue<StkMessage>();
-			FreeTechnicians = new Queue<Technician>();
-            TechniciansNumber = 5;
+            base(id, mySim, myAgent)
+        {
+            CustomerQueueForAcceptance = new Queue<StkMessage>();
+            CustomerQueueForPayment = new Queue<StkMessage>();
+            FreeTechnicians = new Queue<Technician>();
             TimeWaitingForAcceptanceStatistics = new StandartStaticstic();
             AvergaeNumberOfFreeTechnicians = new WeightedAritmeticAverage();
             AverageNumberOfCustomersInQueueForAcceptance = new WeightedAritmeticAverage();
@@ -37,20 +35,20 @@ namespace managers
             SIMULATIONAvergaeNumberOfFreeTechnicians = new StandartStaticstic();
             SIMULATIONAverageNumberOfCustomersInQueueForAcceptance = new StandartStaticstic();
             Init();
-		}
+        }
 
-		override public void PrepareReplication()
-		{
-			base.PrepareReplication();
-			// Setup component for the next replication
-			ResetReplicationStats();
+        override public void PrepareReplication()
+        {
+            base.PrepareReplication();
+            // Setup component for the next replication
+            ResetReplicationStats();
             ClearAllQueues();
-            InitializeTechnicians(TechniciansNumber);
+            InitializeTechnicians(MyAgent.TechniciansNumber);
             if (PetriNet != null)
-			{
-				PetriNet.Clear();
-			}
-		}
+            {
+                PetriNet.Clear();
+            }
+        }
         /// <summary>
         /// Inicializovanie pracovnikov
         /// </summary>
@@ -77,42 +75,61 @@ namespace managers
             FreeTechnicians.Clear();
         }
 
+        private void FindWorkForTechnician(Worker worker)
+        {
+            if (CustomerQueueForPayment.Count > 0)
+            {
+                var cus = CustomerQueueForPayment.Dequeue();
+                cus.Worker = worker;
+                StartPaymentProcess(worker, cus);
+            }
+            else if (CustomerQueueForAcceptance.Count > 0 && ((StkMessage)CustomerQueueForAcceptance.Peek()).HasParkingReserved)
+            {
+                AverageNumberOfCustomersInQueueForAcceptance.Add(-1, MySim.CurrentTime);
+                var cus = CustomerQueueForAcceptance.Dequeue();
+                cus.Worker = worker;
+                TimeWaitingForAcceptanceStatistics.AddValue(MySim.CurrentTime - ((StkMessage)cus).Customer.StartWaitingTime);
+                StartAcceptanceProcess(worker, cus);
+            }
+            else
+            {
+                SetWorkerFree(worker);
+            }
+        }
+
         //meta! sender="STKAgent", id="23", type="Request"
         public void ProcessCustomerPayment(MessageForm message)
         {
-            message.Addressee = MyAgent.FindAssistant(SimId.CustomerPaymentProcess);
-            StartContinualAssistant(message);
+            CustomerQueueForPayment.Enqueue((StkMessage)message);
+            if (FreeTechnicians.Count > 0)
+            {
+                var worker = FreeTechnicians.Dequeue();
+                AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
+                FindWorkForTechnician(worker);
+            }
         }
 
-		//meta! sender="CustomerPaymentProcess", id="28", type="Finish"
-		public void ProcessFinishCustomerPaymentProcess(MessageForm message)
+        //meta! sender="CustomerPaymentProcess", id="28", type="Finish"
+        public void ProcessFinishCustomerPaymentProcess(MessageForm message)
         {
-            /// !!!! KONTROLOVAT CI JE VOLNE MIESTO - BOOL V SPRAVE!!!
+
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-
-            if (CustomerQueueForPayment.Count>0)
-			{
-				StartPaymentProcess(worker, CustomerQueueForPayment.Dequeue());
-			}
-			else if(CustomerQueueForAcceptance.Count>0)
-			{
-				StartAcceptanceProcess(worker, CustomerQueueForAcceptance.Dequeue());
-			}
-			else
-			{
-                SetWorkerFree(worker);
+            if (worker == null)
+            {
+                //
             }
+            FindWorkForTechnician(worker);
 
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerPayment;
             Response(message);
-
         }
 
         private void StartAcceptanceProcess(Worker worker, StkMessage mess)
         {
             mess.Worker = worker;
+            mess.Customer.Situation = CustomerSituation.BEEING_ACCEPTED;
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerAcceptanceProcess);
             StartContinualAssistant(mess);
         }
@@ -120,119 +137,120 @@ namespace managers
         private void StartPaymentProcess(Worker worker, StkMessage mess)
         {
             mess.Worker = worker;
+            mess.Customer.Situation = CustomerSituation.IS_PAYING;
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerPaymentProcess);
             StartContinualAssistant(mess);
         }
 
         //meta! sender="TechniciansLunchBreakScheduler", id="35", type="Finish"
         public void ProcessFinishTechniciansLunchBreakScheduler(MessageForm message)
-		{
-		}
+        {
+        }
 
-		//meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
-		public void ProcessFinishCustomerAcceptanceProcess(MessageForm message)
+        //meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
+        public void ProcessFinishCustomerAcceptanceProcess(MessageForm message)
         {
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            if (CustomerQueueForPayment.Count > 0)
+            if (worker == null)
             {
-                StartPaymentProcess(worker, CustomerQueueForPayment.Dequeue());
+                //
             }
-            else if (CustomerQueueForAcceptance.Count > 0)
-            {
-                StartAcceptanceProcess(worker, CustomerQueueForAcceptance.Dequeue());
-            }
-            else
-            {
-                SetWorkerFree(worker);
-            }
+            FindWorkForTechnician(worker);
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerAcceptance;
             Response(message);
         }
 
-		//meta! sender="STKAgent", id="20", type="Notice"
-		public void ProcessCustomerServiceNotice(MessageForm message)
-		{
-			CustomerQueueForAcceptance.Enqueue((StkMessage)message);
-		}
-
-		//meta! sender="STKAgent", id="47", type="Notice"
-		public void ProcessLunchBreakStart(MessageForm message)
-		{
-		}
-
-		//meta! sender="STKAgent", id="21", type="Request"
-		public void ProcessCustomerAcceptance(MessageForm message)
+        //meta! sender="STKAgent", id="20", type="Notice"
+        public void ProcessCustomerServiceNotice(MessageForm message)
         {
-
-            message.Addressee = MyAgent.FindAssistant(SimId.CustomerAcceptanceProcess);
-            StartContinualAssistant(message);
+            AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
+            //CustomerQueueForAcceptance.Enqueue((StkMessage)message);
         }
 
-		//meta! userInfo="Process messages defined in code", id="0"
-		public void ProcessDefault(MessageForm message)
-		{
-			switch (message.Code)
-			{
-			}
-		}
+        //meta! sender="STKAgent", id="47", type="Notice"
+        public void ProcessLunchBreakStart(MessageForm message)
+        {
+        }
 
-		//meta! userInfo="Generated code: do not modify", tag="begin"
-		public void Init()
-		{
-		}
+        //meta! sender="STKAgent", id="21", type="Request"
+        public void ProcessCustomerAcceptance(MessageForm message)
+        {
+            //((StkMessage)message).HasParkingReserved = true;
+            CustomerQueueForAcceptance.Enqueue((StkMessage)message);
+            ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_ACCEPTANCE;
+            if (FreeTechnicians.Count > 0)
+            {
+                var worker = FreeTechnicians.Dequeue();
+                AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
+                FindWorkForTechnician(worker);
+            }
+        }
 
-		override public void ProcessMessage(MessageForm message)
-		{
-			switch (message.Code)
-			{
-			case Mc.Finish:
-				switch (message.Sender.Id)
-				{
-				case SimId.CustomerPaymentProcess:
-					ProcessFinishCustomerPaymentProcess(message);
-				break;
+        //meta! userInfo="Process messages defined in code", id="0"
+        public void ProcessDefault(MessageForm message)
+        {
+            switch (message.Code)
+            {
+            }
+        }
 
-				case SimId.TechniciansLunchBreakScheduler:
-					ProcessFinishTechniciansLunchBreakScheduler(message);
-				break;
+        //meta! userInfo="Generated code: do not modify", tag="begin"
+        public void Init()
+        {
+        }
 
-				case SimId.CustomerAcceptanceProcess:
-					ProcessFinishCustomerAcceptanceProcess(message);
-				break;
-				}
-			break;
+        override public void ProcessMessage(MessageForm message)
+        {
+            switch (message.Code)
+            {
+                case Mc.Finish:
+                    switch (message.Sender.Id)
+                    {
+                        case SimId.CustomerPaymentProcess:
+                            ProcessFinishCustomerPaymentProcess(message);
+                            break;
 
-			case Mc.LunchBreakStart:
-				ProcessLunchBreakStart(message);
-			break;
+                        case SimId.TechniciansLunchBreakScheduler:
+                            ProcessFinishTechniciansLunchBreakScheduler(message);
+                            break;
 
-			case Mc.CustomerPayment:
-				ProcessCustomerPayment(message);
-			break;
+                        case SimId.CustomerAcceptanceProcess:
+                            ProcessFinishCustomerAcceptanceProcess(message);
+                            break;
+                    }
+                    break;
 
-			case Mc.CustomerAcceptance:
-				ProcessCustomerAcceptance(message);
-			break;
+                case Mc.LunchBreakStart:
+                    ProcessLunchBreakStart(message);
+                    break;
 
-			case Mc.CustomerServiceNotice:
-				ProcessCustomerServiceNotice(message);
-			break;
+                case Mc.CustomerPayment:
+                    ProcessCustomerPayment(message);
+                    break;
 
-			default:
-				ProcessDefault(message);
-			break;
-			}
-		}
-		//meta! tag="end"
-		public new TechniciansAgent MyAgent
-		{
-			get
-			{
-				return (TechniciansAgent)base.MyAgent;
-			}
-		}
+                case Mc.CustomerAcceptance:
+                    ProcessCustomerAcceptance(message);
+                    break;
+
+                case Mc.CustomerServiceNotice:
+                    ProcessCustomerServiceNotice(message);
+                    break;
+
+                default:
+                    ProcessDefault(message);
+                    break;
+            }
+        }
+        //meta! tag="end"
+        public new TechniciansAgent MyAgent
+        {
+            get
+            {
+                return (TechniciansAgent)base.MyAgent;
+            }
+        }
 
         /// <summary>
         /// Resetovanie replikacnych statistik
@@ -256,10 +274,10 @@ namespace managers
                 FreeTechnicians.Enqueue((Technician)worker);
                 AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
             }
-			else
-			{
-				throw new ArgumentException("Nemozem uvolnit mechanika v agentovi technikov!!");
-			}
+            else
+            {
+                throw new ArgumentException("Nemozem uvolnit mechanika v agentovi technikov!!");
+            }
         }
     }
 }

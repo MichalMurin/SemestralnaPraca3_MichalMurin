@@ -6,11 +6,13 @@ namespace agents
 {
 	//meta! id="4"
 	public class TechniciansAgent : Agent
-	{
-		public TechniciansAgent(int id, Simulation mySim, Agent parent) :
+    {
+        public int TechniciansNumber { get; set; }
+        public TechniciansAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
-		{
-			Init();
+        {
+            TechniciansNumber = 5;
+            Init();
 		}
 
 		override public void PrepareReplication()

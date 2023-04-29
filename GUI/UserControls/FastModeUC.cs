@@ -13,6 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using simulation;
+using agents;
+using managers;
 
 namespace SemestralnaPraca3_MichalMurin.UserControls
 {
@@ -30,19 +32,19 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            //CurrentReplicationLbl.Text = simulation.ReplicationCounter.ToString();
-            //AverageWaitingTimeLbl.Text = (simulation.SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
-            //AverageTimeInSystemLbl.Text = (simulation.SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            //AverageCustomersNumAtEndDayLbl.Text = simulation.SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
-            //FreeTechniciansLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
-            //FreeMechanicsLbl.Text = simulation.SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
-            //AverageNumberOfCustomersInFirstQueueLbl.Text = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
-            //AvgNumberOfCustomersInSystem.Text = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
-            // interval spolahlivosti
-            //(double min, double max) interval = _simulator.SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
-            //ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min/60} ; {interval.max/60}>";
-            //interval = _simulator.SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
-            //ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
+            CurrentReplicationLbl.Text = simulation.ReplicationCount.ToString();
+            AverageWaitingTimeLbl.Text = (((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
+            AverageTimeInSystemLbl.Text = (((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            AverageCustomersNumAtEndDayLbl.Text = simulation.SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
+            FreeTechniciansLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            FreeMechanicsLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
+            AverageNumberOfCustomersInFirstQueueLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
+            AvgNumberOfCustomersInSystem.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            //interval spolahlivosti
+           (double min, double max) interval = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
+            ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min / 60} ; {interval.max / 60}>";
+            interval = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
+            ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
         }
 
         private void StartBtn_Click(object sender, EventArgs e)
@@ -61,8 +63,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            //_simulator.MechanicsNumber = (int)MechanicsNumPad.Value;
-            //_simulator.TechniciansNumber = (int)TechnicianNumPad.Value;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber = (int)MechanicsNumPad.Value;
+            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = (int)TechnicianNumPad.Value;
             int replications = (int)replicationsNumpad.Value;
             _isSimulationRunning = true;
             _simulator.Simulate(replications);
