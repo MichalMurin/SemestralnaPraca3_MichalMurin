@@ -12,7 +12,7 @@ using AgentSim.StkStation;
 namespace agents
 {
 	//meta! id="4"
-	public class TechniciansAgent : Agent, IPrepareSimulation
+	public class TechniciansAgent : Agent, IStatsDelegate
     {
         public Queue<Technician> FreeTechnicians { get; set; }
         public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
@@ -80,6 +80,17 @@ namespace agents
         {
             AcceptanceCarGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateAcceptanceTimeGen();
             PaymentTimeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreatePaymentTimeGen();
+        }
+
+        public void FinishStatsAfterReplication()
+        {
+            foreach (var mess in CustomerQueueForAcceptance)
+            {
+                TimeWaitingForAcceptanceStatistics.AddValue(STKAgentSimulation.MAX_TIME - mess.Customer.StartWaitingTime);
+            }
+
+            AverageNumberOfCustomersInQueueForAcceptance.Add(0, STKAgentSimulation.MAX_TIME);
+            AvergaeNumberOfFreeTechnicians.Add(0, STKAgentSimulation.MAX_TIME);
         }
     }
 }

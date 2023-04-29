@@ -12,7 +12,7 @@ using static AgentSim.StkStation.StkGenerator;
 namespace agents
 {
 	//meta! id="5"
-	public class MechanicsAgent : Agent, IPrepareSimulation
+	public class MechanicsAgent : Agent, IStatsDelegate
     {
         public WeightedAritmeticAverage AvergaeNumberOfFreeMechanics { get; set; }
         public StandartStaticstic SIMULATIONAvergaeNumberOfFreeMechanics { get; set; }
@@ -61,6 +61,11 @@ namespace agents
         public void CreateGenerator()
         {
             InspectionTimeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateInspectionTimeGen();
+        }
+
+        public void FinishStatsAfterReplication()
+        {
+            AvergaeNumberOfFreeMechanics.Add(0, STKAgentSimulation.MAX_TIME);
         }
     }
 }

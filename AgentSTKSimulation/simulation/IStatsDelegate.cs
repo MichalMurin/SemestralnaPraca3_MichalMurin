@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace AgentSTKSimulation.simulation
 {
-    public interface IPrepareSimulation
+    public interface IStatsDelegate
     {
         void AddGlobalStats();
         void ResetGlobalStats();
         void CreateGenerator();
+        void FinishStatsAfterReplication();
     }
 }

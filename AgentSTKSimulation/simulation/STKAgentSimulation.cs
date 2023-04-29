@@ -13,12 +13,13 @@ namespace simulation
 {
 	public class STKAgentSimulation : Simulation
 	{
+        public static int MAX_TIME = 8 * 3600;
         public SimulationMode Mode { get; set; }
         private DateTime _startTime;
         public int Seed { get; set; }
         public StkGenerator StkGenerators { get; private set; }
         private Random _seedGenerator;
-        public List<IPrepareSimulation> GlobalStatsAgents { get; set; }
+        public List<IStatsDelegate> GlobalStatsAgents { get; set; }
 
         //public ObservableCollection<Worker> AllWorkers { get; set; }
         /// Standartne Statistiky
@@ -27,7 +28,7 @@ namespace simulation
 		{
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
             Seed = -1;
-            GlobalStatsAgents = new List<IPrepareSimulation>();
+            GlobalStatsAgents = new List<IStatsDelegate>();
             Init();
             RegisterPrepareSimAgents();
         }
@@ -70,8 +71,10 @@ namespace simulation
 		{
             // Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
+            // TODO KONTROLA CI DOBEHLA REPLIKACIA KOREKTNE
             foreach (var agent in GlobalStatsAgents)
             {
+                agent.FinishStatsAfterReplication();
                 agent.AddGlobalStats();
             }
             if (this.CurrentReplication % 100 == 0)

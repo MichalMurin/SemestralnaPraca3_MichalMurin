@@ -68,7 +68,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = (int)TechnicianNumPad.Value;
             int replications = (int)replicationsNumpad.Value;
             _isSimulationRunning = true;
-            _simulator.Simulate(replications);
+            _simulator.Simulate(replications, STKAgentSimulation.MAX_TIME);
             _isSimulationRunning = false;
         }
 

@@ -125,7 +125,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.ResumeSimulation();
             }
             _isSimulationRunning = true;
-            _simulator.Simulate(1,8*3600);
+            _simulator.Simulate(1,STKAgentSimulation.MAX_TIME);
             _isSimulationRunning = false;
         }
 

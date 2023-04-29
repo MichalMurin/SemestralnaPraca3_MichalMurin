@@ -11,7 +11,7 @@ using AgentSTKSimulation.simulation;
 namespace agents
 {
     //meta! id="2"
-    public class SurroundingAgent : Agent, IPrepareSimulation
+    public class SurroundingAgent : Agent, IStatsDelegate
     {
         public StandartStaticstic SIMULATIONTimeInTheSystemStatistics { get; set; }
         public StandartStaticstic SIMULATIONAverageNumberOfCustomersInSystem { get; set; }
@@ -75,6 +75,16 @@ namespace agents
         {
             CarTypeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateCarTypeGenerator();
             CustomerTimeGen = ((STKAgentSimulation)MySim).StkGenerators.CreateCustomerTimeGenerator();
+        }
+
+        public void FinishStatsAfterReplication()
+        {
+            // zaratame do casu ostavajucich ludi v prevadzke
+            foreach (var customer in AllCustomers)
+            {
+                TimeInTheSystemStatistics.AddValue(STKAgentSimulation.MAX_TIME - customer.StartWaitingTime);
+            }
+            AverageNumberOfCustomersInSystem.Add(0, STKAgentSimulation.MAX_TIME);
         }
     }
 }
