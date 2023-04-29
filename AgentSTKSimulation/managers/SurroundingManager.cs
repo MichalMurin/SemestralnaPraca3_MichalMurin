@@ -13,31 +13,11 @@ namespace managers
 	//meta! id="2"
 	public class SurroundingManager : Manager
     {
-        public StandartStaticstic SIMULATIONTimeInTheSystemStatistics { get; set; }
-        public StandartStaticstic SIMULATIONAverageNumberOfCustomersInSystem { get; set; }
-        public ObservableCollection<Customer> AllCustomers { get; set; }
-		public int CurrentNumberOfCustomersInTheSystem { get; set; }
-		public WeightedAritmeticAverage AverageNumberOfCustomersInSystem { get; set; }
-        public StandartStaticstic TimeInTheSystemStatistics { get; set; }
-        public StkGenerator.CarTypeGenerator CarTypeGenerator { get; set; }
-        public int NumberOfCustomersInTheSystemAtAll { get; set; }
         // cas v sekundach
         public const int CUSTOMER_STOP_COMMING_TIME = ((15 - 9) * 60 + 45) * 60;
         public SurroundingManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
-
-            TimeInTheSystemStatistics = new StandartStaticstic();
-            AverageNumberOfCustomersInSystem = new WeightedAritmeticAverage();
-
-            // Ststistiky pre viac replikacii
-            SIMULATIONTimeInTheSystemStatistics = new StandartStaticstic();
-            SIMULATIONAverageNumberOfCustomersInSystem = new StandartStaticstic();
-
-			AllCustomers = new ObservableCollection<Customer>();
-			CurrentNumberOfCustomersInTheSystem = 0;
-			CarTypeGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreateCarTypeGenerator();
-			NumberOfCustomersInTheSystemAtAll = 0;
             Init();
         }
 
@@ -46,25 +26,25 @@ namespace managers
         /// </summary>
         private void ResetReplicationStats()
         {
-            TimeInTheSystemStatistics.Reset();
-            AverageNumberOfCustomersInSystem.Reset();
+            MyAgent.TimeInTheSystemStatistics.Reset();
+            MyAgent.AverageNumberOfCustomersInSystem.Reset();
         }
         /// <summary>
         /// Resetovanie simulacnych statistik
         /// </summary>
         private void ResetSimulationStats()
         {
-            SIMULATIONTimeInTheSystemStatistics.Reset();
-            SIMULATIONAverageNumberOfCustomersInSystem.Reset();
+            MyAgent.SIMULATIONTimeInTheSystemStatistics.Reset();
+            MyAgent.SIMULATIONAverageNumberOfCustomersInSystem.Reset();
         }
 
         override public void PrepareReplication()
 		{
 			base.PrepareReplication();
 			ResetReplicationStats();
-			CurrentNumberOfCustomersInTheSystem = 0;
-            NumberOfCustomersInTheSystemAtAll = 0;
-            AllCustomers.Clear();
+            MyAgent.CurrentNumberOfCustomersInTheSystem = 0;
+            MyAgent.NumberOfCustomersInTheSystemAtAll = 0;
+            MyAgent.AllCustomers.Clear();
 			// Setup component for the next replication
 
 			if (PetriNet != null)
@@ -76,12 +56,12 @@ namespace managers
 		//meta! sender="ModelAgent", id="15", type="Notice"
 		public void ProcessCustomerLeft(MessageForm message)
 		{
-			CurrentNumberOfCustomersInTheSystem--;
+            MyAgent.CurrentNumberOfCustomersInTheSystem--;
 			var cus = ((StkMessage)message).Customer;
             cus.Situation = CustomerSituation.LEFT;
-            TimeInTheSystemStatistics.AddValue(MySim.CurrentTime - cus.StartWaitingTime);
-            AverageNumberOfCustomersInSystem.Add(-1, MySim.CurrentTime);
-            AllCustomers.Remove(cus);
+            MyAgent.TimeInTheSystemStatistics.AddValue(MySim.CurrentTime - cus.StartWaitingTime);
+            MyAgent.AverageNumberOfCustomersInSystem.Add(-1, MySim.CurrentTime);
+            MyAgent.AllCustomers.Remove(cus);
         }
 
 		//meta! sender="CustomerCameScheduler", id="13", type="Finish"
@@ -162,11 +142,11 @@ namespace managers
 
         public Customer CreateCustomer(double startTime)
         {
-            NumberOfCustomersInTheSystemAtAll++;
-			CurrentNumberOfCustomersInTheSystem++;
-            Customer customer = new Customer(startTime, CarTypeGenerator.GetCarType(), NumberOfCustomersInTheSystemAtAll);
-			AllCustomers.Add(customer);
-			AverageNumberOfCustomersInSystem.Add(1, MySim.CurrentTime);
+            MyAgent.NumberOfCustomersInTheSystemAtAll++;
+            MyAgent.CurrentNumberOfCustomersInTheSystem++;
+            Customer customer = new Customer(startTime, MyAgent.CarTypeGenerator.GetCarType(), MyAgent.NumberOfCustomersInTheSystemAtAll);
+            MyAgent.AllCustomers.Add(customer);
+            MyAgent.AverageNumberOfCustomersInSystem.Add(1, MySim.CurrentTime);
             return customer;
         }
     }

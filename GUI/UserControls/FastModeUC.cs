@@ -32,18 +32,18 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            CurrentReplicationLbl.Text = simulation.ReplicationCount.ToString();
-            AverageWaitingTimeLbl.Text = (((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
-            AverageTimeInSystemLbl.Text = (((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            AverageCustomersNumAtEndDayLbl.Text = simulation.SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
-            FreeTechniciansLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
-            FreeMechanicsLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
-            AverageNumberOfCustomersInFirstQueueLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
-            AvgNumberOfCustomersInSystem.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            CurrentReplicationLbl.Text = simulation.CurrentReplication.ToString();
+            AverageWaitingTimeLbl.Text = (((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
+            AverageTimeInSystemLbl.Text = (((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            AverageCustomersNumAtEndDayLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
+            FreeTechniciansLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONAvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            FreeMechanicsLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).SIMULATIONAvergaeNumberOfFreeMechanics.GetAverage().ToString();
+            AverageNumberOfCustomersInFirstQueueLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
+            AvgNumberOfCustomersInSystem.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
             //interval spolahlivosti
-           (double min, double max) interval = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
+           (double min, double max) interval = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
             ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min / 60} ; {interval.max / 60}>";
-            interval = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
+            interval = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
             ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
         }
 
@@ -51,6 +51,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         {
             if (!_isSimulationRunning)
             {
+                _simulator.SetMaxSimSpeed();
                 _simulationThread = new Thread(new ThreadStart(this.RunSimulation));
                 _simulationThread.IsBackground = true;
                 _simulationThread.Start();

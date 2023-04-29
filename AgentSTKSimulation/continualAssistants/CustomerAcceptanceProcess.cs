@@ -8,11 +8,9 @@ namespace continualAssistants
 	//meta! id="25"
 	public class CustomerAcceptanceProcess : Process
 	{
-		StkGenerator.AcceptanceCarGenerator AcceptanceCarGenerator { get; set; }
 		public CustomerAcceptanceProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-			AcceptanceCarGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreateAcceptanceTimeGen();
 
         }
 
@@ -26,7 +24,7 @@ namespace continualAssistants
 		public void ProcessStart(MessageForm message)
 		{
             message.Code = Mc.Finish;
-            Hold(AcceptanceCarGenerator.GetAcceptanceTime(), message);
+            Hold(MyAgent.AcceptanceCarGenerator.GetAcceptanceTime(), message);
         }
 
 		//meta! userInfo="Process messages defined in code", id="0"

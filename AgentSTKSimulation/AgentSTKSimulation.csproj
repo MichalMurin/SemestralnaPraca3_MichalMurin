@@ -68,6 +68,7 @@
     <Compile Include="managers\TechniciansManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="simulation\IPrepareSimulation.cs" />
     <Compile Include="simulation\Mc.cs" />
     <Compile Include="simulation\StkMessage.cs" />
     <Compile Include="simulation\STKAgentSimulation.cs" />

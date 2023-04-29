@@ -9,12 +9,9 @@ namespace continualAssistants
 	//meta! id="30"
 	public class CarInspectionProcess : Process
 	{
-		StkGenerator.InspectionTimeGenerator InspectionTimeGenerator { get; set; }
 		public CarInspectionProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-            InspectionTimeGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreateInspectionTimeGen();
-
         }
 
 		override public void PrepareReplication()
@@ -27,7 +24,7 @@ namespace continualAssistants
 		public void ProcessStart(MessageForm message)
         {
             message.Code = Mc.Finish;
-            Hold(InspectionTimeGenerator.GetServiceTimeInSec(((StkMessage)message).Customer.CarType), message);
+            Hold(MyAgent.InspectionTimeGenerator.GetServiceTimeInSec(((StkMessage)message).Customer.CarType), message);
         }
 
 		//meta! userInfo="Process messages defined in code", id="0"

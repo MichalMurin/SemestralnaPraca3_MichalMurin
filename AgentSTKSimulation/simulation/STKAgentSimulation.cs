@@ -7,6 +7,7 @@ using DISS_S2.StkStation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System;
+using AgentSTKSimulation.simulation;
 
 namespace simulation
 {
@@ -17,17 +18,30 @@ namespace simulation
         public int Seed { get; set; }
         public StkGenerator StkGenerators { get; private set; }
         private Random _seedGenerator;
+        public List<IPrepareSimulation> GlobalStatsAgents { get; set; }
 
         //public ObservableCollection<Worker> AllWorkers { get; set; }
         /// Standartne Statistiky
-        public StandartStaticstic SIMULATIONNumberOfCustomersAtTHeEndOfDay { get; set; }
         /// Vazene statistiky
         public STKAgentSimulation(): base()
 		{
-            
-            Seed = -1;
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
+            Seed = -1;
+            GlobalStatsAgents = new List<IPrepareSimulation>();
+            Init();
+            RegisterPrepareSimAgents();
+        }
 
+        private void RegisterPrepareSimAgents()
+        {
+            GlobalStatsAgents.Add(SurroundingAgent);
+            GlobalStatsAgents.Add(MechanicsAgent);
+            GlobalStatsAgents.Add(TechniciansAgent);
+        }
+
+        override protected void PrepareSimulation()
+		{
+			base.PrepareSimulation();
             if (Seed > 0)
             {
                 _seedGenerator = new Random(Seed);
@@ -38,17 +52,11 @@ namespace simulation
             }
 
             StkGenerators = new StkGenerator(_seedGenerator);
-
-            // Ststistiky pre viac replikacii
-            SIMULATIONNumberOfCustomersAtTHeEndOfDay = new StandartStaticstic();
-            Init();
-
-        }
-
-        override protected void PrepareSimulation()
-		{
-			base.PrepareSimulation();
-            ResetSimulationStats();
+            foreach (var agent in GlobalStatsAgents)
+            {
+                agent.ResetGlobalStats();
+                agent.CreateGenerator();
+            }
             // Create global statistcis
         }
 
@@ -61,13 +69,24 @@ namespace simulation
 		override protected void ReplicationFinished()
 		{
             // Collect local statistics into global, update UI, etc...
+			base.ReplicationFinished();
+            foreach (var agent in GlobalStatsAgents)
+            {
+                agent.AddGlobalStats();
+            }
+            if (this.CurrentReplication % 100 == 0)
+            {
+                RefreshGui();
+            }
+        }
+
+        private void RefreshGui()
+        {
             foreach (var item in Delegates)
             {
                 item.Refresh(this);
             }
-
-			base.ReplicationFinished();
-		}
+        }
 
 		override protected void SimulationFinished()
 		{
@@ -95,14 +114,6 @@ namespace simulation
 		public MechanicsAgent MechanicsAgent
 		{ get; set; }
         //meta! tag="end"
-
-        /// <summary>
-        /// Resetovanie simulacnych statistik
-        /// </summary>
-        private void ResetSimulationStats()
-        {
-            SIMULATIONNumberOfCustomersAtTHeEndOfDay.Reset();
-        }
 
         /// <summary>
         /// Ziskanie simulacneho casu v DateTime formate

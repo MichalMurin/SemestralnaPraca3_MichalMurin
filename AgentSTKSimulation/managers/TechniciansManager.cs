@@ -13,27 +13,9 @@ namespace managers
     //meta! id="4"
     public class TechniciansManager : Manager
     {
-        public Queue<Technician> FreeTechnicians { get; set; }
-        public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
-        public Queue<StkMessage> CustomerQueueForPayment { get; set; }
-        public StandartStaticstic TimeWaitingForAcceptanceStatistics { get; set; }
-        public WeightedAritmeticAverage AverageNumberOfCustomersInQueueForAcceptance { get; set; }
-        public WeightedAritmeticAverage AvergaeNumberOfFreeTechnicians { get; set; }
-        public StandartStaticstic SIMULATIONTimeWaitingForAcceptanceStatistics { get; set; }
-        public StandartStaticstic SIMULATIONAverageNumberOfCustomersInQueueForAcceptance { get; set; }
-        public StandartStaticstic SIMULATIONAvergaeNumberOfFreeTechnicians { get; set; }
         public TechniciansManager(int id, Simulation mySim, Agent myAgent) :
             base(id, mySim, myAgent)
         {
-            CustomerQueueForAcceptance = new Queue<StkMessage>();
-            CustomerQueueForPayment = new Queue<StkMessage>();
-            FreeTechnicians = new Queue<Technician>();
-            TimeWaitingForAcceptanceStatistics = new StandartStaticstic();
-            AvergaeNumberOfFreeTechnicians = new WeightedAritmeticAverage();
-            AverageNumberOfCustomersInQueueForAcceptance = new WeightedAritmeticAverage();
-            SIMULATIONTimeWaitingForAcceptanceStatistics = new StandartStaticstic();
-            SIMULATIONAvergaeNumberOfFreeTechnicians = new StandartStaticstic();
-            SIMULATIONAverageNumberOfCustomersInQueueForAcceptance = new StandartStaticstic();
             Init();
         }
 
@@ -56,39 +38,39 @@ namespace managers
         /// <param name="numberOfTechnicians"></param>
         private void InitializeTechnicians(int numberOfTechnicians)
         {
-            FreeTechnicians.Clear();
+            MyAgent.FreeTechnicians.Clear();
             Technician tech;
             for (int i = 0; i < numberOfTechnicians; i++)
             {
                 tech = new Technician(i);
-                FreeTechnicians.Enqueue(tech);
+                MyAgent.FreeTechnicians.Enqueue(tech);
             }
-            AvergaeNumberOfFreeTechnicians.Add(numberOfTechnicians, MySim.CurrentTime);
+            MyAgent.AvergaeNumberOfFreeTechnicians.Add(numberOfTechnicians, MySim.CurrentTime);
         }
         /// <summary>
         /// Vycistenie struktur pouzitych v simulacii
         /// </summary>
         private void ClearAllQueues()
         {
-            CustomerQueueForAcceptance.Clear();
-            CustomerQueueForPayment.Clear();
-            FreeTechnicians.Clear();
+            MyAgent.CustomerQueueForAcceptance.Clear();
+            MyAgent.CustomerQueueForPayment.Clear();
+            MyAgent.FreeTechnicians.Clear();
         }
 
         private void FindWorkForTechnician(Worker worker)
         {
-            if (CustomerQueueForPayment.Count > 0)
+            if (MyAgent.CustomerQueueForPayment.Count > 0)
             {
-                var cus = CustomerQueueForPayment.Dequeue();
+                var cus = MyAgent.CustomerQueueForPayment.Dequeue();
                 cus.Worker = worker;
                 StartPaymentProcess(worker, cus);
             }
-            else if (CustomerQueueForAcceptance.Count > 0 && ((StkMessage)CustomerQueueForAcceptance.Peek()).HasParkingReserved)
+            else if (MyAgent.CustomerQueueForAcceptance.Count > 0 && ((StkMessage)MyAgent.CustomerQueueForAcceptance.Peek()).HasParkingReserved)
             {
-                AverageNumberOfCustomersInQueueForAcceptance.Add(-1, MySim.CurrentTime);
-                var cus = CustomerQueueForAcceptance.Dequeue();
+                MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(-1, MySim.CurrentTime);
+                var cus = MyAgent.CustomerQueueForAcceptance.Dequeue();
                 cus.Worker = worker;
-                TimeWaitingForAcceptanceStatistics.AddValue(MySim.CurrentTime - ((StkMessage)cus).Customer.StartWaitingTime);
+                MyAgent.TimeWaitingForAcceptanceStatistics.AddValue(MySim.CurrentTime - ((StkMessage)cus).Customer.StartWaitingTime);
                 StartAcceptanceProcess(worker, cus);
             }
             else
@@ -100,11 +82,11 @@ namespace managers
         //meta! sender="STKAgent", id="23", type="Request"
         public void ProcessCustomerPayment(MessageForm message)
         {
-            CustomerQueueForPayment.Enqueue((StkMessage)message);
-            if (FreeTechnicians.Count > 0)
+            MyAgent.CustomerQueueForPayment.Enqueue((StkMessage)message);
+            if (MyAgent.FreeTechnicians.Count > 0)
             {
-                var worker = FreeTechnicians.Dequeue();
-                AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
+                var worker = MyAgent.FreeTechnicians.Dequeue();
+                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
                 FindWorkForTechnician(worker);
             }
         }
@@ -165,7 +147,7 @@ namespace managers
         //meta! sender="STKAgent", id="20", type="Notice"
         public void ProcessCustomerServiceNotice(MessageForm message)
         {
-            AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
+            MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
             //CustomerQueueForAcceptance.Enqueue((StkMessage)message);
         }
 
@@ -178,12 +160,12 @@ namespace managers
         public void ProcessCustomerAcceptance(MessageForm message)
         {
             //((StkMessage)message).HasParkingReserved = true;
-            CustomerQueueForAcceptance.Enqueue((StkMessage)message);
+            MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_ACCEPTANCE;
-            if (FreeTechnicians.Count > 0)
+            if (MyAgent.FreeTechnicians.Count > 0)
             {
-                var worker = FreeTechnicians.Dequeue();
-                AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
+                var worker = MyAgent.FreeTechnicians.Dequeue();
+                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
                 FindWorkForTechnician(worker);
             }
         }
@@ -257,9 +239,9 @@ namespace managers
         /// </summary>
         private void ResetReplicationStats()
         {
-            TimeWaitingForAcceptanceStatistics.Reset();
-            AvergaeNumberOfFreeTechnicians.Reset();
-            AverageNumberOfCustomersInQueueForAcceptance.Reset();
+            MyAgent.TimeWaitingForAcceptanceStatistics.Reset();
+            MyAgent.AvergaeNumberOfFreeTechnicians.Reset();
+            MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Reset();
         }
         /// <summary>
         /// Uvolnenenie pracovnika
@@ -271,8 +253,8 @@ namespace managers
             worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
             if (worker.GetType() == typeof(Technician))
             {
-                FreeTechnicians.Enqueue((Technician)worker);
-                AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
+                MyAgent.FreeTechnicians.Enqueue((Technician)worker);
+                MyAgent.AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
             }
             else
             {

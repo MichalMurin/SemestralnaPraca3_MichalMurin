@@ -37,10 +37,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             UpdateStyles();
             ////
-            ((SurroundingManager)_simulator.FindAgent(SimId.SurroundingAgent).MyManager).AllCustomers.CollectionChanged += ListChanged;
+            ((SurroundingAgent)_simulator.FindAgent(SimId.SurroundingAgent)).AllCustomers.CollectionChanged += ListChanged;
             //_simulator.AllWorkers.CollectionChanged += ListChanged;
             ////
-            _bindingSourceCustomers.DataSource = ((SurroundingManager)_simulator.FindAgent(SimId.SurroundingAgent).MyManager).AllCustomers;
+            _bindingSourceCustomers.DataSource = ((SurroundingAgent)_simulator.FindAgent(SimId.SurroundingAgent)).AllCustomers;
             //_bindingSourceWorkers.DataSource = _simulator.AllWorkers;
             CustomersListBox.DataSource = _bindingSourceCustomers;
             //WorkersListBox.DataSource = _bindingSourceWorkers;
@@ -143,20 +143,20 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private void Update(STKAgentSimulation simulation)
         {
             SystemTime.Text = simulation.GetCurentTimeInDatFormat().ToString("HH:mm:ss");
-            RadaNaPrijatieLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).CustomerQueueForAcceptance.Count.ToString();
-            RadaNaPlatenieLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).CustomerQueueForPayment.Count.ToString();
-            ZaparkovaneAutaLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).ParkingInGarage.GetCarParked().ToString();
-            VolnyParkingLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).ParkingInGarage.GetFreeSpots().ToString();
-            VolniTechniciLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).FreeTechnicians.Count.ToString();
-            VolniMechanicLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).FreeMechanics.Count.ToString();
+            RadaNaPrijatieLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).CustomerQueueForAcceptance.Count.ToString();
+            RadaNaPlatenieLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).CustomerQueueForPayment.Count.ToString();
+            ZaparkovaneAutaLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetCarParked().ToString();
+            VolnyParkingLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetFreeSpots().ToString();
+            VolniTechniciLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).FreeTechnicians.Count.ToString();
+            VolniMechanicLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).FreeMechanics.Count.ToString();
 
-            CurrentNUmberOfCstomersLbl.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).CurrentNumberOfCustomersInTheSystem.ToString();
-            NUmberAllCustomersLbl.Text = ((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).NumberOfCustomersInTheSystemAtAll.ToString();
+            CurrentNUmberOfCstomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).CurrentNumberOfCustomersInTheSystem.ToString();
+            NUmberAllCustomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).NumberOfCustomersInTheSystemAtAll.ToString();
             // v minutach
-            AverageTWaitingTimeLbl.Text = (((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).TimeWaitingForAcceptanceStatistics.GetAverage()/60).ToString();
-            AverageTimeInSystemLbl.Text = (((SurroundingManager)simulation.FindAgent(SimId.SurroundingAgent).MyManager).TimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            AvgFreeMechanicsLbl.Text = ((MechanicsManager)simulation.FindAgent(SimId.MechanicsAgent).MyManager).AvergaeNumberOfFreeMechanics.GetAverage().ToString(); 
-            AvgFreeTechniciansLbl.Text = ((TechniciansManager)simulation.FindAgent(SimId.TechniciansAgent).MyManager).AvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            AverageTWaitingTimeLbl.Text = (((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
+            AverageTimeInSystemLbl.Text = (((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).TimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            AvgFreeMechanicsLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).AvergaeNumberOfFreeMechanics.GetAverage().ToString(); 
+            AvgFreeTechniciansLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).AvergaeNumberOfFreeTechnicians.GetAverage().ToString();
 
         }
 

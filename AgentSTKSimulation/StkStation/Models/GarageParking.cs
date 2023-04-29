@@ -17,17 +17,49 @@ namespace AgentSim.StkStation.Models
         // 
         private int _freeSpotsCount;
         private Queue<StkMessage> _parking;
+        private Queue<StkMessage> _waitingForParkingPlace;
 
         public GarageParking()
         {
             _parking = new Queue<StkMessage>();
             _freeSpotsCount = MAX_CARS_IN_PARKING_GARAGE;
+            _waitingForParkingPlace = new Queue<StkMessage>();
         }
 
         public void ResetGarage()
         {
             _parking.Clear();
+            _waitingForParkingPlace.Clear();
             _freeSpotsCount = MAX_CARS_IN_PARKING_GARAGE;
+        }
+
+        public bool IsWaitingForParkingPlace()
+        {
+            if (_waitingForParkingPlace.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public StkMessage GetWaitingForParkingPlace()
+        {
+            if (IsWaitingForParkingPlace())
+            {
+                return _waitingForParkingPlace.Dequeue();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void AddWaitingForParkingPlace(StkMessage mess)
+        {
+            _waitingForParkingPlace.Enqueue(mess);
         }
 
         public int GetCarParked()

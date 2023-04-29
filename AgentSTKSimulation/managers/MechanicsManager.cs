@@ -12,26 +12,17 @@ namespace managers
 	//meta! id="5"
 	public class MechanicsManager : Manager
 	{
-        public Queue<StkMessage> WaitingForParkingPlace { get; set; }
-        public WeightedAritmeticAverage AvergaeNumberOfFreeMechanics { get; set; }
-        public StandartStaticstic SIMULATIONAvergaeNumberOfFreeMechanics { get; set; }
-		public GarageParking ParkingInGarage { get; set; }
-		public Queue<Mechanic> FreeMechanics { get; set; }
+
 		public MechanicsManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
-			AvergaeNumberOfFreeMechanics = new WeightedAritmeticAverage();
-			SIMULATIONAvergaeNumberOfFreeMechanics = new StandartStaticstic();
-			ParkingInGarage = new GarageParking();
-			FreeMechanics = new Queue<Mechanic>();
-			WaitingForParkingPlace = new Queue<StkMessage>();
 			Init();
 		}
 
 		override public void PrepareReplication()
 		{
 			base.PrepareReplication();
-			ParkingInGarage.ResetGarage();
+			MyAgent.ParkingInGarage.ResetGarage();
             // Setup component for the next replication
             ResetReplicationStats();
             ClearAllQueues();
@@ -48,36 +39,36 @@ namespace managers
 		/// <param name="numberOfTechnicians"></param>
 		private void InitializeMechanics(int numberOfMechanic)
 		{
-			FreeMechanics.Clear();
+            MyAgent.FreeMechanics.Clear();
 			Mechanic mech;
 			for (int i = 0; i < numberOfMechanic; i++)
 			{
 				mech = new Mechanic(i);
-				FreeMechanics.Enqueue(mech);
+                MyAgent.FreeMechanics.Enqueue(mech);
 			}
-			AvergaeNumberOfFreeMechanics.Add(numberOfMechanic, MySim.CurrentTime);
+            MyAgent.AvergaeNumberOfFreeMechanics.Add(numberOfMechanic, MySim.CurrentTime);
 		}
         /// <summary>
         /// Resetovanie replikacnych statistik
         /// </summary>
         private void ResetReplicationStats()
         {
-            AvergaeNumberOfFreeMechanics.Reset();
+            MyAgent.AvergaeNumberOfFreeMechanics.Reset();
         }
         /// <summary>
         /// Vycistenie struktur pouzitych v simulacii
         /// </summary>
         private void ClearAllQueues()
         {
-            FreeMechanics.Clear();
-			WaitingForParkingPlace.Clear();
+            MyAgent.FreeMechanics.Clear();
+			MyAgent.ParkingInGarage.ResetGarage();
         }
 
 		private void FindWorkForMechanic(Worker worker)
 		{
-			if (ParkingInGarage.IsWaitingCar())
+			if (MyAgent.ParkingInGarage.IsWaitingCar())
 			{
-				var mess = ParkingInGarage.GetCustomersCarFromParking();
+				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking();
                 ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
                 mess.Worker = worker;
                 mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
@@ -98,8 +89,8 @@ namespace managers
             worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
             if (worker.GetType() == typeof(Mechanic))
             {
-                FreeMechanics.Enqueue((Mechanic)worker);
-                AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
+                MyAgent.FreeMechanics.Enqueue((Mechanic)worker);
+                MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
             }
             else
             {
@@ -110,23 +101,23 @@ namespace managers
         //meta! sender="STKAgent", id="22", type="Request"
         public void ProcessCarInspection(MessageForm message)
 		{
-			// zapni process na kontrolu
-			ParkingInGarage.ParkCustomersCarInGrage((StkMessage)message);
+            // zapni process na kontrolu
+            MyAgent.ParkingInGarage.ParkCustomersCarInGrage((StkMessage)message);
             HandleParkingReservation();
-			if (FreeMechanics.Count > 0)
+			if (MyAgent.FreeMechanics.Count > 0)
             {
-                var worker = FreeMechanics.Dequeue();
-                AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
+                var worker = MyAgent.FreeMechanics.Dequeue();
+                MyAgent.AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
 				FindWorkForMechanic(worker);
             }
 		}
 
 		private void HandleParkingReservation()
 		{
-            if (ParkingInGarage.IsFreeSpot() && WaitingForParkingPlace.Count > 0)
+            if (MyAgent.ParkingInGarage.IsFreeSpot() && MyAgent.ParkingInGarage.IsWaitingForParkingPlace())
             {
-                var mess = WaitingForParkingPlace.Dequeue();
-                ParkingInGarage.ReservePlaceForCar();
+                var mess = MyAgent.ParkingInGarage.GetWaitingForParkingPlace();
+                MyAgent.ParkingInGarage.ReservePlaceForCar();
                 mess.HasParkingReserved = true;
                 mess.Addressee = MySim.FindAgent(SimId.STKAgent);
                 Response(mess);
@@ -136,8 +127,8 @@ namespace managers
 		//meta! sender="STKAgent", id="19", type="Request"
 		public void ProcessReserveParking(MessageForm message)
 		{
-			// zareservuj parkovisko , ak nie je tak cakaj kym sa neuvolni .. tzn dat do radu
-			WaitingForParkingPlace.Enqueue((StkMessage)message);
+            // zareservuj parkovisko , ak nie je tak cakaj kym sa neuvolni .. tzn dat do radu
+            MyAgent.ParkingInGarage.AddWaitingForParkingPlace((StkMessage)message);
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_ACCEPTANCE;
             HandleParkingReservation();
 		}

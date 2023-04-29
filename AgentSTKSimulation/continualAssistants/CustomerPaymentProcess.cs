@@ -8,11 +8,9 @@ namespace continualAssistants
 	//meta! id="27"
 	public class CustomerPaymentProcess : Process
 	{
-		StkGenerator.PaymentTimeGenerator PaymentTimeGenerator { get; set; }
 		public CustomerPaymentProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-			PaymentTimeGenerator = ((STKAgentSimulation)mySim).StkGenerators.CreatePaymentTimeGen();
         }
 
 		override public void PrepareReplication()
@@ -25,7 +23,7 @@ namespace continualAssistants
 		public void ProcessStart(MessageForm message)
         {
             message.Code = Mc.Finish;
-            Hold(PaymentTimeGenerator.GetPaymentTime(), message);
+            Hold(MyAgent.PaymentTimeGenerator.GetPaymentTime(), message);
         }
 
 		//meta! userInfo="Process messages defined in code", id="0"
