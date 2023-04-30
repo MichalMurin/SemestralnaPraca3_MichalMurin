@@ -85,6 +85,7 @@
     <Compile Include="StkStation\Models\Technician.cs" />
     <Compile Include="StkStation\Models\Work.cs" />
     <Compile Include="StkStation\Models\Worker.cs" />
+    <Compile Include="StkStation\Services\WorkerAgentService.cs" />
     <Compile Include="StkStation\StkGenerator.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,17 +6,19 @@ using DISS_S2.SimulationCore.Statistics;
 using AgentSim.StkStation.Models;
 using System.Collections.Generic;
 using System;
+using AgentSTKSimulation.StkStation.Services;
 
 namespace managers
 {
 	//meta! id="5"
 	public class MechanicsManager : Manager
 	{
-
+		private WorkerAgentService _mechanicsService;
 		public MechanicsManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
 			Init();
+			_mechanicsService = new WorkerAgentService(MyAgent);
 		}
 
 		override public void PrepareReplication()
@@ -69,7 +71,7 @@ namespace managers
 			// ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
 			if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
 			{
-				SendWorkerToLunch(worker);
+				_mechanicsService.SendWorkerToLunch(worker);
 			}
 			else if (MyAgent.ParkingInGarage.IsWaitingCar())
 			{
@@ -82,27 +84,27 @@ namespace managers
             }
 			else
 			{
-				SetWorkerFree(worker);
+				_mechanicsService.SetWorkerFree(worker);
 			}
 		}
         /// <summary>
         /// Uvolnenenie pracovnika
         /// </summary>
-        /// <param name="worker"></param>
-        public void SetWorkerFree(Worker worker)
-        {
-            worker.IsWorking = false;
-            worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
-            if (worker.GetType() == typeof(Mechanic))
-            {
-                MyAgent.FreeMechanics.Enqueue((Mechanic)worker);
-                MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
-            }
-            else
-            {
-                throw new ArgumentException("Nemozem uvolnit technika v agentovi mechanikov!!");
-            }
-        }
+        ///// <param name="worker"></param>
+        //public void SetWorkerFree(Worker worker)
+        //{
+        //    worker.IsWorking = false;
+        //    worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
+        //    if (worker.GetType() == typeof(Mechanic))
+        //    {
+        //        MyAgent.FreeMechanics.Enqueue((Mechanic)worker);
+        //        MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
+        //    }
+        //    else
+        //    {
+        //        throw new ArgumentException("Nemozem uvolnit technika v agentovi mechanikov!!");
+        //    }
+        //}
 
         //meta! sender="STKAgent", id="22", type="Request"
         public void ProcessCarInspection(MessageForm message)
@@ -171,17 +173,17 @@ namespace managers
 			for (int i = 0; i < freeMech; i++)
             {
                 MyAgent.AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
-                SendWorkerToLunch(MyAgent.FreeMechanics.Dequeue());
+                _mechanicsService.SendWorkerToLunch(MyAgent.FreeMechanics.Dequeue());
             }
 		}
 
-		private void SendWorkerToLunch(Worker worker)
-		{
-			var message = new StkMessage(MySim, null, worker);
-			worker.IsWorking = true;
-            message.Addressee = MyAgent.FindAssistant(SimId.MechanicsLunchBreakScheduler);
-            StartContinualAssistant(message);
-        }
+		//private void SendWorkerToLunch(Worker worker)
+		//{
+		//	var message = new StkMessage(MySim, null, worker);
+		//	worker.IsWorking = true;
+  //          message.Addressee = MyAgent.FindAssistant(SimId.MechanicsLunchBreakScheduler);
+  //          StartContinualAssistant(message);
+  //      }
 
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)

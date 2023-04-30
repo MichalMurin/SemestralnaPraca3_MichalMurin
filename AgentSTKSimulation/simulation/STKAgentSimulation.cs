@@ -81,7 +81,7 @@ namespace simulation
                 agent.FinishStatsAfterReplication();
                 agent.AddGlobalStats();
             }
-            if (this.Mode == SimulationMode.FAST && this.CurrentReplication % 10 == 0)
+            if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 10 == 0)
             {
                 RefreshGui();
             }

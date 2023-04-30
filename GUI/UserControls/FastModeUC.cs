@@ -32,7 +32,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            CurrentReplicationLbl.Text = simulation.CurrentReplication.ToString();
+            CurrentReplicationLbl.Text = (simulation.CurrentReplication+1).ToString();
             AverageWaitingTimeLbl.Text = (((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
             AverageTimeInSystemLbl.Text = (((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
             AverageCustomersNumAtEndDayLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
