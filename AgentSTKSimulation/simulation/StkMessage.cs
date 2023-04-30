@@ -42,5 +42,10 @@ namespace simulation
             HasParkingReserved = original.HasParkingReserved;
             // Copy attributes
         }
-	}
+
+        public override string ToString()
+        {
+            return Customer.ToString();
+        }
+    }
 }

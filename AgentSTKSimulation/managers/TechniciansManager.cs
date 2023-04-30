@@ -97,6 +97,7 @@ namespace managers
         //meta! sender="STKAgent", id="23", type="Request"
         public void ProcessCustomerPayment(MessageForm message)
         {
+            ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_PAYMENT;
             MyAgent.CustomerQueueForPayment.Enqueue((StkMessage)message);
             if (MyAgent.FreeTechnicians.Count > 0)
             {
@@ -121,6 +122,7 @@ namespace managers
 
         private void StartAcceptanceProcess(Worker worker, StkMessage mess)
         {
+            worker.Work = AgentSTKSimulation.StkStation.Models.Work.ACCEPTANCE;
             mess.Worker = worker;
             mess.Customer.Situation = CustomerSituation.BEEING_ACCEPTED;
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerAcceptanceProcess);
@@ -129,6 +131,7 @@ namespace managers
 
         private void StartPaymentProcess(Worker worker, StkMessage mess)
         {
+            worker.Work = AgentSTKSimulation.StkStation.Models.Work.PAYMENT;
             mess.Worker = worker;
             mess.Customer.Situation = CustomerSituation.IS_PAYING;
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerPaymentProcess);

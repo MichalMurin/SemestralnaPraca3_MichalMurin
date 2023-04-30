@@ -87,8 +87,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 QueueForAcceptanceListbox.DataSource = null;
                 QueueForPaymentListBox.DataSource = null;
-                //QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
-                //QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
+                QueueForAcceptanceListbox.DataSource = ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).CustomerQueueForAcceptance.ToList();
+                QueueForPaymentListBox.DataSource = ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).CustomerQueueForPayment.ToList();
             }
         }
         private void UpdateWorkersListbox()
@@ -192,8 +192,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             if (QueueShowCheckbox.Checked)
             {
                 _showQueues = true;
-                //QueueForAcceptanceListbox.DataSource = _simulator.CustomerQueueForAcceptance.ToList();
-                //QueueForPaymentListBox.DataSource = _simulator.CustomerQueueForPayment.ToList();
+                QueueForAcceptanceListbox.DataSource = ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).CustomerQueueForAcceptance.ToList();
+                QueueForPaymentListBox.DataSource = ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).CustomerQueueForPayment.ToList();
             }
             else
             {

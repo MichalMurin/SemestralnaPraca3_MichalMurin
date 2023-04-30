@@ -11,6 +11,7 @@ namespace AgentSTKSimulation.StkStation.Models
         ACCEPTANCE,
         SERVICE,
         PAYMENT,
+        LUNCH,
         UNKNOWN
     }
     public static class WorkService
@@ -25,6 +26,8 @@ namespace AgentSTKSimulation.StkStation.Models
                     return "obsluhuje";
                 case Work.PAYMENT:
                     return "vybavuje platenie";
+                case Work.LUNCH:
+                    return "obeduje";
                 default:
                     return "UNKNOWN";
             }

@@ -78,6 +78,7 @@ namespace managers
 				worker.IsWorking = true;
 				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking();
                 ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
+				worker.Work = AgentSTKSimulation.StkStation.Models.Work.SERVICE;
                 mess.Worker = worker;
                 mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
                 StartContinualAssistant(mess);

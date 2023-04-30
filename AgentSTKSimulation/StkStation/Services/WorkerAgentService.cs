@@ -40,6 +40,7 @@ namespace AgentSTKSimulation.StkStation.Services
 
         internal void SendWorkerToLunch(Worker worker)
         {
+            worker.Work = Models.Work.LUNCH;
             int id = 0;
             if (worker.GetType() == typeof(Mechanic))
             {
