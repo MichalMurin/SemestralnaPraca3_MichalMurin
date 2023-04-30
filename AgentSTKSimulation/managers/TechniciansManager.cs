@@ -59,7 +59,12 @@ namespace managers
 
         private void FindWorkForTechnician(Worker worker)
         {
-            if (MyAgent.CustomerQueueForPayment.Count > 0)
+            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
+            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
+            {
+                SendWorkerToLunch(worker);
+            }
+            else if (MyAgent.CustomerQueueForPayment.Count > 0)
             {
                 var cus = MyAgent.CustomerQueueForPayment.Dequeue();
                 cus.Worker = worker;
@@ -77,6 +82,13 @@ namespace managers
             {
                 SetWorkerFree(worker);
             }
+        }
+        private void SendWorkerToLunch(Worker worker)
+        {
+            var message = new StkMessage(MySim, null, worker);
+            worker.IsWorking = true;
+            message.Addressee = MyAgent.FindAssistant(SimId.TechniciansLunchBreakScheduler);
+            StartContinualAssistant(message);
         }
 
         //meta! sender="STKAgent", id="23", type="Request"
@@ -127,6 +139,11 @@ namespace managers
         //meta! sender="TechniciansLunchBreakScheduler", id="35", type="Finish"
         public void ProcessFinishTechniciansLunchBreakScheduler(MessageForm message)
         {
+            // uvolni pracovnika, daj mu robotku
+            var worker = ((StkMessage)message).Worker;
+            worker.HadLunch = true;
+            MyAgent.AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
+            FindWorkForTechnician(worker);
         }
 
         //meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
@@ -154,6 +171,13 @@ namespace managers
         //meta! sender="STKAgent", id="47", type="Notice"
         public void ProcessLunchBreakStart(MessageForm message)
         {
+            // nastav bool na obedy a posli volnych na obed
+            int freeTech = MyAgent.FreeTechnicians.Count;
+            for (int i = 0; i < freeTech; i++)
+            {
+                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
+                SendWorkerToLunch(MyAgent.FreeTechnicians.Dequeue());
+            }
         }
 
         //meta! sender="STKAgent", id="21", type="Request"

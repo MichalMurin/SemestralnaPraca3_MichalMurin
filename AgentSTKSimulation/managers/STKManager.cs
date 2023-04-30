@@ -67,7 +67,8 @@ namespace managers
 		//meta! sender="StartLunchBreakScheduler", id="43", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
-			message.Addressee = MySim.FindAgent(SimId.TechniciansAgent);
+			((STKAgentSimulation)MySim).IsTimeForLunch = true;
+            message.Addressee = MySim.FindAgent(SimId.TechniciansAgent);
 			Notice(message);
 			var message2 = message.CreateCopy();
 			message2.Addressee = MySim.FindAgent(SimId.MechanicsAgent);
@@ -77,9 +78,12 @@ namespace managers
 		//meta! sender="ModelAgent", id="40", type="Notice"
 		public void ProcessInitialize(MessageForm message)
 		{
-            // zacneme hold do 11 na obendu pauzu
-            message.Addressee = MyAgent.FindAssistant(SimId.StartLunchBreakScheduler);
-            StartContinualAssistant(message);
+			// zacneme hold do 11 na obendu pauzu, ak nerobime validaciu
+			if (!((STKAgentSimulation)MySim).IsValidation)
+			{
+                message.Addressee = MyAgent.FindAssistant(SimId.StartLunchBreakScheduler);
+                StartContinualAssistant(message);
+            }
         }
 
 		//meta! sender="TechniciansAgent", id="21", type="Response"

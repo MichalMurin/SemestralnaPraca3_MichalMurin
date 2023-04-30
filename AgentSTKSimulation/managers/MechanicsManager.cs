@@ -66,8 +66,14 @@ namespace managers
 
 		private void FindWorkForMechanic(Worker worker)
 		{
-			if (MyAgent.ParkingInGarage.IsWaitingCar())
+			// ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
+			if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
 			{
+				SendWorkerToLunch(worker);
+			}
+			else if (MyAgent.ParkingInGarage.IsWaitingCar())
+			{
+				worker.IsWorking = true;
 				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking();
                 ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
                 mess.Worker = worker;
@@ -137,6 +143,10 @@ namespace managers
 		public void ProcessFinishMechanicsLunchBreakScheduler(MessageForm message)
 		{
 			// uvolni pracovnika, daj mu robotku
+			var worker = ((StkMessage)message).Worker;
+			worker.HadLunch = true;
+            MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
+            FindWorkForMechanic(worker);
 		}
 
 		//meta! sender="CarInspectionProcess", id="31", type="Finish"
@@ -157,7 +167,21 @@ namespace managers
 		public void ProcessLunchBreakStart(MessageForm message)
 		{
 			// nastav bool na obedy a posli volnych na obed
+			int freeMech = MyAgent.FreeMechanics.Count;
+			for (int i = 0; i < freeMech; i++)
+            {
+                MyAgent.AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
+                SendWorkerToLunch(MyAgent.FreeMechanics.Dequeue());
+            }
 		}
+
+		private void SendWorkerToLunch(Worker worker)
+		{
+			var message = new StkMessage(MySim, null, worker);
+			worker.IsWorking = true;
+            message.Addressee = MyAgent.FindAssistant(SimId.MechanicsLunchBreakScheduler);
+            StartContinualAssistant(message);
+        }
 
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)

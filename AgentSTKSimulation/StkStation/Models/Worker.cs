@@ -11,6 +11,7 @@ namespace AgentSim.StkStation.Models
     public class Worker: INotifyPropertyChanged
     {
         public bool IsWorking { get; set; }
+        public bool HadLunch { get; set; }
         private Work _work;
         public Work Work
         {
@@ -32,12 +33,14 @@ namespace AgentSim.StkStation.Models
             IsWorking = false;
             Id = id;
             Work = Work.UNKNOWN;
+            HadLunch = false;
         }
         public Worker(Worker other)
         {
             IsWorking = other.IsWorking;
             Id = other.Id;
             Work = other.Work;
+            HadLunch = other.HadLunch;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

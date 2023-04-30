@@ -19,15 +19,19 @@ namespace continualAssistants
 
 		//meta! sender="MechanicsAgent", id="33", type="Start"
 		public void ProcessStart(MessageForm message)
-		{
-		}
+        {
+            message.Code = Mc.Finish;
+            Hold(30*60, message);
+        }
 
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
 			switch (message.Code)
-			{
-			}
+            {
+                case Mc.Finish:
+                    AssistantFinished(message); break;
+            }
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

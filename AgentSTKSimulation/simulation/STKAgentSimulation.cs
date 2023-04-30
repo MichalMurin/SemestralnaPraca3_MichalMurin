@@ -17,6 +17,8 @@ namespace simulation
         public SimulationMode Mode { get; set; }
         private DateTime _startTime;
         public int Seed { get; set; }
+        public bool IsValidation { get; set; }
+        public bool IsTimeForLunch { get; set; }
         public StkGenerator StkGenerators { get; private set; }
         private Random _seedGenerator;
         public List<IStatsDelegate> GlobalStatsAgents { get; set; }
@@ -28,6 +30,8 @@ namespace simulation
 		{
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
             Seed = -1;
+            IsValidation = false;
+            IsTimeForLunch = false;
             GlobalStatsAgents = new List<IStatsDelegate>();
             Init();
             RegisterPrepareSimAgents();
@@ -77,7 +81,7 @@ namespace simulation
                 agent.FinishStatsAfterReplication();
                 agent.AddGlobalStats();
             }
-            if (this.CurrentReplication % 100 == 0)
+            if (this.Mode == SimulationMode.FAST && this.CurrentReplication % 10 == 0)
             {
                 RefreshGui();
             }
@@ -95,7 +99,8 @@ namespace simulation
 		{
 			// Dysplay simulation results
 			base.SimulationFinished();
-		}
+            RefreshGui();
+        }
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

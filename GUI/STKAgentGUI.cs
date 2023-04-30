@@ -112,5 +112,17 @@ namespace SemestralnaPraca3_MichalMurin
             var uc = _userControlers[GuiTab.CHART_TECHNICIANS];
             AddUserControlToPanel(uc, GuiTab.CHART_TECHNICIANS);
         }
+
+        private void ValidationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ValidationCheckBox.Checked)
+            {
+                _simulator.IsValidation = true;
+            }
+            else
+            {
+                _simulator.IsValidation = false;
+            }
+        }
     }
 }
