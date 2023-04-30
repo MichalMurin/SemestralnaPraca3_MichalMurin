@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using simulation;
+using agents;
 
 namespace SemestralnaPraca3_MichalMurin.UserControls
 {
@@ -29,10 +30,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            //var techNum = simulation.TechniciansNumber;
-            //var average = simulation.SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage();
-            //chart1.Series[SERIES_NAME].Points.AddXY(techNum, average);
-            //resultsListBox.Items.Add($"{techNum}       :{average}");
+            var techNum = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansNumber;
+            var average = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage();
+            chart1.Series[SERIES_NAME].Points.AddXY(techNum, average);
+            resultsListBox.Items.Add($"{techNum}       :{average}");
         }
 
         public void StopSimulation()
@@ -78,13 +79,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            //_simulator.TechniciansNumber = startNumberTechnics;
-            //_simulator.MechanicsNumber = numberOfMechanics;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber = numberOfMechanics;
+            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = startNumberTechnics;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
-                _simulator.Simulate(replications);
-                //_simulator.TechniciansNumber++;
+                _simulator.Simulate(replications, 8*3600);
+                ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber++;
                 if (!_isSimulationRunning)
                 {
                     break;
