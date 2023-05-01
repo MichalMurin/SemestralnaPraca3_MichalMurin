@@ -12,6 +12,7 @@ namespace DISS_S2.StkStation
     public class Customer: INotifyPropertyChanged
     {
         public double StartWaitingTime { get; set; }
+        public bool HasParkingReserved { get; set; }
         public CarType CarType { get; set; }
         public int Id { get; set; }
         private CustomerSituation _situation;
@@ -35,6 +36,7 @@ namespace DISS_S2.StkStation
             CarType = carType;
             Id = id;
             Situation = CustomerSituation.CREATED;
+            HasParkingReserved = false;
         }
 
         public Customer(Customer other)

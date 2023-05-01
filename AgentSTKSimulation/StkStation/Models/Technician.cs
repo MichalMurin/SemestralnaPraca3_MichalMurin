@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgentSTKSimulation.StkStation.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,8 @@ namespace AgentSim.StkStation.Models
 
         public override string ToString()
         {
-            string work = Work==null ? string.Empty : Work.ToString();
-            string isWorkingStr = IsWorking? $"pracuje: {work}":"nepracuje";
+            string work = WorkService.SituationToString(Work);
+            string isWorkingStr = IsBusy? $"pracuje: {work}, zakaznik: {CustomerId}":"nepracuje";
             return $"Technik {Id} {isWorkingStr}";
         }
     }

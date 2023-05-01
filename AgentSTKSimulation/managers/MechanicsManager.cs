@@ -13,12 +13,10 @@ namespace managers
 	//meta! id="5"
 	public class MechanicsManager : Manager
 	{
-		private WorkerAgentService _mechanicsService;
 		public MechanicsManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
 			Init();
-			_mechanicsService = new WorkerAgentService(MyAgent);
 		}
 
 		override public void PrepareReplication()
@@ -28,64 +26,51 @@ namespace managers
             // Setup component for the next replication
             ResetReplicationStats();
             ClearAllQueues();
-            InitializeMechanics(MyAgent.MechanicsNumber);
+            MyAgent.MechanicsService.InitializeWorkers(typeof(Mechanic));
             if (PetriNet != null)
 			{
 				PetriNet.Clear();
 			}
         }
-		/// <summary>
-		/// Inicializovanie pracovnikov
-		/// </summary>
-		/// <param name="numberOfMechanics"></param>
-		/// <param name="numberOfTechnicians"></param>
-		private void InitializeMechanics(int numberOfMechanic)
-		{
-            MyAgent.FreeMechanics.Clear();
-			Mechanic mech;
-			for (int i = 0; i < numberOfMechanic; i++)
-			{
-				mech = new Mechanic(i);
-                MyAgent.FreeMechanics.Enqueue(mech);
-			}
-            MyAgent.AvergaeNumberOfFreeMechanics.Add(numberOfMechanic, MySim.CurrentTime);
-		}
         /// <summary>
         /// Resetovanie replikacnych statistik
         /// </summary>
         private void ResetReplicationStats()
         {
-            MyAgent.AvergaeNumberOfFreeMechanics.Reset();
+            MyAgent.MechanicsService.ResetLocalStats();
         }
         /// <summary>
         /// Vycistenie struktur pouzitych v simulacii
         /// </summary>
         private void ClearAllQueues()
         {
-            MyAgent.FreeMechanics.Clear();
+            MyAgent.MechanicsService.ClearQueues();
 			MyAgent.ParkingInGarage.ResetGarage();
         }
 
-		private void FindWorkForMechanic(Worker worker)
+		private void FindWorkForMechanic()
 		{
+			var worker = MyAgent.MechanicsService.GetWorker();
 			// ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
 			if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
 			{
-				_mechanicsService.SendWorkerToLunch(worker);
+				MyAgent.MechanicsService.SendWorkerToLunch(worker);
 			}
 			else if (MyAgent.ParkingInGarage.IsWaitingCar())
 			{
-				worker.IsWorking = true;
+				worker.IsBusy = true;
 				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking();
+				HandleParkingReservation();
                 ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
-				worker.Work = AgentSTKSimulation.StkStation.Models.Work.SERVICE;
+                worker.CustomerId = ((StkMessage)mess).Customer.Id;
+                worker.Work = AgentSTKSimulation.StkStation.Models.Work.SERVICE;
                 mess.Worker = worker;
                 mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
                 StartContinualAssistant(mess);
             }
 			else
 			{
-				_mechanicsService.SetWorkerFree(worker);
+                MyAgent.MechanicsService.SetWorkerFree(worker);
 			}
 		}
         /// <summary>
@@ -94,7 +79,7 @@ namespace managers
         ///// <param name="worker"></param>
         //public void SetWorkerFree(Worker worker)
         //{
-        //    worker.IsWorking = false;
+        //    worker.IsBusy = false;
         //    worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
         //    if (worker.GetType() == typeof(Mechanic))
         //    {
@@ -112,12 +97,10 @@ namespace managers
 		{
             // zapni process na kontrolu
             MyAgent.ParkingInGarage.ParkCustomersCarInGrage((StkMessage)message);
-            HandleParkingReservation();
-			if (MyAgent.FreeMechanics.Count > 0)
+            //HandleParkingReservation();
+			if (MyAgent.MechanicsService.IsFreeWorker())
             {
-                var worker = MyAgent.FreeMechanics.Dequeue();
-                MyAgent.AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
-				FindWorkForMechanic(worker);
+				FindWorkForMechanic();
             }
 		}
 
@@ -127,7 +110,7 @@ namespace managers
             {
                 var mess = MyAgent.ParkingInGarage.GetWaitingForParkingPlace();
                 MyAgent.ParkingInGarage.ReservePlaceForCar();
-                mess.HasParkingReserved = true;
+                mess.Customer.HasParkingReserved = true;
                 mess.Addressee = MySim.FindAgent(SimId.STKAgent);
                 Response(mess);
             }
@@ -148,8 +131,8 @@ namespace managers
 			// uvolni pracovnika, daj mu robotku
 			var worker = ((StkMessage)message).Worker;
 			worker.HadLunch = true;
-            MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
-            FindWorkForMechanic(worker);
+			MyAgent.MechanicsService.SetWorkerFree(worker);
+            FindWorkForMechanic();
 		}
 
 		//meta! sender="CarInspectionProcess", id="31", type="Finish"
@@ -158,8 +141,8 @@ namespace managers
             // posli zakaznika hore na platenie
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-
-            FindWorkForMechanic(worker);
+			MyAgent.MechanicsService.SetWorkerFree(worker);
+            FindWorkForMechanic();
 
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CarInspection;
@@ -170,18 +153,13 @@ namespace managers
 		public void ProcessLunchBreakStart(MessageForm message)
 		{
 			// nastav bool na obedy a posli volnych na obed
-			int freeMech = MyAgent.FreeMechanics.Count;
-			for (int i = 0; i < freeMech; i++)
-            {
-                MyAgent.AvergaeNumberOfFreeMechanics.Add(-1, MySim.CurrentTime);
-                _mechanicsService.SendWorkerToLunch(MyAgent.FreeMechanics.Dequeue());
-            }
-		}
+			MyAgent.MechanicsService.LunchBreakStart();
+        }
 
 		//private void SendWorkerToLunch(Worker worker)
 		//{
 		//	var message = new StkMessage(MySim, null, worker);
-		//	worker.IsWorking = true;
+		//	worker.IsBusy = true;
   //          message.Addressee = MyAgent.FindAssistant(SimId.MechanicsLunchBreakScheduler);
   //          StartContinualAssistant(message);
   //      }

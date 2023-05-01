@@ -1,4 +1,5 @@
 ﻿using AgentSTKSimulation.StkStation.Models;
+using DISS_S2.StkStation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,8 +11,10 @@ namespace AgentSim.StkStation.Models
 {
     public class Worker: INotifyPropertyChanged
     {
-        public bool IsWorking { get; set; }
+        public bool IsBusy { get; set; }
         public bool HadLunch { get; set; }
+
+        public int CustomerId { get; set; }
         private Work _work;
         public Work Work
         {
@@ -30,14 +33,15 @@ namespace AgentSim.StkStation.Models
 
         public Worker(int id)
         {
-            IsWorking = false;
+            CustomerId = -1;
+            IsBusy = false;
             Id = id;
             Work = Work.UNKNOWN;
             HadLunch = false;
         }
         public Worker(Worker other)
         {
-            IsWorking = other.IsWorking;
+            IsBusy = other.IsBusy;
             Id = other.Id;
             Work = other.Work;
             HadLunch = other.HadLunch;

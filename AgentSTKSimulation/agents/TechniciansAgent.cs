@@ -8,36 +8,31 @@ using System.Collections.Generic;
 using AgentSTKSimulation.simulation;
 using static AgentSim.StkStation.StkGenerator;
 using AgentSim.StkStation;
+using AgentSTKSimulation.StkStation.Services;
 
 namespace agents
 {
 	//meta! id="4"
 	public class TechniciansAgent : Agent, IStatsDelegate
     {
-        public Queue<Technician> FreeTechnicians { get; set; }
+        public WorkerAgentService TechniciansService { get; set; }
         public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
         public Queue<StkMessage> CustomerQueueForPayment { get; set; }
         public StandartStaticstic TimeWaitingForAcceptanceStatistics { get; set; }
         public WeightedAritmeticAverage AverageNumberOfCustomersInQueueForAcceptance { get; set; }
-        public WeightedAritmeticAverage AvergaeNumberOfFreeTechnicians { get; set; }
         public StandartStaticstic SIMULATIONTimeWaitingForAcceptanceStatistics { get; set; }
         public StandartStaticstic SIMULATIONAverageNumberOfCustomersInQueueForAcceptance { get; set; }
-        public StandartStaticstic SIMULATIONAvergaeNumberOfFreeTechnicians { get; set; }
-        public int TechniciansNumber { get; set; }
         public StkGenerator.AcceptanceCarGenerator AcceptanceCarGenerator { get; set; }
         public StkGenerator.PaymentTimeGenerator PaymentTimeGenerator { get; set; }
         public TechniciansAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
         {
-            TechniciansNumber = 5;
+            TechniciansService = new WorkerAgentService(this);
             CustomerQueueForAcceptance = new Queue<StkMessage>();
             CustomerQueueForPayment = new Queue<StkMessage>();
-            FreeTechnicians = new Queue<Technician>();
             TimeWaitingForAcceptanceStatistics = new StandartStaticstic();
-            AvergaeNumberOfFreeTechnicians = new WeightedAritmeticAverage();
             AverageNumberOfCustomersInQueueForAcceptance = new WeightedAritmeticAverage();
             SIMULATIONTimeWaitingForAcceptanceStatistics = new StandartStaticstic();
-            SIMULATIONAvergaeNumberOfFreeTechnicians = new StandartStaticstic();
             SIMULATIONAverageNumberOfCustomersInQueueForAcceptance = new StandartStaticstic();
             Init();
 		}
@@ -66,14 +61,14 @@ namespace agents
         public void AddGlobalStats()
         {
             SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.AddValue(AverageNumberOfCustomersInQueueForAcceptance.GetAverage());
-            SIMULATIONAvergaeNumberOfFreeTechnicians.AddValue(AvergaeNumberOfFreeTechnicians.GetAverage());
+            TechniciansService.SIMULATIONAvergaeNumberOfFreeWorkers.AddValue(TechniciansService.AvergaeNumberOfFreeWorkers.GetAverage());
             SIMULATIONTimeWaitingForAcceptanceStatistics.AddValue(TimeWaitingForAcceptanceStatistics.GetAverage());
         }
 
         public void ResetGlobalStats()
         {
             SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.Reset();
-            SIMULATIONAvergaeNumberOfFreeTechnicians.Reset();
+            TechniciansService.SIMULATIONAvergaeNumberOfFreeWorkers.Reset();
             SIMULATIONTimeWaitingForAcceptanceStatistics.Reset();
         }
         public void CreateGenerator()
@@ -90,7 +85,7 @@ namespace agents
             }
 
             AverageNumberOfCustomersInQueueForAcceptance.Add(0, STKAgentSimulation.MAX_TIME);
-            AvergaeNumberOfFreeTechnicians.Add(0, STKAgentSimulation.MAX_TIME);
+            TechniciansService.AvergaeNumberOfFreeWorkers.Add(0, STKAgentSimulation.MAX_TIME);
         }
     }
 }

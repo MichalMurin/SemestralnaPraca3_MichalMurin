@@ -8,26 +8,22 @@ using System.Collections.Generic;
 using AgentSTKSimulation.simulation;
 using AgentSim.StkStation;
 using static AgentSim.StkStation.StkGenerator;
+using System.Collections.ObjectModel;
+using AgentSTKSimulation.StkStation.Services;
 
 namespace agents
 {
 	//meta! id="5"
 	public class MechanicsAgent : Agent, IStatsDelegate
     {
-        public WeightedAritmeticAverage AvergaeNumberOfFreeMechanics { get; set; }
-        public StandartStaticstic SIMULATIONAvergaeNumberOfFreeMechanics { get; set; }
+        public WorkerAgentService MechanicsService { get; set; }
         public GarageParking ParkingInGarage { get; set; }
-        public Queue<Mechanic> FreeMechanics { get; set; }
-        public int MechanicsNumber { get; set; }
         public StkGenerator.InspectionTimeGenerator InspectionTimeGenerator { get; set; }
         public MechanicsAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
         {
-            MechanicsNumber = 5;
-            AvergaeNumberOfFreeMechanics = new WeightedAritmeticAverage();
-            SIMULATIONAvergaeNumberOfFreeMechanics = new StandartStaticstic();
             ParkingInGarage = new GarageParking();
-            FreeMechanics = new Queue<Mechanic>();
+            MechanicsService = new WorkerAgentService(this);
             Init();
 		}
 
@@ -51,12 +47,12 @@ namespace agents
 
 		public void AddGlobalStats()
 		{
-			SIMULATIONAvergaeNumberOfFreeMechanics.AddValue(AvergaeNumberOfFreeMechanics.GetAverage());
+            MechanicsService.SIMULATIONAvergaeNumberOfFreeWorkers.AddValue(MechanicsService.AvergaeNumberOfFreeWorkers.GetAverage());
 		}
 
         public void ResetGlobalStats()
         {
-			SIMULATIONAvergaeNumberOfFreeMechanics.Reset();
+            MechanicsService.SIMULATIONAvergaeNumberOfFreeWorkers.Reset();
         }
         public void CreateGenerator()
         {
@@ -65,7 +61,7 @@ namespace agents
 
         public void FinishStatsAfterReplication()
         {
-            AvergaeNumberOfFreeMechanics.Add(0, STKAgentSimulation.MAX_TIME);
+            MechanicsService.AvergaeNumberOfFreeWorkers.Add(0, STKAgentSimulation.MAX_TIME);
         }
     }
 }

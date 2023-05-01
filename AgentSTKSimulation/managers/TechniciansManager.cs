@@ -14,12 +14,10 @@ namespace managers
     //meta! id="4"
     public class TechniciansManager : Manager
     {
-        private WorkerAgentService _techniciansService;
         public TechniciansManager(int id, Simulation mySim, Agent myAgent) :
             base(id, mySim, myAgent)
         {
             Init();
-            _techniciansService = new WorkerAgentService(MyAgent);
         }
 
         override public void PrepareReplication()
@@ -28,27 +26,11 @@ namespace managers
             // Setup component for the next replication
             ResetReplicationStats();
             ClearAllQueues();
-            InitializeTechnicians(MyAgent.TechniciansNumber);
+            MyAgent.TechniciansService.InitializeWorkers(typeof(Technician));
             if (PetriNet != null)
             {
                 PetriNet.Clear();
             }
-        }
-        /// <summary>
-        /// Inicializovanie pracovnikov
-        /// </summary>
-        /// <param name="numberOfMechanics"></param>
-        /// <param name="numberOfTechnicians"></param>
-        private void InitializeTechnicians(int numberOfTechnicians)
-        {
-            MyAgent.FreeTechnicians.Clear();
-            Technician tech;
-            for (int i = 0; i < numberOfTechnicians; i++)
-            {
-                tech = new Technician(i);
-                MyAgent.FreeTechnicians.Enqueue(tech);
-            }
-            MyAgent.AvergaeNumberOfFreeTechnicians.Add(numberOfTechnicians, MySim.CurrentTime);
         }
         /// <summary>
         /// Vycistenie struktur pouzitych v simulacii
@@ -57,15 +39,16 @@ namespace managers
         {
             MyAgent.CustomerQueueForAcceptance.Clear();
             MyAgent.CustomerQueueForPayment.Clear();
-            MyAgent.FreeTechnicians.Clear();
+            MyAgent.TechniciansService.ClearQueues();
         }
 
-        private void FindWorkForTechnician(Worker worker)
+        private void FindWorkForTechnician()
         {
+            var worker = MyAgent.TechniciansService.GetWorker();
             // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
             if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
             {
-                _techniciansService.SendWorkerToLunch(worker);
+                MyAgent.TechniciansService.SendWorkerToLunch(worker);
             }
             else if (MyAgent.CustomerQueueForPayment.Count > 0)
             {
@@ -73,7 +56,7 @@ namespace managers
                 cus.Worker = worker;
                 StartPaymentProcess(worker, cus);
             }
-            else if (MyAgent.CustomerQueueForAcceptance.Count > 0 && ((StkMessage)MyAgent.CustomerQueueForAcceptance.Peek()).HasParkingReserved)
+            else if (MyAgent.CustomerQueueForAcceptance.Count > 0 && ((StkMessage)MyAgent.CustomerQueueForAcceptance.Peek()).Customer.HasParkingReserved)
             {
                 MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(-1, MySim.CurrentTime);
                 var cus = MyAgent.CustomerQueueForAcceptance.Dequeue();
@@ -83,13 +66,13 @@ namespace managers
             }
             else
             {
-                _techniciansService.SetWorkerFree(worker);
+                MyAgent.TechniciansService.SetWorkerFree(worker);
             }
         }
         //private void SendWorkerToLunch(Worker worker)
         //{
         //    var message = new StkMessage(MySim, null, worker);
-        //    worker.IsWorking = true;
+        //    worker.IsBusy = true;
         //    message.Addressee = MyAgent.FindAssistant(SimId.TechniciansLunchBreakScheduler);
         //    StartContinualAssistant(message);
         //}
@@ -99,11 +82,9 @@ namespace managers
         {
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_PAYMENT;
             MyAgent.CustomerQueueForPayment.Enqueue((StkMessage)message);
-            if (MyAgent.FreeTechnicians.Count > 0)
+            if (MyAgent.TechniciansService.IsFreeWorker())
             {
-                var worker = MyAgent.FreeTechnicians.Dequeue();
-                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
-                FindWorkForTechnician(worker);
+                FindWorkForTechnician();
             }
         }
 
@@ -113,7 +94,8 @@ namespace managers
 
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            FindWorkForTechnician(worker);
+            MyAgent.TechniciansService.SetWorkerFree(worker);
+            FindWorkForTechnician();
 
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerPayment;
@@ -122,6 +104,7 @@ namespace managers
 
         private void StartAcceptanceProcess(Worker worker, StkMessage mess)
         {
+            worker.CustomerId = mess.Customer.Id;
             worker.Work = AgentSTKSimulation.StkStation.Models.Work.ACCEPTANCE;
             mess.Worker = worker;
             mess.Customer.Situation = CustomerSituation.BEEING_ACCEPTED;
@@ -131,6 +114,7 @@ namespace managers
 
         private void StartPaymentProcess(Worker worker, StkMessage mess)
         {
+            worker.CustomerId = mess.Customer.Id;
             worker.Work = AgentSTKSimulation.StkStation.Models.Work.PAYMENT;
             mess.Worker = worker;
             mess.Customer.Situation = CustomerSituation.IS_PAYING;
@@ -144,8 +128,8 @@ namespace managers
             // uvolni pracovnika, daj mu robotku
             var worker = ((StkMessage)message).Worker;
             worker.HadLunch = true;
-            MyAgent.AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
-            FindWorkForTechnician(worker);
+            MyAgent.TechniciansService.SetWorkerFree(worker);
+            FindWorkForTechnician();
         }
 
         //meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
@@ -153,7 +137,8 @@ namespace managers
         {
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            FindWorkForTechnician(worker);
+            MyAgent.TechniciansService.SetWorkerFree(worker);
+            FindWorkForTechnician();
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerAcceptance;
             Response(message);
@@ -163,32 +148,25 @@ namespace managers
         public void ProcessCustomerServiceNotice(MessageForm message)
         {
             MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
-            //CustomerQueueForAcceptance.Enqueue((StkMessage)message);
+            MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
         }
 
         //meta! sender="STKAgent", id="47", type="Notice"
         public void ProcessLunchBreakStart(MessageForm message)
         {
             // nastav bool na obedy a posli volnych na obed
-            int freeTech = MyAgent.FreeTechnicians.Count;
-            for (int i = 0; i < freeTech; i++)
-            {
-                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
-                _techniciansService.SendWorkerToLunch(MyAgent.FreeTechnicians.Dequeue());
-            }
+            MyAgent.TechniciansService.LunchBreakStart();
         }
 
         //meta! sender="STKAgent", id="21", type="Request"
         public void ProcessCustomerAcceptance(MessageForm message)
         {
             //((StkMessage)message).HasParkingReserved = true;
-            MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
+            //MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_ACCEPTANCE;
-            if (MyAgent.FreeTechnicians.Count > 0)
+            if (MyAgent.TechniciansService.IsFreeWorker())
             {
-                var worker = MyAgent.FreeTechnicians.Dequeue();
-                MyAgent.AvergaeNumberOfFreeTechnicians.Add(-1, MySim.CurrentTime);
-                FindWorkForTechnician(worker);
+                FindWorkForTechnician();
             }
         }
 
@@ -262,7 +240,7 @@ namespace managers
         private void ResetReplicationStats()
         {
             MyAgent.TimeWaitingForAcceptanceStatistics.Reset();
-            MyAgent.AvergaeNumberOfFreeTechnicians.Reset();
+            MyAgent.TechniciansService.ResetLocalStats();
             MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Reset();
         }
         /// <summary>
@@ -271,12 +249,12 @@ namespace managers
         /// <param name="worker"></param>
         //public void SetWorkerFree(Worker worker)
         //{
-        //    worker.IsWorking = false;
+        //    worker.IsBusy = false;
         //    worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
         //    if (worker.GetType() == typeof(Technician))
         //    {
         //        MyAgent.FreeTechnicians.Enqueue((Technician)worker);
-        //        MyAgent.AvergaeNumberOfFreeTechnicians.Add(1, MySim.CurrentTime);
+        //        MyAgent.AvergaeNumberOfFreeWorkers.Add(1, MySim.CurrentTime);
         //    }
         //    else
         //    {

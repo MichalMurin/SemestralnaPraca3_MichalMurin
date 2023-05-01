@@ -28,7 +28,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private bool _isSimulationRunning = false;
         private Thread _simulationThread;
         private BindingSource _bindingSourceCustomers = new BindingSource();
-        private BindingSource _bindingSourceWorkers = new BindingSource();
+        private BindingSource _bindingSourceMechanics = new BindingSource();
+        private BindingSource _bindingSourceTechnicians = new BindingSource();
         private bool _showQueues = false;
         public SlowModeUC(STKAgentSimulation core)
         {
@@ -38,12 +39,15 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             UpdateStyles();
             ////
             ((SurroundingAgent)_simulator.FindAgent(SimId.SurroundingAgent)).AllCustomers.CollectionChanged += ListChanged;
-            //_simulator.AllWorkers.CollectionChanged += ListChanged;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.AllWorkers.CollectionChanged += ListChanged;
+            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.AllWorkers.CollectionChanged += ListChanged;
             ////
             _bindingSourceCustomers.DataSource = ((SurroundingAgent)_simulator.FindAgent(SimId.SurroundingAgent)).AllCustomers;
-            //_bindingSourceWorkers.DataSource = _simulator.AllWorkers;
+            _bindingSourceMechanics.DataSource = ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.AllWorkers;
+            _bindingSourceTechnicians.DataSource = ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.AllWorkers;
             CustomersListBox.DataSource = _bindingSourceCustomers;
-            //WorkersListBox.DataSource = _bindingSourceWorkers;
+            TechniciansListBox.DataSource = _bindingSourceTechnicians;
+            MechanicsListBox.DataSource = _bindingSourceMechanics;
         }
 
 
@@ -61,7 +65,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                     var list = (ObservableCollection<Worker>)sender;
                     list[list.Count - 1].PropertyChanged += PropertyChanged;
                 }
-                this.Invoke((MethodInvoker)delegate { UpdateCustomerListbox(); });
+                //this.Invoke((MethodInvoker)delegate { UpdateCustomerListbox(); });
             }
         }
 
@@ -93,7 +97,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         }
         private void UpdateWorkersListbox()
         {
-            _bindingSourceWorkers.ResetBindings(false);
+            _bindingSourceMechanics.ResetBindings(false);
+            _bindingSourceTechnicians.ResetBindings(false);
         }
 
         private void StartBtn_Click(object sender, EventArgs e)
@@ -106,8 +111,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.SetSimSpeed(1, sleep/1000.0);
 
                 _simulator.Mode = SimulationMode.SLOW;
-                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber = (int)MechanicCounter.Value;
-                ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = (int)techniciansCounter.Value;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)MechanicCounter.Value;
+                ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = (int)techniciansCounter.Value;
                 _simulationThread.Start();
             }
             else
@@ -147,16 +152,16 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             RadaNaPlatenieLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).CustomerQueueForPayment.Count.ToString();
             ZaparkovaneAutaLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetCarParked().ToString();
             VolnyParkingLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetFreeSpots().ToString();
-            VolniTechniciLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).FreeTechnicians.Count.ToString();
-            VolniMechanicLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).FreeMechanics.Count.ToString();
+            VolniTechniciLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansService.FreeWorkers.Count.ToString();
+            VolniMechanicLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.FreeWorkers.Count.ToString();
 
             CurrentNUmberOfCstomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).CurrentNumberOfCustomersInTheSystem.ToString();
             NUmberAllCustomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).NumberOfCustomersInTheSystemAtAll.ToString();
             // v minutach
             AverageTWaitingTimeLbl.Text = (((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
             AverageTimeInSystemLbl.Text = (((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).TimeInTheSystemStatistics.GetAverage() / 60).ToString();
-            AvgFreeMechanicsLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).AvergaeNumberOfFreeMechanics.GetAverage().ToString(); 
-            AvgFreeTechniciansLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).AvergaeNumberOfFreeTechnicians.GetAverage().ToString();
+            AvgFreeMechanicsLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.AvergaeFreeWorkers().ToString(); 
+            AvgFreeTechniciansLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansService.AvergaeFreeWorkers().ToString();
 
         }
 

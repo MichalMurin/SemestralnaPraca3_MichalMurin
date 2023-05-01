@@ -30,7 +30,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(Simulation simulation)
         {
-            var mechanics = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsNumber;
+            var mechanics = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber;
             var average = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60;
             chart1.Series[SERIES_NAME].Points.AddXY(mechanics, average);
             resultsListBox.Items.Add($"{mechanics}      :{average}");
@@ -79,13 +79,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber = startNumberMechs;
-            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = numberOfTechnicscs;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = startNumberMechs;
+            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = numberOfTechnicscs;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications, 8*3600);
-                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber++;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber++;
                 if (!_isSimulationRunning)
                 {
                     break;

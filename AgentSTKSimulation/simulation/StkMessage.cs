@@ -7,11 +7,9 @@ namespace simulation
 	{
         public Customer Customer { get; set; }
         public Worker Worker { get; set; }
-		public bool HasParkingReserved { get; set; }
 		public StkMessage(Simulation sim, Customer cus, Worker wor) :
 			base(sim)
 		{
-			HasParkingReserved = false;
 			Customer = cus;
 			Worker = wor;
 		}
@@ -33,13 +31,15 @@ namespace simulation
 			StkMessage original = (StkMessage)message;
 			if (original.Customer != null)
             {
-                Customer = new Customer(original.Customer);
+				//Customer = new Customer(original.Customer);
+				Customer = original.Customer;
             }
 			if (original.Worker != null)
             {
-                Worker = new Worker(original.Worker);
+				//Worker = new Worker(original.Worker);
+				Worker = original.Worker;
             }
-            HasParkingReserved = original.HasParkingReserved;
+            //HasParkingReserved = original.HasParkingReserved;
             // Copy attributes
         }
 

@@ -30,7 +30,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(STKAgentSimulation simulation)
         {
-            var techNum = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansNumber;
+            var techNum = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber;
             var average = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage();
             chart1.Series[SERIES_NAME].Points.AddXY(techNum, average);
             resultsListBox.Items.Add($"{techNum}       :{average}");
@@ -79,13 +79,13 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsNumber = numberOfMechanics;
-            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber = startNumberTechnics;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = numberOfMechanics;
+            ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = startNumberTechnics;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications, 8*3600);
-                ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansNumber++;
+                ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber++;
                 if (!_isSimulationRunning)
                 {
                     break;

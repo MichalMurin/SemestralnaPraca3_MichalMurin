@@ -29,7 +29,7 @@ namespace AgentSTKSimulation.StkStation.Models
                 case Work.LUNCH:
                     return "obeduje";
                 default:
-                    return "UNKNOWN";
+                    return "oddychuje";
             }
         }
     }
