@@ -69,6 +69,7 @@ namespace managers
 		{
 			((STKAgentSimulation)MySim).IsTimeForLunch = true;
             message.Addressee = MySim.FindAgent(SimId.TechniciansAgent);
+			message.Code = Mc.LunchBreakStart;
 			Notice(message);
 			var message2 = message.CreateCopy();
 			message2.Addressee = MySim.FindAgent(SimId.MechanicsAgent);

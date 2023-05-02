@@ -16,9 +16,9 @@ namespace AgentSim.StkStation.Models
 
         public override string ToString()
         {
-            string work =  WorkService.SituationToString(Work);
-            string isWorkingStr = IsBusy ? $"pracuje: {work}, zakaznik: {CustomerId}" : "nepracuje";
-            return $"Mechanik {Id} {isWorkingStr}";
+            string work = WorkService.SituationToString(Work);
+            string isWorkingStr = CustomerId > 0 ? $", zakaznik: {CustomerId}" : "";
+            return $"Mechanik {Id} {work} {isWorkingStr}";
         }
     }
 }

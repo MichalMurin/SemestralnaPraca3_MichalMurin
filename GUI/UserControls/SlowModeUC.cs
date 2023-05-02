@@ -31,6 +31,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private BindingSource _bindingSourceMechanics = new BindingSource();
         private BindingSource _bindingSourceTechnicians = new BindingSource();
         private bool _showQueues = false;
+        private double _delta = 0.001;
+        private bool _isVisible = false;
         public SlowModeUC(STKAgentSimulation core)
         {
             InitializeComponent();
@@ -107,8 +109,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulationThread = new Thread(new ThreadStart(this.RunSimulation));
                 _simulationThread.IsBackground = true;
-                var sleep = RychlostMenic.Maximum - RychlostMenic.Value;
-                _simulator.SetSimSpeed(1, sleep/1000.0);
+                HandleSpeed();
 
                 _simulator.Mode = SimulationMode.SLOW;
                 ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)MechanicCounter.Value;
@@ -141,8 +142,15 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void RychlostMenic_Scroll(object sender, EventArgs e)
         {
-            var sleep = RychlostMenic.Maximum - RychlostMenic.Value;
-            _simulator.SetSimSpeed(1, sleep/1000.0);
+            HandleSpeed();
+        }
+
+        private void HandleSpeed()
+        {
+            int interval = 1;
+            var sleep = RychlostMenic.Maximum - RychlostMenic.Value + _delta;
+            _simulator.SetSimSpeed(interval, sleep / 1000.0);
+
         }
 
         private void Update(STKAgentSimulation simulation)
@@ -189,6 +197,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 {
                     _simulator.ResumeSimulation();
                 }
+                _simulator.CorrectReplicationRun = false;
             }
         }
 
@@ -216,10 +225,15 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void Refresh(Simulation sim)
         {
-            if (_isSimulationRunning)
+            if (_isVisible)
             {
                 this.Invoke((MethodInvoker)delegate { Update((STKAgentSimulation)sim); });
             }
+        }
+
+        public void SetControlVisible(bool visible)
+        {
+            _isVisible = visible;
         }
     }
 }

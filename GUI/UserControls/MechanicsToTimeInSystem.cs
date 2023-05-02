@@ -21,6 +21,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private bool _isSimulationRunning = false;
         private Thread _simulationThread;
         private const string SERIES_NAME = "Priemerny cas v systeme";
+        private bool _isVisible = false;
         public MechanicsToTimeInSystem(STKAgentSimulation core)
         {
             InitializeComponent();
@@ -49,6 +50,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 {
                     _simulator.ResumeSimulation();
                 }
+                _simulator.CorrectReplicationRun = false;
             }
         }
 
@@ -106,10 +108,15 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         public void Refresh(Simulation sim)
         {
-            if (_isSimulationRunning)
+            if (_isVisible)
             {
                 this.Invoke((MethodInvoker)delegate { Update(((STKAgentSimulation)sim)); });
             }
+        }
+
+        public void SetControlVisible(bool visible)
+        {
+            _isVisible = visible;
         }
     }
 }

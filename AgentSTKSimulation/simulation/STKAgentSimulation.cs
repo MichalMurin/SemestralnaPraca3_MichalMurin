@@ -22,6 +22,7 @@ namespace simulation
         public StkGenerator StkGenerators { get; private set; }
         private Random _seedGenerator;
         public List<IStatsDelegate> GlobalStatsAgents { get; set; }
+        public bool CorrectReplicationRun { get; set; }
 
         //public ObservableCollection<Worker> AllWorkers { get; set; }
         /// Standartne Statistiky
@@ -47,6 +48,7 @@ namespace simulation
         override protected void PrepareSimulation()
 		{
 			base.PrepareSimulation();
+            CorrectReplicationRun = true;
             if (Seed > 0)
             {
                 _seedGenerator = new Random(Seed);
@@ -68,20 +70,23 @@ namespace simulation
 		override protected void PrepareReplication()
 		{
 			base.PrepareReplication();
-			// Reset entities, queues, local statistics, etc...
-		}
+            // Reset entities, queues, local statistics, etc...
+        }
 
 		override protected void ReplicationFinished()
 		{
             // Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
             // TODO KONTROLA CI DOBEHLA REPLIKACIA KOREKTNE
-            foreach (var agent in GlobalStatsAgents)
+            if (CorrectReplicationRun)
             {
-                agent.FinishStatsAfterReplication();
-                agent.AddGlobalStats();
+                foreach (var agent in GlobalStatsAgents)
+                {
+                    agent.FinishStatsAfterReplication();
+                    agent.AddGlobalStats();
+                }
             }
-            if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 10 == 0)
+            if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 100 == 0)
             {
                 RefreshGui();
             }

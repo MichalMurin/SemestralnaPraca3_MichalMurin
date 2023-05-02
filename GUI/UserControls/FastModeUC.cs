@@ -23,6 +23,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         private STKAgentSimulation _simulator;
         private bool _isSimulationRunning = false;
         private Thread _simulationThread;
+        private bool _isVisible = false;
         public FastModeUC(STKAgentSimulation core)
         {
             InitializeComponent();
@@ -92,21 +93,27 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                     {
                         _simulator.ResumeSimulation();
                     }
+                    _simulator.CorrectReplicationRun = false;
                 }
             }
         }
 
         public void SimStateChanged(Simulation sim, SimState state)
         {
-            //throw new NotImplementedException();
+            //
         }
 
         public void Refresh(Simulation sim)
         {
-            if (_isSimulationRunning)
+            if (_isVisible)
             {
                 this.Invoke((MethodInvoker)delegate { Update((STKAgentSimulation)sim); });
             }
+        }
+
+        public void SetControlVisible(bool visible)
+        {
+            _isVisible = visible;
         }
     }
 }

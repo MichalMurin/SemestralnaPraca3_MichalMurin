@@ -59,6 +59,7 @@ namespace SemestralnaPraca3_MichalMurin
 
         private void StoppCurrentSimulation()
         {
+            ((ISimulationStoppable)_userControlers[_currentTab]).SetControlVisible(false);
             ((ISimulationStoppable)_userControlers[_currentTab]).StopSimulation();
         }
 
@@ -68,6 +69,7 @@ namespace SemestralnaPraca3_MichalMurin
             panelContainer.Controls.Add(userControl);
             userControl.BringToFront();
             _currentTab = tabName;
+            ((ISimulationStoppable)_userControlers[_currentTab]).SetControlVisible(true);
         }
 
         private void SlowModeBtn_clicked(object sender, EventArgs e)

@@ -9,5 +9,6 @@ namespace SemestralnaPraca3_MichalMurin
     internal interface ISimulationStoppable
     {
         void StopSimulation();
+        void SetControlVisible(bool visible);
     }
 }
