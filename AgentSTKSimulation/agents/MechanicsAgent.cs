@@ -38,7 +38,7 @@ namespace agents
 		{
 			new MechanicsManager(SimId.MechanicsManager, MySim, this);
 			new CarInspectionProcess(SimId.CarInspectionProcess, MySim, this);
-			new MechanicsLunchBreakScheduler(SimId.MechanicsLunchBreakScheduler, MySim, this);
+			new MechanicsLunchBreakProcess(SimId.MechanicsLunchBreakProcess, MySim, this);
 			AddOwnMessage(Mc.CarInspection);
 			AddOwnMessage(Mc.ReserveParking);
 			AddOwnMessage(Mc.LunchBreakStart);

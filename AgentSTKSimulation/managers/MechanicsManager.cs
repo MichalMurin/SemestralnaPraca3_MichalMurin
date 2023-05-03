@@ -73,27 +73,9 @@ namespace managers
                 MyAgent.MechanicsService.SetWorkerFree(worker);
 			}
 		}
-        /// <summary>
-        /// Uvolnenenie pracovnika
-        /// </summary>
-        ///// <param name="worker"></param>
-        //public void SetWorkerFree(Worker worker)
-        //{
-        //    worker.IsBusy = false;
-        //    worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
-        //    if (worker.GetType() == typeof(Mechanic))
-        //    {
-        //        MyAgent.FreeMechanics.Enqueue((Mechanic)worker);
-        //        MyAgent.AvergaeNumberOfFreeMechanics.Add(1, MySim.CurrentTime);
-        //    }
-        //    else
-        //    {
-        //        throw new ArgumentException("Nemozem uvolnit technika v agentovi mechanikov!!");
-        //    }
-        //}
 
-        //meta! sender="STKAgent", id="22", type="Request"
-        public void ProcessCarInspection(MessageForm message)
+		//meta! sender="STKAgent", id="22", type="Request"
+		public void ProcessCarInspection(MessageForm message)
 		{
             // zapni process na kontrolu
             MyAgent.ParkingInGarage.ParkCustomersCarInGrage((StkMessage)message);
@@ -125,16 +107,6 @@ namespace managers
             HandleParkingReservation();
 		}
 
-		//meta! sender="MechanicsLunchBreakScheduler", id="33", type="Finish"
-		public void ProcessFinishMechanicsLunchBreakScheduler(MessageForm message)
-		{
-			// uvolni pracovnika, daj mu robotku
-			var worker = ((StkMessage)message).Worker;
-			worker.HadLunch = true;
-			MyAgent.MechanicsService.SetWorkerFree(worker);
-            FindWorkForMechanic();
-		}
-
 		//meta! sender="CarInspectionProcess", id="31", type="Finish"
 		public void ProcessFinishCarInspectionProcess(MessageForm message)
 		{
@@ -156,14 +128,6 @@ namespace managers
 			MyAgent.MechanicsService.LunchBreakStart();
         }
 
-		//private void SendWorkerToLunch(Worker worker)
-		//{
-		//	var message = new StkMessage(MySim, null, worker);
-		//	worker.IsBusy = true;
-  //          message.Addressee = MyAgent.FindAssistant(SimId.MechanicsLunchBreakScheduler);
-  //          StartContinualAssistant(message);
-  //      }
-
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
@@ -171,6 +135,16 @@ namespace managers
 			{
 			}
 		}
+
+		//meta! sender="MechanicsLunchBreakProcess", id="61", type="Finish"
+		public void ProcessFinishMechanicsLunchBreakProcess(MessageForm message)
+        {
+            // uvolni pracovnika, daj mu robotku
+            var worker = ((StkMessage)message).Worker;
+            worker.HadLunch = true;
+            MyAgent.MechanicsService.SetWorkerFree(worker);
+            FindWorkForMechanic();
+        }
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
@@ -181,11 +155,15 @@ namespace managers
 		{
 			switch (message.Code)
 			{
+			case Mc.ReserveParking:
+				ProcessReserveParking(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
-				case SimId.MechanicsLunchBreakScheduler:
-					ProcessFinishMechanicsLunchBreakScheduler(message);
+				case SimId.MechanicsLunchBreakProcess:
+					ProcessFinishMechanicsLunchBreakProcess(message);
 				break;
 
 				case SimId.CarInspectionProcess:
@@ -196,10 +174,6 @@ namespace managers
 
 			case Mc.LunchBreakStart:
 				ProcessLunchBreakStart(message);
-			break;
-
-			case Mc.ReserveParking:
-				ProcessReserveParking(message);
 			break;
 
 			case Mc.CarInspection:

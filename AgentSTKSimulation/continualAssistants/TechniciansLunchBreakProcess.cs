@@ -3,10 +3,10 @@ using simulation;
 using agents;
 namespace continualAssistants
 {
-	//meta! id="34"
-	public class TechniciansLunchBreakScheduler : Scheduler
+	//meta! id="57"
+	public class TechniciansLunchBreakProcess : Process
 	{
-		public TechniciansLunchBreakScheduler(int id, Simulation mySim, CommonAgent myAgent) :
+		public TechniciansLunchBreakProcess(int id, Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
 		}
@@ -17,7 +17,7 @@ namespace continualAssistants
 			// Setup component for the next replication
 		}
 
-		//meta! sender="TechniciansAgent", id="35", type="Start"
+		//meta! sender="TechniciansAgent", id="58", type="Start"
 		public void ProcessStart(MessageForm message)
         {
             message.Code = Mc.Finish;

@@ -14,12 +14,12 @@ namespace simulation
 		public const int STKManager = 103;
 		public const int TechniciansManager = 104;
 		public const int MechanicsManager = 105;
-		public const int MechanicsLunchBreakScheduler = 1005;
-		public const int TechniciansLunchBreakScheduler = 1006;
-		public const int CustomerAcceptanceProcess = 1002;
 		public const int StartLunchBreakScheduler = 1007;
-		public const int CustomerPaymentProcess = 1003;
 		public const int CustomerCameScheduler = 1001;
+		public const int CustomerAcceptanceProcess = 1002;
+		public const int TechniciansLunchBreakProcess = 1008;
+		public const int CustomerPaymentProcess = 1003;
+		public const int MechanicsLunchBreakProcess = 1009;
 		public const int CarInspectionProcess = 1004;
 		//meta! tag="end"
 	}

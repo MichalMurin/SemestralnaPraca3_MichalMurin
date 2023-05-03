@@ -47,15 +47,15 @@ namespace agents
             // Setup component for the next replication
         }
 
-        //meta! userInfo="Generated code: do not modify", tag="begin"
-        private void Init()
-        {
-            new SurroundingManager(SimId.SurroundingManager, MySim, this);
-            new CustomerCameScheduler(SimId.CustomerCameScheduler, MySim, this);
-            AddOwnMessage(Mc.CustomerLeft);
-            AddOwnMessage(Mc.Initialize);
-        }
-        //meta! tag="end"
+		//meta! userInfo="Generated code: do not modify", tag="begin"
+		private void Init()
+		{
+			new SurroundingManager(SimId.SurroundingManager, MySim, this);
+			new CustomerCameScheduler(SimId.CustomerCameScheduler, MySim, this);
+			AddOwnMessage(Mc.CustomerLeft);
+			AddOwnMessage(Mc.Initialize);
+		}
+		//meta! tag="end"
 
         public void AddGlobalStats()
         {

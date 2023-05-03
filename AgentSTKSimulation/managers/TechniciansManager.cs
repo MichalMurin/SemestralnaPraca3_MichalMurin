@@ -69,16 +69,9 @@ namespace managers
                 MyAgent.TechniciansService.SetWorkerFree(worker);
             }
         }
-        //private void SendWorkerToLunch(Worker worker)
-        //{
-        //    var message = new StkMessage(MySim, null, worker);
-        //    worker.IsBusy = true;
-        //    message.Addressee = MyAgent.FindAssistant(SimId.TechniciansLunchBreakScheduler);
-        //    StartContinualAssistant(message);
-        //}
 
-        //meta! sender="STKAgent", id="23", type="Request"
-        public void ProcessCustomerPayment(MessageForm message)
+		//meta! sender="STKAgent", id="23", type="Request"
+		public void ProcessCustomerPayment(MessageForm message)
         {
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_PAYMENT;
             MyAgent.CustomerQueueForPayment.Enqueue((StkMessage)message);
@@ -88,8 +81,8 @@ namespace managers
             }
         }
 
-        //meta! sender="CustomerPaymentProcess", id="28", type="Finish"
-        public void ProcessFinishCustomerPaymentProcess(MessageForm message)
+		//meta! sender="CustomerPaymentProcess", id="28", type="Finish"
+		public void ProcessFinishCustomerPaymentProcess(MessageForm message)
         {
 
             var worker = ((StkMessage)message).Worker;
@@ -122,18 +115,9 @@ namespace managers
             StartContinualAssistant(mess);
         }
 
-        //meta! sender="TechniciansLunchBreakScheduler", id="35", type="Finish"
-        public void ProcessFinishTechniciansLunchBreakScheduler(MessageForm message)
-        {
-            // uvolni pracovnika, daj mu robotku
-            var worker = ((StkMessage)message).Worker;
-            worker.HadLunch = true;
-            MyAgent.TechniciansService.SetWorkerFree(worker);
-            FindWorkForTechnician();
-        }
 
-        //meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
-        public void ProcessFinishCustomerAcceptanceProcess(MessageForm message)
+		//meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
+		public void ProcessFinishCustomerAcceptanceProcess(MessageForm message)
         {
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
@@ -144,25 +128,23 @@ namespace managers
             Response(message);
         }
 
-        //meta! sender="STKAgent", id="20", type="Notice"
-        public void ProcessCustomerServiceNotice(MessageForm message)
+		//meta! sender="STKAgent", id="20", type="Notice"
+		public void ProcessCustomerServiceNotice(MessageForm message)
         {
             MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
             MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
         }
 
-        //meta! sender="STKAgent", id="47", type="Notice"
-        public void ProcessLunchBreakStart(MessageForm message)
+		//meta! sender="STKAgent", id="47", type="Notice"
+		public void ProcessLunchBreakStart(MessageForm message)
         {
             // nastav bool na obedy a posli volnych na obed
             MyAgent.TechniciansService.LunchBreakStart();
         }
 
-        //meta! sender="STKAgent", id="21", type="Request"
-        public void ProcessCustomerAcceptance(MessageForm message)
+		//meta! sender="STKAgent", id="21", type="Request"
+		public void ProcessCustomerAcceptance(MessageForm message)
         {
-            //((StkMessage)message).HasParkingReserved = true;
-            //MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
             ((StkMessage)message).Customer.Situation = CustomerSituation.WAITING_FOR_ACCEPTANCE;
             if (MyAgent.TechniciansService.IsFreeWorker())
             {
@@ -170,62 +152,72 @@ namespace managers
             }
         }
 
-        //meta! userInfo="Process messages defined in code", id="0"
-        public void ProcessDefault(MessageForm message)
+		//meta! userInfo="Process messages defined in code", id="0"
+		public void ProcessDefault(MessageForm message)
         {
             switch (message.Code)
             {
             }
         }
 
-        //meta! userInfo="Generated code: do not modify", tag="begin"
-        public void Init()
+		//meta! sender="TechniciansLunchBreakProcess", id="58", type="Finish"
+		public void ProcessFinishTechniciansLunchBreakProcess(MessageForm message)
         {
+            // uvolni pracovnika, daj mu robotku
+            var worker = ((StkMessage)message).Worker;
+            worker.HadLunch = true;
+            MyAgent.TechniciansService.SetWorkerFree(worker);
+            FindWorkForTechnician();
         }
 
-        override public void ProcessMessage(MessageForm message)
-        {
-            switch (message.Code)
-            {
-                case Mc.Finish:
-                    switch (message.Sender.Id)
-                    {
-                        case SimId.CustomerPaymentProcess:
-                            ProcessFinishCustomerPaymentProcess(message);
-                            break;
+		//meta! userInfo="Generated code: do not modify", tag="begin"
+		public void Init()
+		{
+		}
 
-                        case SimId.TechniciansLunchBreakScheduler:
-                            ProcessFinishTechniciansLunchBreakScheduler(message);
-                            break;
+		override public void ProcessMessage(MessageForm message)
+		{
+			switch (message.Code)
+			{
+			case Mc.CustomerPayment:
+				ProcessCustomerPayment(message);
+			break;
 
-                        case SimId.CustomerAcceptanceProcess:
-                            ProcessFinishCustomerAcceptanceProcess(message);
-                            break;
-                    }
-                    break;
+			case Mc.Finish:
+				switch (message.Sender.Id)
+				{
+				case SimId.CustomerAcceptanceProcess:
+					ProcessFinishCustomerAcceptanceProcess(message);
+				break;
 
-                case Mc.LunchBreakStart:
-                    ProcessLunchBreakStart(message);
-                    break;
+				case SimId.TechniciansLunchBreakProcess:
+					ProcessFinishTechniciansLunchBreakProcess(message);
+				break;
 
-                case Mc.CustomerPayment:
-                    ProcessCustomerPayment(message);
-                    break;
+				case SimId.CustomerPaymentProcess:
+					ProcessFinishCustomerPaymentProcess(message);
+				break;
+				}
+			break;
 
-                case Mc.CustomerAcceptance:
-                    ProcessCustomerAcceptance(message);
-                    break;
+			case Mc.CustomerServiceNotice:
+				ProcessCustomerServiceNotice(message);
+			break;
 
-                case Mc.CustomerServiceNotice:
-                    ProcessCustomerServiceNotice(message);
-                    break;
+			case Mc.CustomerAcceptance:
+				ProcessCustomerAcceptance(message);
+			break;
 
-                default:
-                    ProcessDefault(message);
-                    break;
-            }
-        }
-        //meta! tag="end"
+			case Mc.LunchBreakStart:
+				ProcessLunchBreakStart(message);
+			break;
+
+			default:
+				ProcessDefault(message);
+			break;
+			}
+		}
+		//meta! tag="end"
         public new TechniciansAgent MyAgent
         {
             get
@@ -243,23 +235,5 @@ namespace managers
             MyAgent.TechniciansService.ResetLocalStats();
             MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Reset();
         }
-        /// <summary>
-        /// Uvolnenenie pracovnika
-        /// </summary>
-        /// <param name="worker"></param>
-        //public void SetWorkerFree(Worker worker)
-        //{
-        //    worker.IsBusy = false;
-        //    worker.Work = AgentSTKSimulation.StkStation.Models.Work.UNKNOWN;
-        //    if (worker.GetType() == typeof(Technician))
-        //    {
-        //        MyAgent.FreeTechnicians.Enqueue((Technician)worker);
-        //        MyAgent.AvergaeNumberOfFreeWorkers.Add(1, MySim.CurrentTime);
-        //    }
-        //    else
-        //    {
-        //        throw new ArgumentException("Nemozem uvolnit mechanika v agentovi technikov!!");
-        //    }
-        //}
     }
 }

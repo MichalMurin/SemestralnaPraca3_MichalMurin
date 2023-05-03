@@ -57,12 +57,12 @@ namespace managers
 		{
 			switch (message.Code)
 			{
-			case Mc.CustomerCame:
-				ProcessCustomerCame(message);
-			break;
-
 			case Mc.CustomerService:
 				ProcessCustomerService(message);
+			break;
+
+			case Mc.CustomerCame:
+				ProcessCustomerCame(message);
 			break;
 
 			default:

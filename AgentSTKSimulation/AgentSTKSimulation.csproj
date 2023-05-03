@@ -55,9 +55,9 @@
     <Compile Include="continualAssistants\CustomerAcceptanceProcess.cs" />
     <Compile Include="continualAssistants\CustomerCameScheduler.cs" />
     <Compile Include="continualAssistants\CustomerPaymentProcess.cs" />
-    <Compile Include="continualAssistants\MechanicsLunchBreakScheduler.cs" />
+    <Compile Include="continualAssistants\MechanicsLunchBreakProcess.cs" />
     <Compile Include="continualAssistants\StartLunchBreakScheduler.cs" />
-    <Compile Include="continualAssistants\TechniciansLunchBreakScheduler.cs" />
+    <Compile Include="continualAssistants\TechniciansLunchBreakProcess.cs" />
     <Compile Include="Generators\DiscretEmpiricGenerator.cs" />
     <Compile Include="Generators\ExponentialDistribution.cs" />
     <Compile Include="Generators\TriangleDistribution.cs" />

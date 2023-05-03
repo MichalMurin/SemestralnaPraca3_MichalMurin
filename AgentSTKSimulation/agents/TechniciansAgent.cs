@@ -49,14 +49,14 @@ namespace agents
 		{
 			new TechniciansManager(SimId.TechniciansManager, MySim, this);
 			new CustomerAcceptanceProcess(SimId.CustomerAcceptanceProcess, MySim, this);
-			new TechniciansLunchBreakScheduler(SimId.TechniciansLunchBreakScheduler, MySim, this);
 			new CustomerPaymentProcess(SimId.CustomerPaymentProcess, MySim, this);
+			new TechniciansLunchBreakProcess(SimId.TechniciansLunchBreakProcess, MySim, this);
 			AddOwnMessage(Mc.CustomerPayment);
 			AddOwnMessage(Mc.CustomerServiceNotice);
-			AddOwnMessage(Mc.LunchBreakStart);
 			AddOwnMessage(Mc.CustomerAcceptance);
-        }
-        //meta! tag="end"
+			AddOwnMessage(Mc.LunchBreakStart);
+		}
+		//meta! tag="end"
 
         public void AddGlobalStats()
         {

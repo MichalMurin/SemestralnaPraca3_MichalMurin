@@ -113,32 +113,32 @@ namespace managers
 		{
 			switch (message.Code)
 			{
+			case Mc.ReserveParking:
+				ProcessReserveParking(message);
+			break;
+
 			case Mc.Finish:
 				ProcessFinish(message);
 			break;
 
-			case Mc.CustomerService:
-				ProcessCustomerService(message);
-			break;
-
-			case Mc.Initialize:
-				ProcessInitialize(message);
+			case Mc.CustomerAcceptance:
+				ProcessCustomerAcceptance(message);
 			break;
 
 			case Mc.CarInspection:
 				ProcessCarInspection(message);
 			break;
 
+			case Mc.Initialize:
+				ProcessInitialize(message);
+			break;
+
 			case Mc.CustomerPayment:
 				ProcessCustomerPayment(message);
 			break;
 
-			case Mc.ReserveParking:
-				ProcessReserveParking(message);
-			break;
-
-			case Mc.CustomerAcceptance:
-				ProcessCustomerAcceptance(message);
+			case Mc.CustomerService:
+				ProcessCustomerService(message);
 			break;
 
 			default:

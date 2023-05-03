@@ -110,19 +110,19 @@ namespace managers
 		}
 
 		override public void ProcessMessage(MessageForm message)
-		{ 
+		{
 			switch (message.Code)
 			{
-			case Mc.CustomerLeft:
-				ProcessCustomerLeft(message);
-			break;
-
 			case Mc.Initialize:
 				ProcessInitialize(message);
 			break;
 
 			case Mc.Finish:
 				ProcessFinish(message);
+			break;
+
+			case Mc.CustomerLeft:
+				ProcessCustomerLeft(message);
 			break;
 
 			default:

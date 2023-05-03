@@ -49,11 +49,11 @@ namespace AgentSTKSimulation.StkStation.Services
             int id = 0;
             if (worker.GetType() == typeof(Mechanic))
             {
-                id = SimId.MechanicsLunchBreakScheduler;
+                id = SimId.MechanicsLunchBreakProcess;
             }
             if (worker.GetType() == typeof(Technician))
             {
-                id = SimId.TechniciansLunchBreakScheduler; 
+                id = SimId.TechniciansLunchBreakProcess; 
             }
             var message = new StkMessage(_myAgent.MySim, null, worker);
             worker.IsBusy = true;
