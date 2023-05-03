@@ -126,5 +126,11 @@ namespace SemestralnaPraca3_MichalMurin
                 _simulator.IsValidation = false;
             }
         }
+
+        private void CustomersFlowNumPad_ValueChanged(object sender, EventArgs e)
+        {
+            double flow = (double)CustomersFlowNumPad.Value;
+            _simulator.CustomersFlow = flow;
+        }
     }
 }

@@ -17,6 +17,7 @@ namespace simulation
         public SimulationMode Mode { get; set; }
         private DateTime _startTime;
         public int Seed { get; set; }
+        public double CustomersFlow { get; set; }
         public bool IsValidation { get; set; }
         public bool IsTimeForLunch { get; set; }
         public StkGenerator StkGenerators { get; private set; }
@@ -31,6 +32,7 @@ namespace simulation
 		{
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
             Seed = -1;
+            CustomersFlow = 23;
             IsValidation = false;
             IsTimeForLunch = false;
             GlobalStatsAgents = new List<IStatsDelegate>();
@@ -59,6 +61,7 @@ namespace simulation
             }
 
             StkGenerators = new StkGenerator(_seedGenerator);
+            StkGenerators.CustomersFlow = CustomersFlow;
             foreach (var agent in GlobalStatsAgents)
             {
                 agent.ResetGlobalStats();
