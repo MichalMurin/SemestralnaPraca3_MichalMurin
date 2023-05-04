@@ -17,7 +17,7 @@ namespace AgentSTKSimulation.StkStation.Services
         public Queue<Worker> FreeWorkers { get; set; }
         public ObservableCollection<Worker> AllWorkers { get; set; }
         public int WorkersNumber { get; set; }
-        private Agent _myAgent;
+        protected Agent _myAgent;
         public WeightedAritmeticAverage AvergaeNumberOfFreeWorkers { get; set; }
         public StandartStaticstic SIMULATIONAvergaeNumberOfFreeWorkers { get; set; }
         public WorkerAgentService(Agent myAgent)
@@ -34,7 +34,7 @@ namespace AgentSTKSimulation.StkStation.Services
         /// Uvolnenenie pracovnika
         /// </summary>
         /// <param name="worker"></param>
-        public void SetWorkerFree(Worker worker)
+        public virtual void SetWorkerFree(Worker worker)
         {
             worker.CustomerId = -1;
             worker.IsBusy = false;
@@ -66,7 +66,7 @@ namespace AgentSTKSimulation.StkStation.Services
         /// </summary>
         /// <param name="numberOfMechanics"></param>
         /// <param name="numberOfTechnicians"></param>
-        public void InitializeWorkers(Type type)
+        public virtual void InitializeWorkers(Type type)
         {
             FreeWorkers.Clear();
             Worker worker;
@@ -87,7 +87,7 @@ namespace AgentSTKSimulation.StkStation.Services
             AvergaeNumberOfFreeWorkers.Add(WorkersNumber, _myAgent.MySim.CurrentTime);
         }
 
-        public void ClearQueues()
+        public virtual void ClearQueues()
         {
             FreeWorkers.Clear();
             AllWorkers.Clear();
@@ -114,7 +114,7 @@ namespace AgentSTKSimulation.StkStation.Services
             return worker;
         }
 
-        public void LunchBreakStart()
+        public virtual void LunchBreakStart()
         {
             int freeWorkers = FreeWorkers.Count;
             for (int i = 0; i < freeWorkers; i++)
