@@ -56,10 +56,10 @@ namespace managers
 			{
 				MyAgent.MechanicsService.SendWorkerToLunch(worker);
 			}
-			else if (MyAgent.ParkingInGarage.IsWaitingCar())
+			else if (MyAgent.ParkingInGarage.IsWaitingCar(((Mechanic)worker).Certificated)))
 			{
 				worker.IsBusy = true;
-				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking();
+				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking(((Mechanic)worker).Certificated);
 				HandleParkingReservation();
                 ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
                 worker.CustomerId = ((StkMessage)mess).Customer.Id;

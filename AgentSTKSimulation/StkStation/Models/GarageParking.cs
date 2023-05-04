@@ -17,6 +17,7 @@ namespace AgentSim.StkStation.Models
         // 
         private int _freeSpotsCount;
         private Queue<StkMessage> _parking;
+        private Queue<StkMessage> _parkedTrucks;
         private Queue<StkMessage> _waitingForParkingPlace;
 
         public GarageParking()
@@ -24,12 +25,14 @@ namespace AgentSim.StkStation.Models
             _parking = new Queue<StkMessage>();
             _freeSpotsCount = MAX_CARS_IN_PARKING_GARAGE;
             _waitingForParkingPlace = new Queue<StkMessage>();
+            _parkedTrucks = new Queue<StkMessage>();
         }
 
         public void ResetGarage()
         {
             _parking.Clear();
             _waitingForParkingPlace.Clear();
+            _parkedTrucks.Clear();
             _freeSpotsCount = MAX_CARS_IN_PARKING_GARAGE;
         }
 
@@ -64,7 +67,7 @@ namespace AgentSim.StkStation.Models
 
         public int GetCarParked()
         {
-            return _parking.Count;
+            return _parking.Count + _parkedTrucks.Count;
         }
         public int GetFreeSpots()
         {
@@ -97,7 +100,7 @@ namespace AgentSim.StkStation.Models
 
         public void ParkCustomersCarInGrage(StkMessage customer)
         {
-            if (_parking.Count < GarageParking.MAX_CARS_IN_PARKING_GARAGE)
+            if (_parking.Count + _parkedTrucks.Count< GarageParking.MAX_CARS_IN_PARKING_GARAGE)
             {
                 _parking.Enqueue(customer);
                 customer.Customer.Situation = CustomerSituation.WAITING_IN_GARAGE;
@@ -108,23 +111,56 @@ namespace AgentSim.StkStation.Models
             }
         }
 
-        public bool IsWaitingCar()
+        public bool IsWaitingCar(bool certificatedWorker)
         {
-            if (_parking.Count > 0)
+            if (certificatedWorker)
             {
-                return true;
+                if (_parking.Count > 0 || _parkedTrucks.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                if (_parking.Count > 0)
+                {
+                    var num = _parking.Count;
+                    for (int i = 0; i < num; i++)
+                    {
+                        if (_parking.Peek().Customer.CarType != CarType.TRUCK)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            _parkedTrucks.Enqueue(_parking.Dequeue());
+                        }
+                    }
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
-        public StkMessage GetCustomersCarFromParking()
+        public StkMessage GetCustomersCarFromParking(bool certificatedWorker)
         {
-            if (IsWaitingCar())
+            if (IsWaitingCar(certificatedWorker))
             {
                 _freeSpotsCount++;
+                if (certificatedWorker)
+                {
+                    if (_parkedTrucks.Count > 0)
+                    {
+                        return _parkedTrucks.Dequeue();
+                    }
+                }                
                 return _parking.Dequeue();
             }
             else

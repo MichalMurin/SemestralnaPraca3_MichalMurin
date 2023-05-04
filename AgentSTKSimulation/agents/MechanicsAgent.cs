@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using AgentSTKSimulation.simulation;
 using AgentSim.StkStation;
 using static AgentSim.StkStation.StkGenerator;
-using System.Collections.ObjectModel;
 using AgentSTKSimulation.StkStation.Services;
 
 namespace agents
@@ -16,14 +15,14 @@ namespace agents
 	//meta! id="5"
 	public class MechanicsAgent : Agent, IStatsDelegate
     {
-        public WorkerAgentService MechanicsService { get; set; }
+        public MechanicAgentService MechanicsService { get; set; }
         public GarageParking ParkingInGarage { get; set; }
-        public StkGenerator.InspectionTimeGenerator InspectionTimeGenerator { get; set; }
+        public InspectionTimeGenerator InspectionTimeGenerator { get; set; }
         public MechanicsAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
         {
             ParkingInGarage = new GarageParking();
-            MechanicsService = new WorkerAgentService(this);
+            MechanicsService = new MechanicAgentService(this);
             Init();
 		}
 
