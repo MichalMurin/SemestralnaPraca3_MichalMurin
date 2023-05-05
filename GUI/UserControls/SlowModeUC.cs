@@ -102,17 +102,26 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             _bindingSourceMechanics.ResetBindings(false);
             _bindingSourceTechnicians.ResetBindings(false);
         }
+        private void CalculateSalary()
+        {
+            int salary = (int)CertificatedMechanicCounter.Value * 2000;
+            salary += (int)NonCertificatedMechanicsCounter.Value * 1500;
+            salary += (int)techniciansCounter.Value * 1100;
+            SalaryLbl.Text = $"{salary}€";
+        }
 
         private void StartBtn_Click(object sender, EventArgs e)
         {
             if (!_isSimulationRunning)
             {
+                CalculateSalary();
                 _simulationThread = new Thread(new ThreadStart(this.RunSimulation));
                 _simulationThread.IsBackground = true;
                 HandleSpeed();
 
                 _simulator.Mode = SimulationMode.SLOW;
-                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)MechanicCounter.Value;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)CertificatedMechanicCounter.Value;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = (int)NonCertificatedMechanicsCounter.Value;
                 ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = (int)techniciansCounter.Value;
                 _simulationThread.Start();
             }
@@ -161,7 +170,9 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             ZaparkovaneAutaLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetCarParked().ToString();
             VolnyParkingLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).ParkingInGarage.GetFreeSpots().ToString();
             VolniTechniciLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).TechniciansService.FreeWorkers.Count.ToString();
-            VolniMechanicLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.FreeWorkers.Count.ToString();
+            var freeMechs = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.FreeWorkers.Count + 
+                ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.FreeNonCertificatedWorkers.Count;
+            VolniMechanicLbl.Text = freeMechs.ToString();
 
             CurrentNUmberOfCstomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).CurrentNumberOfCustomersInTheSystem.ToString();
             NUmberAllCustomersLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).NumberOfCustomersInTheSystemAtAll.ToString();

@@ -31,7 +31,7 @@ namespace AgentSTKSimulation.StkStation.Services
             Worker worker;
             for (int i = 0; i < NonCertificatedNumber; i++)
             {
-                worker = new Mechanic(i, false);
+                worker = new Mechanic(i + WorkersNumber, false);
 
                 FreeNonCertificatedWorkers.Enqueue(worker);
                 AllWorkers.Add(worker);
@@ -86,6 +86,25 @@ namespace AgentSTKSimulation.StkStation.Services
             }
             AvergaeNumberOfFreeWorkers.Add(1, _myAgent.MySim.CurrentTime);
         }
-
+        public Worker GetWorker(bool certificated = true)
+        {
+            Worker worker;
+            if (certificated && FreeWorkers.Count > 0)
+            {
+                worker = FreeWorkers.Dequeue();
+            }
+            else if (!certificated && FreeNonCertificatedWorkers.Count > 0)
+            {
+                worker = FreeNonCertificatedWorkers.Dequeue();
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Nie je mozne vratit pracovnika!");
+            }
+            worker.IsBusy = true;
+            worker.Work = Models.Work.UNKNOWN;
+            AvergaeNumberOfFreeWorkers.Add(-1, _myAgent.MySim.CurrentTime);
+            return worker;
+        }
     }
 }

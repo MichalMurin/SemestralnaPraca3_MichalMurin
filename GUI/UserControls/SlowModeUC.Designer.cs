@@ -36,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.PauseBtn = new System.Windows.Forms.Button();
             this.techniciansCounter = new System.Windows.Forms.NumericUpDown();
-            this.MechanicCounter = new System.Windows.Forms.NumericUpDown();
+            this.CertificatedMechanicCounter = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.RadaNaPrijatieLbl = new System.Windows.Forms.Label();
@@ -73,15 +73,20 @@
             this.label20 = new System.Windows.Forms.Label();
             this.QueueShowCheckbox = new System.Windows.Forms.CheckBox();
             this.TechniciansListBox = new System.Windows.Forms.ListBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.NonCertificatedMechanicsCounter = new System.Windows.Forms.NumericUpDown();
+            this.label22 = new System.Windows.Forms.Label();
+            this.SalaryLbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.RychlostMenic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.techniciansCounter)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MechanicCounter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CertificatedMechanicCounter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NonCertificatedMechanicsCounter)).BeginInit();
             this.SuspendLayout();
             // 
             // RychlostMenic
             // 
             this.RychlostMenic.Location = new System.Drawing.Point(14, 56);
-            this.RychlostMenic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.RychlostMenic.Margin = new System.Windows.Forms.Padding(2);
             this.RychlostMenic.Maximum = 500;
             this.RychlostMenic.Minimum = 1;
             this.RychlostMenic.Name = "RychlostMenic";
@@ -114,7 +119,7 @@
             // StartBtn
             // 
             this.StartBtn.Location = new System.Drawing.Point(392, 16);
-            this.StartBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StartBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StartBtn.Name = "StartBtn";
             this.StartBtn.Size = new System.Drawing.Size(98, 37);
             this.StartBtn.TabIndex = 3;
@@ -125,7 +130,7 @@
             // StopBtn
             // 
             this.StopBtn.Location = new System.Drawing.Point(621, 17);
-            this.StopBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StopBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StopBtn.Name = "StopBtn";
             this.StopBtn.Size = new System.Drawing.Size(98, 39);
             this.StopBtn.TabIndex = 4;
@@ -146,7 +151,7 @@
             // PauseBtn
             // 
             this.PauseBtn.Location = new System.Drawing.Point(508, 17);
-            this.PauseBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.PauseBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PauseBtn.Name = "PauseBtn";
             this.PauseBtn.Size = new System.Drawing.Size(98, 39);
             this.PauseBtn.TabIndex = 7;
@@ -157,7 +162,7 @@
             // techniciansCounter
             // 
             this.techniciansCounter.Location = new System.Drawing.Point(495, 76);
-            this.techniciansCounter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.techniciansCounter.Margin = new System.Windows.Forms.Padding(2);
             this.techniciansCounter.Maximum = new decimal(new int[] {
             -727379969,
             232,
@@ -177,24 +182,24 @@
             0,
             0});
             // 
-            // MechanicCounter
+            // CertificatedMechanicCounter
             // 
-            this.MechanicCounter.Location = new System.Drawing.Point(653, 76);
-            this.MechanicCounter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.MechanicCounter.Maximum = new decimal(new int[] {
+            this.CertificatedMechanicCounter.Location = new System.Drawing.Point(754, 76);
+            this.CertificatedMechanicCounter.Margin = new System.Windows.Forms.Padding(2);
+            this.CertificatedMechanicCounter.Maximum = new decimal(new int[] {
             -727379969,
             232,
             0,
             0});
-            this.MechanicCounter.Minimum = new decimal(new int[] {
+            this.CertificatedMechanicCounter.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.MechanicCounter.Name = "MechanicCounter";
-            this.MechanicCounter.Size = new System.Drawing.Size(46, 20);
-            this.MechanicCounter.TabIndex = 9;
-            this.MechanicCounter.Value = new decimal(new int[] {
+            this.CertificatedMechanicCounter.Name = "CertificatedMechanicCounter";
+            this.CertificatedMechanicCounter.Size = new System.Drawing.Size(46, 20);
+            this.CertificatedMechanicCounter.TabIndex = 9;
+            this.CertificatedMechanicCounter.Value = new decimal(new int[] {
             17,
             0,
             0,
@@ -216,9 +221,9 @@
             this.label4.Location = new System.Drawing.Point(560, 80);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(96, 13);
+            this.label4.Size = new System.Drawing.Size(171, 13);
             this.label4.TabIndex = 11;
-            this.label4.Text = "Pocet mechanikov";
+            this.label4.Text = "Pocet certifikovanych mechanikov";
             // 
             // RadaNaPrijatieLbl
             // 
@@ -476,7 +481,7 @@
             // 
             this.MechanicsListBox.DataSource = this.CustomersListBox.CustomTabOffsets;
             this.MechanicsListBox.FormattingEnabled = true;
-            this.MechanicsListBox.Location = new System.Drawing.Point(436, 135);
+            this.MechanicsListBox.Location = new System.Drawing.Point(436, 177);
             this.MechanicsListBox.Name = "MechanicsListBox";
             this.MechanicsListBox.Size = new System.Drawing.Size(305, 95);
             this.MechanicsListBox.TabIndex = 37;
@@ -484,7 +489,7 @@
             // CustomersListBox
             // 
             this.CustomersListBox.FormattingEnabled = true;
-            this.CustomersListBox.Location = new System.Drawing.Point(436, 362);
+            this.CustomersListBox.Location = new System.Drawing.Point(436, 404);
             this.CustomersListBox.Name = "CustomersListBox";
             this.CustomersListBox.Size = new System.Drawing.Size(305, 186);
             this.CustomersListBox.TabIndex = 38;
@@ -492,7 +497,7 @@
             // QueueForPaymentListBox
             // 
             this.QueueForPaymentListBox.FormattingEnabled = true;
-            this.QueueForPaymentListBox.Location = new System.Drawing.Point(754, 362);
+            this.QueueForPaymentListBox.Location = new System.Drawing.Point(754, 404);
             this.QueueForPaymentListBox.Name = "QueueForPaymentListBox";
             this.QueueForPaymentListBox.Size = new System.Drawing.Size(284, 186);
             this.QueueForPaymentListBox.TabIndex = 40;
@@ -501,7 +506,7 @@
             // 
             this.QueueForAcceptanceListbox.DataSource = this.QueueForPaymentListBox.CustomTabOffsets;
             this.QueueForAcceptanceListbox.FormattingEnabled = true;
-            this.QueueForAcceptanceListbox.Location = new System.Drawing.Point(754, 135);
+            this.QueueForAcceptanceListbox.Location = new System.Drawing.Point(754, 177);
             this.QueueForAcceptanceListbox.Name = "QueueForAcceptanceListbox";
             this.QueueForAcceptanceListbox.Size = new System.Drawing.Size(284, 199);
             this.QueueForAcceptanceListbox.TabIndex = 39;
@@ -509,7 +514,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(434, 121);
+            this.label17.Location = new System.Drawing.Point(434, 163);
             this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(60, 13);
@@ -519,7 +524,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(434, 346);
+            this.label18.Location = new System.Drawing.Point(434, 388);
             this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(56, 13);
@@ -529,7 +534,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(752, 121);
+            this.label19.Location = new System.Drawing.Point(752, 163);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(102, 13);
@@ -539,7 +544,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(752, 342);
+            this.label20.Location = new System.Drawing.Point(752, 384);
             this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(96, 13);
@@ -549,8 +554,8 @@
             // QueueShowCheckbox
             // 
             this.QueueShowCheckbox.AutoSize = true;
-            this.QueueShowCheckbox.Location = new System.Drawing.Point(754, 95);
-            this.QueueShowCheckbox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.QueueShowCheckbox.Location = new System.Drawing.Point(754, 137);
+            this.QueueShowCheckbox.Margin = new System.Windows.Forms.Padding(2);
             this.QueueShowCheckbox.Name = "QueueShowCheckbox";
             this.QueueShowCheckbox.Size = new System.Drawing.Size(133, 17);
             this.QueueShowCheckbox.TabIndex = 45;
@@ -562,15 +567,73 @@
             // 
             this.TechniciansListBox.DataSource = this.CustomersListBox.CustomTabOffsets;
             this.TechniciansListBox.FormattingEnabled = true;
-            this.TechniciansListBox.Location = new System.Drawing.Point(436, 239);
+            this.TechniciansListBox.Location = new System.Drawing.Point(436, 281);
             this.TechniciansListBox.Name = "TechniciansListBox";
             this.TechniciansListBox.Size = new System.Drawing.Size(305, 95);
             this.TechniciansListBox.TabIndex = 46;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(560, 106);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(183, 13);
+            this.label21.TabIndex = 48;
+            this.label21.Text = "Pocet necertifikovanych mechanikov";
+            // 
+            // NonCertificatedMechanicsCounter
+            // 
+            this.NonCertificatedMechanicsCounter.Location = new System.Drawing.Point(754, 101);
+            this.NonCertificatedMechanicsCounter.Margin = new System.Windows.Forms.Padding(2);
+            this.NonCertificatedMechanicsCounter.Maximum = new decimal(new int[] {
+            -727379969,
+            232,
+            0,
+            0});
+            this.NonCertificatedMechanicsCounter.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NonCertificatedMechanicsCounter.Name = "NonCertificatedMechanicsCounter";
+            this.NonCertificatedMechanicsCounter.Size = new System.Drawing.Size(46, 20);
+            this.NonCertificatedMechanicsCounter.TabIndex = 47;
+            this.NonCertificatedMechanicsCounter.Value = new decimal(new int[] {
+            17,
+            0,
+            0,
+            0});
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(23, 419);
+            this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(85, 13);
+            this.label22.TabIndex = 50;
+            this.label22.Text = "Mzdove naklady";
+            // 
+            // SalaryLbl
+            // 
+            this.SalaryLbl.AutoSize = true;
+            this.SalaryLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SalaryLbl.Location = new System.Drawing.Point(125, 411);
+            this.SalaryLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.SalaryLbl.Name = "SalaryLbl";
+            this.SalaryLbl.Size = new System.Drawing.Size(16, 24);
+            this.SalaryLbl.TabIndex = 49;
+            this.SalaryLbl.Text = "-";
             // 
             // SlowModeUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label22);
+            this.Controls.Add(this.SalaryLbl);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.NonCertificatedMechanicsCounter);
             this.Controls.Add(this.TechniciansListBox);
             this.Controls.Add(this.QueueShowCheckbox);
             this.Controls.Add(this.label20);
@@ -607,7 +670,7 @@
             this.Controls.Add(this.RadaNaPrijatieLbl);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.MechanicCounter);
+            this.Controls.Add(this.CertificatedMechanicCounter);
             this.Controls.Add(this.techniciansCounter);
             this.Controls.Add(this.PauseBtn);
             this.Controls.Add(this.label2);
@@ -617,12 +680,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.RychlostMenic);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SlowModeUC";
-            this.Size = new System.Drawing.Size(1083, 574);
+            this.Size = new System.Drawing.Size(1163, 653);
             ((System.ComponentModel.ISupportInitialize)(this.RychlostMenic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.techniciansCounter)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MechanicCounter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CertificatedMechanicCounter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NonCertificatedMechanicsCounter)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -638,7 +702,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button PauseBtn;
         private System.Windows.Forms.NumericUpDown techniciansCounter;
-        private System.Windows.Forms.NumericUpDown MechanicCounter;
+        private System.Windows.Forms.NumericUpDown CertificatedMechanicCounter;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label RadaNaPrijatieLbl;
@@ -675,5 +739,9 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox QueueShowCheckbox;
         private System.Windows.Forms.ListBox TechniciansListBox;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.NumericUpDown NonCertificatedMechanicsCounter;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label SalaryLbl;
     }
 }

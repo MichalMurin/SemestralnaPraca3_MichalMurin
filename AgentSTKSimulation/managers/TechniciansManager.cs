@@ -45,12 +45,7 @@ namespace managers
         private void FindWorkForTechnician()
         {
             var worker = MyAgent.TechniciansService.GetWorker();
-            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
-            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
-            {
-                MyAgent.TechniciansService.SendWorkerToLunch(worker);
-            }
-            else if (MyAgent.CustomerQueueForPayment.Count > 0)
+            if (MyAgent.CustomerQueueForPayment.Count > 0)
             {
                 var cus = MyAgent.CustomerQueueForPayment.Dequeue();
                 cus.Worker = worker;
@@ -84,11 +79,18 @@ namespace managers
 		//meta! sender="CustomerPaymentProcess", id="28", type="Finish"
 		public void ProcessFinishCustomerPaymentProcess(MessageForm message)
         {
-
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            MyAgent.TechniciansService.SetWorkerFree(worker);
-            FindWorkForTechnician();
+            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
+            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
+            {
+                MyAgent.TechniciansService.SendWorkerToLunch(worker);
+            }
+            else
+            {
+                MyAgent.TechniciansService.SetWorkerFree(worker);
+                FindWorkForTechnician();
+            }
 
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerPayment;

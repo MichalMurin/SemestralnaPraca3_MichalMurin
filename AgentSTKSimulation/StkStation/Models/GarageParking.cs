@@ -2,9 +2,6 @@
 using simulation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AgentSim.StkStation.Models
 {
@@ -111,61 +108,85 @@ namespace AgentSim.StkStation.Models
             }
         }
 
-        public bool IsWaitingCar(bool certificatedWorker)
+        public void ReparkTrucksFromPeekToTruckQueue()
         {
-            if (certificatedWorker)
+            if (_parking.Count > 0)
             {
-                if (_parking.Count > 0 || _parkedTrucks.Count > 0)
+                var truck = _parking.Peek();
+                while (truck.Customer.CarType == CarType.TRUCK)
                 {
-                    return true;
+                    _parkedTrucks.Enqueue(_parking.Dequeue());
+                    if (_parking.Count > 0)
+                    {
+                        truck = _parking.Peek();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+            }
+            
+        }
+
+        public bool IsWaitingStandartCarInParking()
+        {
+            if (_parking.Count > 0 && _parking.Peek().Customer.CarType != CarType.TRUCK)
+            {
+                return true;
             }
             else
             {
-                if (_parking.Count > 0)
-                {
-                    var num = _parking.Count;
-                    for (int i = 0; i < num; i++)
-                    {
-                        if (_parking.Peek().Customer.CarType != CarType.TRUCK)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            _parkedTrucks.Enqueue(_parking.Dequeue());
-                        }
-                    }
-                    return false;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
-        public StkMessage GetCustomersCarFromParking(bool certificatedWorker)
+        public bool IsWaitingTruck()
         {
-            if (IsWaitingCar(certificatedWorker))
+            if ( _parkedTrucks.Count > 0)
             {
-                _freeSpotsCount++;
-                if (certificatedWorker)
-                {
-                    if (_parkedTrucks.Count > 0)
-                    {
-                        return _parkedTrucks.Dequeue();
-                    }
-                }                
+                return true;
+            }
+            else if (_parking.Count > 0 && _parking.Peek().Customer.CarType == CarType.TRUCK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public StkMessage GetStandartCarFromParking()
+        {
+            if (IsWaitingStandartCarInParking())
+            {
+                _freeSpotsCount++;                 
                 return _parking.Dequeue();
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Ziadne vozidlo momentalne necaka!");
+                throw new ArgumentOutOfRangeException("Ziadne standartne vozidlo momentalne necaka!");
+            }
+        }
+
+        public StkMessage GetTruckFromParking()
+        {
+            if (IsWaitingTruck())
+            {
+                _freeSpotsCount++;
+                if (_parkedTrucks.Count>0)
+                {
+                    return _parkedTrucks.Dequeue();
+                }
+                else
+                {
+                    return _parking.Dequeue();
+                }
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Ziaden kamion momentalne necaka!");
             }
         }
     }

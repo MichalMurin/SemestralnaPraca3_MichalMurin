@@ -7,6 +7,7 @@ using AgentSim.StkStation.Models;
 using System.Collections.Generic;
 using System;
 using AgentSTKSimulation.StkStation.Services;
+using AgentSTKSimulation.StkStation.Models;
 
 namespace managers
 {
@@ -48,30 +49,51 @@ namespace managers
 			MyAgent.ParkingInGarage.ResetGarage();
         }
 
+        private void StartCarService(StkMessage mess, Worker worker)
+        {
+            HandleParkingReservation();
+            ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
+            worker.CustomerId = ((StkMessage)mess).Customer.Id;
+            worker.Work = AgentSTKSimulation.StkStation.Models.Work.SERVICE;
+            mess.Worker = worker;
+            mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
+            StartContinualAssistant(mess);
+        }
+
 		private void FindWorkForMechanic()
 		{
-			var worker = MyAgent.MechanicsService.GetWorker();
-			// ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
-			if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
+			if (MyAgent.ParkingInGarage.IsWaitingTruck())
 			{
-				MyAgent.MechanicsService.SendWorkerToLunch(worker);
+				if (MyAgent.MechanicsService.IsFreeWorker())
+				{
+                    // caka kamion a je volny certifikovany pracovnik -> davam mu do roboty kamion
+                    var worker = MyAgent.MechanicsService.GetWorker(true);
+                    var mess = MyAgent.ParkingInGarage.GetTruckFromParking();
+                    StartCarService(mess, worker);
+                }
+				else
+                {
+                    // je na rade kamion, ale nie je volny certifikovany pracovnik, preparkujem kamion (alebo kamiony) na vedlajsie parkovisko a pokracujem na dalsi if
+                    MyAgent.ParkingInGarage.ReparkTrucksFromPeekToTruckQueue();
+				}
 			}
-			else if (MyAgent.ParkingInGarage.IsWaitingCar(((Mechanic)worker).Certificated)))
+			if (MyAgent.ParkingInGarage.IsWaitingStandartCarInParking())
 			{
-				worker.IsBusy = true;
-				var mess = MyAgent.ParkingInGarage.GetCustomersCarFromParking(((Mechanic)worker).Certificated);
-				HandleParkingReservation();
-                ((StkMessage)mess).Customer.Situation = CustomerSituation.SERVED_BY_MECHANIC;
-                worker.CustomerId = ((StkMessage)mess).Customer.Id;
-                worker.Work = AgentSTKSimulation.StkStation.Models.Work.SERVICE;
-                mess.Worker = worker;
-                mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
-                StartContinualAssistant(mess);
+                if (MyAgent.MechanicsService.IsFreeNonCertificatedWorker())
+                {
+                    // caka normalne auto a je volny necertifikovany pracovnik -> davam mu do roboty auto
+                    var worker = MyAgent.MechanicsService.GetWorker(false);
+                    var mess = MyAgent.ParkingInGarage.GetStandartCarFromParking();
+                    StartCarService(mess, worker);
+                }
+                else if (MyAgent.MechanicsService.IsFreeWorker())
+                {
+                    // je na rade normalne auto, ale nie je volny necertifikovany pracovnik, preto dam podradnu pracu aj certifikovanemu pracovnikovi
+                    var worker = MyAgent.MechanicsService.GetWorker(true);
+                    var mess = MyAgent.ParkingInGarage.GetStandartCarFromParking();
+                    StartCarService(mess, worker);
+                }
             }
-			else
-			{
-                MyAgent.MechanicsService.SetWorkerFree(worker);
-			}
 		}
 
 		//meta! sender="STKAgent", id="22", type="Request"
@@ -79,12 +101,12 @@ namespace managers
 		{
             // zapni process na kontrolu
             MyAgent.ParkingInGarage.ParkCustomersCarInGrage((StkMessage)message);
-            //HandleParkingReservation();
-			if (MyAgent.MechanicsService.IsFreeWorker())
+            if (MyAgent.MechanicsService.IsFreeWorker() || MyAgent.MechanicsService.IsFreeNonCertificatedWorker())
             {
-				FindWorkForMechanic();
+                FindWorkForMechanic();
+                return;
             }
-		}
+        }
 
 		private void HandleParkingReservation()
 		{
@@ -113,8 +135,16 @@ namespace managers
             // posli zakaznika hore na platenie
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-			MyAgent.MechanicsService.SetWorkerFree(worker);
-            FindWorkForMechanic();
+            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
+            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
+            {
+                MyAgent.MechanicsService.SendWorkerToLunch(worker);
+			}
+			else
+			{
+                MyAgent.MechanicsService.SetWorkerFree(worker);
+                FindWorkForMechanic();
+            }
 
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CarInspection;

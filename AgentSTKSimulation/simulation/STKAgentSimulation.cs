@@ -65,6 +65,11 @@ namespace simulation
                 agent.ResetGlobalStats();
                 agent.CreateGenerator();
             }
+            if (IsValidation)
+            {
+                MechanicsAgent.MechanicsService.NonCertificatedNumber = 0;
+            }
+
             // Create global statistcis
         }
 

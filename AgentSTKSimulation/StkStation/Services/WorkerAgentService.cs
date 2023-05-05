@@ -93,7 +93,7 @@ namespace AgentSTKSimulation.StkStation.Services
             AllWorkers.Clear();
         }
 
-        public bool IsFreeWorker()
+        public virtual bool IsFreeWorker()
         {
             if (FreeWorkers.Count > 0)
             {
@@ -105,7 +105,7 @@ namespace AgentSTKSimulation.StkStation.Services
             }
         }
 
-        public Worker GetWorker()
+        public virtual Worker GetWorker()
         {
             AvergaeNumberOfFreeWorkers.Add(-1, _myAgent.MySim.CurrentTime);
             var worker = FreeWorkers.Dequeue();

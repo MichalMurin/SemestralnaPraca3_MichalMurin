@@ -55,8 +55,17 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.SetMaxSimSpeed();
                 _simulationThread = new Thread(new ThreadStart(this.RunSimulation));
                 _simulationThread.IsBackground = true;
+                CalculateSalary();
                 _simulationThread.Start();
             }
+        }
+
+        private void CalculateSalary()
+        {
+            int salary = (int)CertificatedMechanicsNumPad.Value * 2000;
+            salary += (int)NonCertificatedMechanicsNumPad.Value * 1500;
+            salary += (int)TechnicianNumPad.Value * 1100;
+            MzdoveNakladyLbl.Text = $"{salary}€";
         }
         private void RunSimulation()
         {
@@ -65,7 +74,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)MechanicsNumPad.Value;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = (int)CertificatedMechanicsNumPad.Value;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = (int)NonCertificatedMechanicsNumPad.Value;
             ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = (int)TechnicianNumPad.Value;
             int replications = (int)replicationsNumpad.Value;
             _isSimulationRunning = true;
