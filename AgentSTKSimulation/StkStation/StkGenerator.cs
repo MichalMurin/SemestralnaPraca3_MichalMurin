@@ -116,8 +116,8 @@ namespace AgentSim.StkStation
                 (
                     new List<(double, int, int, Random)>
                     {
-                        (0.65,2,2,new Random(seedGenerator.Next())),
-                        (0.21,2,2,new Random(seedGenerator.Next())),
+                        (0.65,0,0,new Random(seedGenerator.Next())),
+                        (0.21,1,1,new Random(seedGenerator.Next())),
                         (0.14,2,2,new Random(seedGenerator.Next()))
                     },
                     seedGenerator
