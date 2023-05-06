@@ -23,7 +23,6 @@ namespace managers
 		override public void PrepareReplication()
 		{
 			base.PrepareReplication();
-			MyAgent.ParkingInGarage.ResetGarage();
             // Setup component for the next replication
             ResetReplicationStats();
             ClearAllQueues();

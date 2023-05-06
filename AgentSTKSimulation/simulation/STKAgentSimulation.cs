@@ -48,9 +48,6 @@ namespace simulation
         override protected void PrepareSimulation()
 		{
 			base.PrepareSimulation();
-            IsValidation = false;
-            IsTimeForLunch = false;
-            CorrectReplicationRun = true;
             if (Seed > 0)
             {
                 _seedGenerator = new Random(Seed);
@@ -78,6 +75,8 @@ namespace simulation
 		override protected void PrepareReplication()
 		{
 			base.PrepareReplication();
+            IsTimeForLunch = false;
+            CorrectReplicationRun = true;
             // Reset entities, queues, local statistics, etc...
         }
 
