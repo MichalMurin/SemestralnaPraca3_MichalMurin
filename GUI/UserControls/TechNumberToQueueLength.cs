@@ -70,7 +70,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void RunSimulation()
         {
-            int numberOfMechanics = (int)mechanicsCounter.Value;
+            int numberOfCertificatedMechanics = (int)CertificatedmechanicsCounter.Value;
+            int numberOfNonCertificatedMechanics = (int)NonCertificatedMechNupPad.Value;
             int replications = (int)replicationCounterForOneRun.Value;
             int startNumberTechnics = (int)TechniciansCounterStart.Value;
             int endNumberTechnics = (int)TechniciansCounterEnd.Value;
@@ -81,7 +82,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = numberOfMechanics;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = numberOfCertificatedMechanics;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = numberOfNonCertificatedMechanics;
             ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = startNumberTechnics;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)

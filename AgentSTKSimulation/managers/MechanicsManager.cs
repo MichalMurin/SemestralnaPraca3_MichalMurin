@@ -136,16 +136,7 @@ namespace managers
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
             // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
-            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
-            {
-                MyAgent.MechanicsService.SendWorkerToLunch(worker);
-			}
-			else
-			{
-                MyAgent.MechanicsService.SetWorkerFree(worker);
-                FindWorkForMechanic();
-            }
-
+            MyAgent.MechanicsService.HandleFinishedWork(worker, FindWorkForMechanic);
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CarInspection;
             Response(message);
@@ -169,6 +160,10 @@ namespace managers
 		//meta! sender="MechanicsLunchBreakProcess", id="61", type="Finish"
 		public void ProcessFinishMechanicsLunchBreakProcess(MessageForm message)
         {
+			if (MySim.CurrentTime > (13-9) * 3600)
+			{
+				throw new ArgumentOutOfRangeException("neskor skoncil obed");
+			}
             // uvolni pracovnika, daj mu robotku
             var worker = ((StkMessage)message).Worker;
             worker.HadLunch = true;

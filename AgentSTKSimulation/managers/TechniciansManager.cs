@@ -8,6 +8,7 @@ using AgentSim.StkStation.Models;
 using DISS_S2.SimulationCore.Statistics;
 using System;
 using AgentSTKSimulation.StkStation.Services;
+using AgentSTKSimulation.StkStation.Models;
 
 namespace managers
 {
@@ -64,7 +65,6 @@ namespace managers
                 MyAgent.TechniciansService.SetWorkerFree(worker);
             }
         }
-
 		//meta! sender="STKAgent", id="23", type="Request"
 		public void ProcessCustomerPayment(MessageForm message)
         {
@@ -75,28 +75,17 @@ namespace managers
                 FindWorkForTechnician();
             }
         }
-
 		//meta! sender="CustomerPaymentProcess", id="28", type="Finish"
 		public void ProcessFinishCustomerPaymentProcess(MessageForm message)
         {
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
-            if (!((STKAgentSimulation)MySim).IsValidation && ((STKAgentSimulation)MySim).IsTimeForLunch && !worker.HadLunch)
-            {
-                MyAgent.TechniciansService.SendWorkerToLunch(worker);
-            }
-            else
-            {
-                MyAgent.TechniciansService.SetWorkerFree(worker);
-                FindWorkForTechnician();
-            }
 
+            MyAgent.TechniciansService.HandleFinishedWork(worker, FindWorkForTechnician);
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerPayment;
             Response(message);
         }
-
         private void StartAcceptanceProcess(Worker worker, StkMessage mess)
         {
             worker.CustomerId = mess.Customer.Id;
@@ -116,34 +105,28 @@ namespace managers
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerPaymentProcess);
             StartContinualAssistant(mess);
         }
-
-
 		//meta! sender="CustomerAcceptanceProcess", id="26", type="Finish"
 		public void ProcessFinishCustomerAcceptanceProcess(MessageForm message)
         {
             var worker = ((StkMessage)message).Worker;
             ((StkMessage)message).Worker = null;
-            MyAgent.TechniciansService.SetWorkerFree(worker);
-            FindWorkForTechnician();
+            MyAgent.TechniciansService.HandleFinishedWork(worker, FindWorkForTechnician);
             message.Addressee = MySim.FindAgent(SimId.STKAgent);
             message.Code = Mc.CustomerAcceptance;
             Response(message);
         }
-
 		//meta! sender="STKAgent", id="20", type="Notice"
 		public void ProcessCustomerServiceNotice(MessageForm message)
         {
             MyAgent.AverageNumberOfCustomersInQueueForAcceptance.Add(1, MySim.CurrentTime);
             MyAgent.CustomerQueueForAcceptance.Enqueue((StkMessage)message);
         }
-
 		//meta! sender="STKAgent", id="47", type="Notice"
 		public void ProcessLunchBreakStart(MessageForm message)
         {
             // nastav bool na obedy a posli volnych na obed
             MyAgent.TechniciansService.LunchBreakStart();
         }
-
 		//meta! sender="STKAgent", id="21", type="Request"
 		public void ProcessCustomerAcceptance(MessageForm message)
         {
@@ -165,6 +148,10 @@ namespace managers
 		//meta! sender="TechniciansLunchBreakProcess", id="58", type="Finish"
 		public void ProcessFinishTechniciansLunchBreakProcess(MessageForm message)
         {
+            if (MySim.CurrentTime > (13 - 9) * 3600)
+            {
+                throw new ArgumentOutOfRangeException("neskor skoncil obed");
+            }
             // uvolni pracovnika, daj mu robotku
             var worker = ((StkMessage)message).Worker;
             worker.HadLunch = true;

@@ -119,6 +119,9 @@ namespace AgentSim.StkStation
                         (0.65,0,0,new Random(seedGenerator.Next())),
                         (0.21,1,1,new Random(seedGenerator.Next())),
                         (0.14,2,2,new Random(seedGenerator.Next()))
+                        //(0.3,0,0,new Random(seedGenerator.Next())),
+                        //(0.3,1,1,new Random(seedGenerator.Next())),
+                        //(0.40,2,2,new Random(seedGenerator.Next()))
                     },
                     seedGenerator
                     );

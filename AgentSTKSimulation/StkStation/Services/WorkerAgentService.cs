@@ -30,6 +30,20 @@ namespace AgentSTKSimulation.StkStation.Services
             SIMULATIONAvergaeNumberOfFreeWorkers = new StandartStaticstic();
         }
 
+        public void HandleFinishedWork(Worker worker, System.Action findWorkMethod)
+        {
+            // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
+            if (!((STKAgentSimulation)_myAgent.MySim).IsValidation && ((STKAgentSimulation)_myAgent.MySim).IsTimeForLunch && !worker.HadLunch)
+            {
+                SendWorkerToLunch(worker);
+            }
+            else
+            {
+                SetWorkerFree(worker);
+                findWorkMethod();
+            }
+        }
+
         /// <summary>
         /// Uvolnenenie pracovnika
         /// </summary>
@@ -45,6 +59,7 @@ namespace AgentSTKSimulation.StkStation.Services
 
         public void SendWorkerToLunch(Worker worker)
         {
+            worker.CustomerId = -1;
             worker.Work = Models.Work.LUNCH;
             int id = 0;
             if (worker.GetType() == typeof(Mechanic))

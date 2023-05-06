@@ -48,6 +48,8 @@ namespace simulation
         override protected void PrepareSimulation()
 		{
 			base.PrepareSimulation();
+            IsValidation = false;
+            IsTimeForLunch = false;
             CorrectReplicationRun = true;
             if (Seed > 0)
             {
@@ -91,11 +93,33 @@ namespace simulation
                     agent.FinishStatsAfterReplication();
                     agent.AddGlobalStats();
                 }
+
+                ////////////////
+                var mechanics = MechanicsAgent.MechanicsService.AllWorkers;
+                foreach (var item in mechanics)
+                {
+                    if (!item.HadLunch)
+                    {
+                        throw new ArgumentException("Niekto nemal obed");
+                    }
+                }
+                var technics = TechniciansAgent.TechniciansService.AllWorkers;
+                foreach (var item in technics)
+                {
+                    if (!item.HadLunch)
+                    {
+                        throw new ArgumentException("Niekto nemal obed");
+                    }
+                }
+                ///////////////////////
+                
             }
             if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 100 == 0)
             {
                 RefreshGui();
             }
+
+            
         }
 
         private void RefreshGui()

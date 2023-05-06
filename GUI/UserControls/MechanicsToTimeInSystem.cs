@@ -31,7 +31,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void Update(Simulation simulation)
         {
-            var mechanics = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber;
+            var mechanics = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber + 
+                ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber;
             var average = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60;
             chart1.Series[SERIES_NAME].Points.AddXY(mechanics, average);
             resultsListBox.Items.Add($"{mechanics}      :{average}");
@@ -70,6 +71,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void RunSimulation()
         {
+            int certificatedRatio = (int)CertificatedRatio.Value;
+            int nonCertificatedRatio = (int)NonCertificatedRation.Value;
             int numberOfTechnicscs = (int)technicsCounter.Value;
             int replications = (int)replicationCounterForOneRun.Value;
             int startNumberMechs = (int)MechanicsCounterStart.Value;
@@ -81,13 +84,22 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             {
                 _simulator.ResumeSimulation();
             }
-            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = startNumberMechs;
+            int allMechNum = startNumberMechs;
+            int certificatedNum = allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = certificatedNum;
+            ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = allMechNum - certificatedNum;
             ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = numberOfTechnicscs;
             _isSimulationRunning = true;
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications, 8*3600);
-                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber++;
+                //
+                allMechNum++;
+                certificatedNum = allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = certificatedNum;
+                ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = allMechNum - certificatedNum;
+                //((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber++;
+                //
                 if (!_isSimulationRunning)
                 {
                     break;
