@@ -130,7 +130,7 @@ namespace SemestralnaPraca3_MichalMurin
         private void CustomersFlowNumPad_ValueChanged(object sender, EventArgs e)
         {
             double flow = (double)CustomersFlowNumPad.Value;
-            _simulator.SurroundingAgent.CustomersFlow = flow;
+            _simulator.SurroundingAgent.CustomersFlowIncreaseInPercent = flow;
         }
     }
 }

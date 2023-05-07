@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.header = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.CustomersFlowNumPad = new System.Windows.Forms.NumericUpDown();
             this.ValidationCheckBox = new System.Windows.Forms.CheckBox();
@@ -40,7 +41,7 @@
             this.FastModeBtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CustomersFlowNumPad)).BeginInit();
@@ -73,6 +74,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.label2);
             this.panel2.Controls.Add(this.CustomersFlowNumPad);
@@ -89,33 +91,33 @@
             this.panel2.Size = new System.Drawing.Size(1111, 61);
             this.panel2.TabIndex = 1;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(509, 39);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(252, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "*pri validacii sa odignoruju necertifikovani mechanici";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(704, 14);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 13);
+            this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 8;
-            this.label2.Text = "CUSTOMERS/HOUR";
+            this.label2.Text = "CUSTOMERS INCREASE";
             // 
             // CustomersFlowNumPad
             // 
-            this.CustomersFlowNumPad.Location = new System.Drawing.Point(821, 11);
-            this.CustomersFlowNumPad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.CustomersFlowNumPad.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.CustomersFlowNumPad.DecimalPlaces = 2;
+            this.CustomersFlowNumPad.Location = new System.Drawing.Point(840, 12);
+            this.CustomersFlowNumPad.Margin = new System.Windows.Forms.Padding(2);
             this.CustomersFlowNumPad.Name = "CustomersFlowNumPad";
             this.CustomersFlowNumPad.Size = new System.Drawing.Size(74, 20);
             this.CustomersFlowNumPad.TabIndex = 6;
-            this.CustomersFlowNumPad.Value = new decimal(new int[] {
-            23,
-            0,
-            0,
-            0});
             this.CustomersFlowNumPad.ValueChanged += new System.EventHandler(this.CustomersFlowNumPad_ValueChanged);
             // 
             // ValidationCheckBox
@@ -197,14 +199,15 @@
             this.panelContainer.Size = new System.Drawing.Size(1111, 578);
             this.panelContainer.TabIndex = 2;
             // 
-            // label1
+            // label3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(509, 39);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(252, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "*pri validacii sa odignoruju necertifikovani mechanici";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(918, 14);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(15, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "%";
             // 
             // STKAgentGUI
             // 
@@ -244,6 +247,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown CustomersFlowNumPad;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
     }
 }
 

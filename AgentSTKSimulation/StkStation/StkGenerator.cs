@@ -19,10 +19,11 @@ namespace AgentSim.StkStation
         public class CustomerTimeGenerator
         {
             private ExponentialDistribution _customerTimeGapGenerator;
-            public CustomerTimeGenerator(Random seedGenerator, double customersFlow)
+            public CustomerTimeGenerator(Random seedGenerator, double customersFlowIncrease)
             {
                 // mi = 3600/23 .... 23x za hodinu 
-                _customerTimeGapGenerator = new ExponentialDistribution(3600.0 / customersFlow, seedGenerator);
+                double flow = 23 + (customersFlowIncrease / 100) * 23;
+                _customerTimeGapGenerator = new ExponentialDistribution(3600.0 / flow, seedGenerator);
             }
             public double GetCustomerGapTime()
             {
@@ -140,9 +141,9 @@ namespace AgentSim.StkStation
             CustomersFlow = 23;
         }
 
-        public CustomerTimeGenerator CreateCustomerTimeGenerator(double flow)
+        public CustomerTimeGenerator CreateCustomerTimeGenerator(double flowIncrease)
         {
-            return new CustomerTimeGenerator(_seedGen, flow);
+            return new CustomerTimeGenerator(_seedGen, flowIncrease);
         }
 
         public AcceptanceCarGenerator CreateAcceptanceTimeGen()
