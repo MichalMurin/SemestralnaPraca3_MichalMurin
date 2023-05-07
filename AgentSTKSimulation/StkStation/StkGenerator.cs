@@ -140,9 +140,9 @@ namespace AgentSim.StkStation
             CustomersFlow = 23;
         }
 
-        public CustomerTimeGenerator CreateCustomerTimeGenerator()
+        public CustomerTimeGenerator CreateCustomerTimeGenerator(double flow)
         {
-            return new CustomerTimeGenerator(_seedGen, CustomersFlow);
+            return new CustomerTimeGenerator(_seedGen, flow);
         }
 
         public AcceptanceCarGenerator CreateAcceptanceTimeGen()

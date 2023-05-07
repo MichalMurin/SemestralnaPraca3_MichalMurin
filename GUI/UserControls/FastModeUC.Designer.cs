@@ -60,6 +60,7 @@
             this.NonCertificatedMechanicsNumPad = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.MzdoveNakladyLbl = new System.Windows.Forms.Label();
+            this.saveCsvBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.replicationsNumpad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CertificatedMechanicsNumPad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TechnicianNumPad)).BeginInit();
@@ -69,7 +70,7 @@
             // replicationsNumpad
             // 
             this.replicationsNumpad.Location = new System.Drawing.Point(160, 20);
-            this.replicationsNumpad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.replicationsNumpad.Margin = new System.Windows.Forms.Padding(2);
             this.replicationsNumpad.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -92,7 +93,7 @@
             // StartBtn
             // 
             this.StartBtn.Location = new System.Drawing.Point(298, 20);
-            this.StartBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StartBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StartBtn.Name = "StartBtn";
             this.StartBtn.Size = new System.Drawing.Size(74, 38);
             this.StartBtn.TabIndex = 2;
@@ -113,7 +114,7 @@
             // StopBtn
             // 
             this.StopBtn.Location = new System.Drawing.Point(389, 20);
-            this.StopBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StopBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StopBtn.Name = "StopBtn";
             this.StopBtn.Size = new System.Drawing.Size(74, 38);
             this.StopBtn.TabIndex = 5;
@@ -194,7 +195,7 @@
             // CertificatedMechanicsNumPad
             // 
             this.CertificatedMechanicsNumPad.Location = new System.Drawing.Point(703, 64);
-            this.CertificatedMechanicsNumPad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CertificatedMechanicsNumPad.Margin = new System.Windows.Forms.Padding(2);
             this.CertificatedMechanicsNumPad.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -227,7 +228,7 @@
             // TechnicianNumPad
             // 
             this.TechnicianNumPad.Location = new System.Drawing.Point(603, 27);
-            this.TechnicianNumPad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.TechnicianNumPad.Margin = new System.Windows.Forms.Padding(2);
             this.TechnicianNumPad.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -438,10 +439,21 @@
             this.MzdoveNakladyLbl.TabIndex = 33;
             this.MzdoveNakladyLbl.Text = "-";
             // 
+            // saveCsvBtn
+            // 
+            this.saveCsvBtn.Location = new System.Drawing.Point(24, 354);
+            this.saveCsvBtn.Name = "saveCsvBtn";
+            this.saveCsvBtn.Size = new System.Drawing.Size(223, 28);
+            this.saveCsvBtn.TabIndex = 34;
+            this.saveCsvBtn.Text = "SAVE CSV";
+            this.saveCsvBtn.UseVisualStyleBackColor = true;
+            this.saveCsvBtn.Click += new System.EventHandler(this.saveCsvBtn_Click);
+            // 
             // FastModeUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.saveCsvBtn);
             this.Controls.Add(this.MzdoveNakladyLbl);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label7);
@@ -475,7 +487,7 @@
             this.Controls.Add(this.StartBtn);
             this.Controls.Add(this.replicationsNumpad);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FastModeUC";
             this.Size = new System.Drawing.Size(943, 718);
             ((System.ComponentModel.ISupportInitialize)(this.replicationsNumpad)).EndInit();
@@ -521,5 +533,6 @@
         private System.Windows.Forms.NumericUpDown NonCertificatedMechanicsNumPad;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label MzdoveNakladyLbl;
+        private System.Windows.Forms.Button saveCsvBtn;
     }
 }

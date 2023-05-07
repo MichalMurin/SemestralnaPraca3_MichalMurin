@@ -53,9 +53,9 @@ namespace agents
         {
             MechanicsService.SIMULATIONAvergaeNumberOfFreeWorkers.Reset();
         }
-        public void CreateGenerator()
+        public void CreateGenerator(StkGenerator generators)
         {
-            InspectionTimeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateInspectionTimeGen();
+            InspectionTimeGenerator = generators.CreateInspectionTimeGen();
         }
 
         public void FinishStatsAfterReplication()

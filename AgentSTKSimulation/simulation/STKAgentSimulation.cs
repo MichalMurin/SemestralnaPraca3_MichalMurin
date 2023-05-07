@@ -1,4 +1,4 @@
-using OSPABA;
+﻿using OSPABA;
 using agents;
 using AgentSim.StkStation.Models;
 using AgentSim.StkStation;
@@ -15,24 +15,16 @@ namespace simulation
         public SimulationMode Mode { get; set; }
         private DateTime _startTime;
         public int Seed { get; set; }
-        public double CustomersFlow { get; set; }
         public bool IsValidation { get; set; }
-        public bool IsTimeForLunch { get; set; }
-        public StkGenerator StkGenerators { get; private set; }
         private Random _seedGenerator;
         public List<IStatsDelegate> GlobalStatsAgents { get; set; }
         public bool CorrectReplicationRun { get; set; }
 
-        //public ObservableCollection<Worker> AllWorkers { get; set; }
-        /// Standartne Statistiky
-        /// Vazene statistiky
         public STKAgentSimulation(): base()
 		{
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
             Seed = -1;
-            CustomersFlow = 23;
             IsValidation = false;
-            IsTimeForLunch = false;
             GlobalStatsAgents = new List<IStatsDelegate>();
             Init();
             RegisterPrepareSimAgents();
@@ -57,12 +49,11 @@ namespace simulation
                 _seedGenerator = new Random();
             }
 
-            StkGenerators = new StkGenerator(_seedGenerator);
-            StkGenerators.CustomersFlow = CustomersFlow;
+            var generators = new StkGenerator(_seedGenerator);
             foreach (var agent in GlobalStatsAgents)
             {
                 agent.ResetGlobalStats();
-                agent.CreateGenerator();
+                agent.CreateGenerator(generators);
             }
             if (IsValidation)
             {
@@ -75,7 +66,6 @@ namespace simulation
 		override protected void PrepareReplication()
 		{
 			base.PrepareReplication();
-            IsTimeForLunch = false;
             CorrectReplicationRun = true;
             // Reset entities, queues, local statistics, etc...
         }
@@ -93,24 +83,24 @@ namespace simulation
                     agent.AddGlobalStats();
                 }
 
-                ////////////////
-                var mechanics = MechanicsAgent.MechanicsService.AllWorkers;
-                foreach (var item in mechanics)
-                {
-                    if (!item.HadLunch)
-                    {
-                        throw new ArgumentException("Niekto nemal obed");
-                    }
-                }
-                var technics = TechniciansAgent.TechniciansService.AllWorkers;
-                foreach (var item in technics)
-                {
-                    if (!item.HadLunch)
-                    {
-                        throw new ArgumentException("Niekto nemal obed");
-                    }
-                }
-                ///////////////////////
+                //////////////////
+                //var mechanics = MechanicsAgent.MechanicsService.AllWorkers;
+                //foreach (var item in mechanics)
+                //{
+                //    if (!item.HadLunch)
+                //    {
+                //        throw new ArgumentException("Niekto nemal obed");
+                //    }
+                //}
+                //var technics = TechniciansAgent.TechniciansService.AllWorkers;
+                //foreach (var item in technics)
+                //{
+                //    if (!item.HadLunch)
+                //    {
+                //        throw new ArgumentException("Niekto nemal obed");
+                //    }
+                //}
+                /////////////////////////
                 
             }
             if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 100 == 0)
@@ -134,6 +124,7 @@ namespace simulation
 			// Dysplay simulation results
 			base.SimulationFinished();
             RefreshGui();
+
         }
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
@@ -164,6 +155,42 @@ namespace simulation
         public DateTime GetCurentTimeInDatFormat()
         {
             return _startTime.AddSeconds(CurrentTime);
+        }
+
+        public void SaveCsvResults(string path)
+        {
+            var list = new List<string>();
+            var techsNum = ((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber;
+            var certificatedMechsNum = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber;
+            var nonCertificatedMechsnum = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber;
+            var replications = (this.CurrentReplication + 1).ToString();
+            var avgWaitingTimet = (((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).SIMULATIONTimeWaitingForAcceptanceStatistics.GetAverage() / 60).ToString();
+            var avgTimeInSystem = (((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetAverage() / 60).ToString();
+            var avgCusAtEndOfDay = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONNumberOfCustomersAtTHeEndOfDay.GetAverage().ToString();
+            var freeTechs = ((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).TechniciansService.AvergaeFreeWorkersGlobal().ToString();
+            var freeMechs = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.AvergaeFreeWorkersGlobal().ToString();
+            var avgCustomersInFirstQueue = ((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
+            var avgCustomersInSystemNumber = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            //interval spolahlivosti
+            (double min, double max) interval = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
+            var confIntervalTimeInSystem = $"<{interval.min / 60} ; {interval.max / 60}>";
+            interval = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
+            var confIntervaNumberOfCustomersInSystem = $"<{interval.min} ; {interval.max}>";
+
+            list.Add($"Počet replikácií;{replications}");
+            list.Add($"Počet technikov;{techsNum}");
+            list.Add($"Počet certifikovaných mechanikov;{certificatedMechsNum}");
+            list.Add($"Počet necertifikovaných mechanikov;{nonCertificatedMechsnum}");
+            list.Add($"Priemerná doba čakania v rade na prijatie [min.];{avgWaitingTimet}");
+            list.Add($"Priemerný počet ľudí v rade na prijatie;{avgCustomersInFirstQueue}");
+            list.Add($"Priemerný čas strávený v systéme [min.];{avgTimeInSystem}");
+            list.Add($"90% interval spoľahlivosti [min.];{confIntervalTimeInSystem}");
+            list.Add($"Priemerný počet zákazníkov v systéme;{avgCustomersInSystemNumber}");
+            list.Add($"95% interval spoľahlivosti;{confIntervaNumberOfCustomersInSystem}");
+            list.Add($"Priemerný počet zákazníkov v prevádzke na konci dňa;{avgCusAtEndOfDay}");
+            list.Add($"Priemerný počet voľných technikov;{freeTechs}");
+            list.Add($"Priemerný počet voľných mechanikov;{freeMechs}");
+            System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
         }
     }
 }

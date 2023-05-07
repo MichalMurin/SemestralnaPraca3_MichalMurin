@@ -20,6 +20,7 @@ namespace AgentSTKSimulation.StkStation.Services
         protected Agent _myAgent;
         public WeightedAritmeticAverage AvergaeNumberOfFreeWorkers { get; set; }
         public StandartStaticstic SIMULATIONAvergaeNumberOfFreeWorkers { get; set; }
+        public bool IsTimeForLunch { get; set; }
         public WorkerAgentService(Agent myAgent)
         {
             WorkersNumber = 5;
@@ -28,12 +29,13 @@ namespace AgentSTKSimulation.StkStation.Services
             AllWorkers = new ObservableCollection<Worker>();
             AvergaeNumberOfFreeWorkers = new WeightedAritmeticAverage();
             SIMULATIONAvergaeNumberOfFreeWorkers = new StandartStaticstic();
+            IsTimeForLunch = false;
         }
 
         public void HandleFinishedWork(Worker worker, System.Action findWorkMethod)
         {
             // ak nie je validacia a je cas na obed posielame pracovnikov, ktori nemali obed na obed
-            if (!((STKAgentSimulation)_myAgent.MySim).IsValidation && ((STKAgentSimulation)_myAgent.MySim).IsTimeForLunch && !worker.HadLunch)
+            if (!((STKAgentSimulation)_myAgent.MySim).IsValidation && IsTimeForLunch && !worker.HadLunch)
             {
                 SendWorkerToLunch(worker);
             }
@@ -131,6 +133,7 @@ namespace AgentSTKSimulation.StkStation.Services
 
         public virtual void LunchBreakStart()
         {
+            IsTimeForLunch = true;
             int freeWorkers = FreeWorkers.Count;
             for (int i = 0; i < freeWorkers; i++)
             {

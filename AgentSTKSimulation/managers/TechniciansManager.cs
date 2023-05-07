@@ -27,6 +27,7 @@ namespace managers
             // Setup component for the next replication
             ResetReplicationStats();
             ClearAllQueues();
+            MyAgent.TechniciansService.IsTimeForLunch = false;
             MyAgent.TechniciansService.InitializeWorkers(typeof(Technician));
             if (PetriNet != null)
             {

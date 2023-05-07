@@ -67,7 +67,6 @@ namespace managers
 		//meta! sender="StartLunchBreakScheduler", id="43", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
-			((STKAgentSimulation)MySim).IsTimeForLunch = true;
             message.Addressee = MySim.FindAgent(SimId.TechniciansAgent);
 			message.Code = Mc.LunchBreakStart;
 			Notice(message);

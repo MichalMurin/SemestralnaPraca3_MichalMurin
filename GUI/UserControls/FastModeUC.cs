@@ -125,5 +125,20 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         {
             _isVisible = visible;
         }
+
+        private void saveCsvBtn_Click(object sender, EventArgs e)
+        {
+            if (!_isSimulationRunning)
+            {
+                var dialog = new FolderBrowserDialog();
+                dialog.ShowDialog();
+                var path = dialog.SelectedPath;
+                _simulator.SaveCsvResults(path);
+            }
+            else
+            {
+                MessageBox.Show("Simulacia este bezi", "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

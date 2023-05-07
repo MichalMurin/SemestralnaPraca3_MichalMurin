@@ -23,6 +23,7 @@ namespace agents
         public StandartStaticstic SIMULATIONNumberOfCustomersAtTHeEndOfDay { get; set; }
         public StkGenerator.CarTypeGenerator CarTypeGenerator { get; set; }
         public StkGenerator.CustomerTimeGenerator CustomerTimeGen { get; set; }
+        public double CustomersFlow { get; set; }
         public SurroundingAgent(int id, Simulation mySim, Agent parent) :
             base(id, mySim, parent)
         {
@@ -38,6 +39,7 @@ namespace agents
             NumberOfCustomersInTheSystemAtAll = 0;
             // Ststistiky pre viac replikacii
             SIMULATIONNumberOfCustomersAtTHeEndOfDay = new StandartStaticstic();
+            CustomersFlow = 23;
             Init();
         }
 
@@ -71,10 +73,10 @@ namespace agents
             SIMULATIONTimeInTheSystemStatistics.Reset();
         }
 
-        public void CreateGenerator()
+        public void CreateGenerator(StkGenerator generators)
         {
-            CarTypeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateCarTypeGenerator();
-            CustomerTimeGen = ((STKAgentSimulation)MySim).StkGenerators.CreateCustomerTimeGenerator();
+            CarTypeGenerator = generators.CreateCarTypeGenerator();
+            CustomerTimeGen = generators.CreateCustomerTimeGenerator(CustomersFlow);
         }
 
         public void FinishStatsAfterReplication()

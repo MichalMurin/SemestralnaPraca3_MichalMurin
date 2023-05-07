@@ -71,10 +71,10 @@ namespace agents
             TechniciansService.SIMULATIONAvergaeNumberOfFreeWorkers.Reset();
             SIMULATIONTimeWaitingForAcceptanceStatistics.Reset();
         }
-        public void CreateGenerator()
+        public void CreateGenerator(StkGenerator generators)
         {
-            AcceptanceCarGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreateAcceptanceTimeGen();
-            PaymentTimeGenerator = ((STKAgentSimulation)MySim).StkGenerators.CreatePaymentTimeGen();
+            AcceptanceCarGenerator = generators.CreateAcceptanceTimeGen();
+            PaymentTimeGenerator = generators.CreatePaymentTimeGen();
         }
 
         public void FinishStatsAfterReplication()
