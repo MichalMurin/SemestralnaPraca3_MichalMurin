@@ -104,7 +104,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                     {
                         _simulator.ResumeSimulation();
                     }
-                    _simulator.CorrectReplicationRun = false;
                 }
             }
         }
@@ -127,7 +126,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             _isVisible = visible;
         }
 
-        private void saveCsvBtn_Click(object sender, EventArgs e)
+        private void SaveCsvBtn_Click(object sender, EventArgs e)
         {
             if (!_isSimulationRunning)
             {

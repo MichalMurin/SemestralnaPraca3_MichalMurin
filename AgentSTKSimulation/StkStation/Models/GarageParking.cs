@@ -11,7 +11,6 @@ namespace AgentSim.StkStation.Models
     public class GarageParking
     {
         public const int MAX_CARS_IN_PARKING_GARAGE = 5;
-        // 
         private int _freeSpotsCount;
         private Queue<StkMessage> _parking;
         private Queue<StkMessage> _parkedTrucks;

@@ -5,6 +5,9 @@ using AgentSim.StkStation;
 
 namespace continualAssistants
 {
+	/// <summary>
+	/// Process pre simulovanie platenia
+	/// </summary>
 	//meta! id="27"
 	public class CustomerPaymentProcess : Process
 	{

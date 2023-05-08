@@ -5,6 +5,9 @@ using AgentSim.StkStation;
 
 namespace continualAssistants
 {
+	/// <summary>
+	/// Planovac na simulovanie prichodov zakznikov
+	/// </summary>
 	//meta! id="12"
 	public class CustomerCameScheduler : Scheduler
 	{

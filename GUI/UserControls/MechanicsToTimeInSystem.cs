@@ -51,7 +51,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 {
                     _simulator.ResumeSimulation();
                 }
-                _simulator.CorrectReplicationRun = false;
             }
         }
 
@@ -93,13 +92,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             for (int i = 0; i < numberOfRuns; i++)
             {
                 _simulator.Simulate(replications, 8*3600);
-                //
                 allMechNum++;
                 certificatedNum = (int)(allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio);
                 ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = certificatedNum;
                 ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = allMechNum - certificatedNum;
-                //((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber++;
-                //
                 if (!_isSimulationRunning)
                 {
                     break;

@@ -449,7 +449,7 @@
             this.saveCsvBtn.TabIndex = 34;
             this.saveCsvBtn.Text = "SAVE CSV";
             this.saveCsvBtn.UseVisualStyleBackColor = true;
-            this.saveCsvBtn.Click += new System.EventHandler(this.saveCsvBtn_Click);
+            this.saveCsvBtn.Click += new System.EventHandler(this.SaveCsvBtn_Click);
             // 
             // AvgCustomersAtOneDayLbl
             // 

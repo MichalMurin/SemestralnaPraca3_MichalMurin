@@ -4,6 +4,9 @@ using managers;
 using continualAssistants;
 namespace agents
 {
+	/// <summary>
+	/// Agent STK
+	/// </summary>
 	//meta! id="3"
 	public class STKAgent : Agent
 	{

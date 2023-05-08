@@ -26,7 +26,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
         {
             InitializeComponent();
             _simulator = core;
-            //chart1.Series[SERIES_NAME].IsValueShownAsLabel = true;
         }
 
         private void Update(STKAgentSimulation simulation)
@@ -50,7 +49,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 {
                     _simulator.ResumeSimulation();
                 }
-                _simulator.CorrectReplicationRun = false;
             }
         }
 

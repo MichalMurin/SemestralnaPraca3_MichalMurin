@@ -5,6 +5,9 @@ using AgentSim.StkStation;
 
 namespace continualAssistants
 {
+	/// <summary>
+	/// Trieda pre simulovanie procesu prijimania zakaznika
+	/// </summary>
 	//meta! id="25"
 	public class CustomerAcceptanceProcess : Process
 	{

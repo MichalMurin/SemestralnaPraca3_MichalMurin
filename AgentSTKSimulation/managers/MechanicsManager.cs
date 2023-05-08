@@ -48,7 +48,11 @@ namespace managers
             MyAgent.MechanicsService.ClearQueues();
 			MyAgent.ParkingInGarage.ResetGarage();
         }
-
+		/// <summary>
+		/// Spustenie procesu obsluhy vozidla
+		/// </summary>
+		/// <param name="mess"></param>
+		/// <param name="worker"></param>
         private void StartCarService(StkMessage mess, Worker worker)
         {
             HandleParkingReservation();
@@ -59,7 +63,9 @@ namespace managers
             mess.Addressee = MyAgent.FindAssistant(SimId.CarInspectionProcess);
             StartContinualAssistant(mess);
         }
-
+		/// <summary>
+		/// Priradenie prace mechanikovi, ak je niektory volny
+		/// </summary>
 		private void FindWorkForMechanic()
 		{
 			if (MyAgent.ParkingInGarage.IsWaitingTruck())
@@ -107,7 +113,9 @@ namespace managers
                 return;
             }
         }
-
+		/// <summary>
+		/// Sprava rezervacie parkoviska v dielni
+		/// </summary>
 		private void HandleParkingReservation()
 		{
             if (MyAgent.ParkingInGarage.IsFreeSpot() && MyAgent.ParkingInGarage.IsWaitingForParkingPlace())

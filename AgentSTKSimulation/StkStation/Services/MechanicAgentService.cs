@@ -8,10 +8,23 @@ using System.Threading.Tasks;
 
 namespace AgentSTKSimulation.StkStation.Services
 {
+    /// <summary>
+    /// Trieda pre spravu necertifikovanych mechanikov
+    /// </summary>
     public class MechanicAgentService : WorkerAgentService
     {
+        /// <summary>
+        /// Front necertifikovanych mechanikov
+        /// </summary>
         public Queue<Worker> FreeNonCertificatedWorkers { get; set; }
+        /// <summary>
+        /// Pocet necertifikovanych mechanikov
+        /// </summary>
         public int NonCertificatedNumber { get; set; }
+        /// <summary>
+        /// Konstruktor triedy
+        /// </summary>
+        /// <param name="myAgent"></param>
         public MechanicAgentService(Agent myAgent) : base(myAgent)
         {
             FreeNonCertificatedWorkers = new Queue<Worker>();
@@ -22,8 +35,6 @@ namespace AgentSTKSimulation.StkStation.Services
         /// <summary>
         /// Inicializovanie pracovnikov
         /// </summary>
-        /// <param name="numberOfMechanics"></param>
-        /// <param name="numberOfTechnicians"></param>
         public override void InitializeWorkers(Type type)
         {
             base.InitializeWorkers(type);
@@ -38,13 +49,17 @@ namespace AgentSTKSimulation.StkStation.Services
             }
             AvergaeNumberOfFreeWorkers.Add(NonCertificatedNumber, _myAgent.MySim.CurrentTime);
         }
-
+        /// <summary>
+        /// Premazanie strktur triedy
+        /// </summary>
         public override void ClearQueues()
         {
             base.ClearQueues();
             FreeNonCertificatedWorkers.Clear();
         }
-
+        /// <summary>
+        /// Start obednej pauzy
+        /// </summary>
         public override void LunchBreakStart()
         {
             base.LunchBreakStart();
@@ -55,6 +70,10 @@ namespace AgentSTKSimulation.StkStation.Services
                 SendWorkerToLunch(FreeNonCertificatedWorkers.Dequeue());
             }
         }
+        /// <summary>
+        /// Zistenie, ci je volny necertifikovany mechanik
+        /// </summary>
+        /// <returns></returns>
         public bool IsFreeNonCertificatedWorker()
         {
             if (FreeNonCertificatedWorkers.Count > 0)
@@ -70,7 +89,7 @@ namespace AgentSTKSimulation.StkStation.Services
         /// <summary>
         /// Uvolnenenie pracovnika
         /// </summary>
-        /// <param name="worker"></param>
+        /// <param name="worker">uvolneny pracovnik</param>
         public override void SetWorkerFree(Worker worker)
         {
             worker.CustomerId = -1;
@@ -86,6 +105,12 @@ namespace AgentSTKSimulation.StkStation.Services
             }
             AvergaeNumberOfFreeWorkers.Add(1, _myAgent.MySim.CurrentTime);
         }
+        /// <summary>
+        /// Ziskanie volneho pracovnika
+        /// </summary>
+        /// <param name="certificated">true ak chceme certifikovaneho zamestnanca</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public Worker GetWorker(bool certificated = true)
         {
             Worker worker;

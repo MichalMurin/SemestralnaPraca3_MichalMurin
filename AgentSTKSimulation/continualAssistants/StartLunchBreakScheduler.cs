@@ -3,6 +3,9 @@ using simulation;
 using agents;
 namespace continualAssistants
 {
+	/// <summary>
+	/// Planovac zaciatku obedu
+	/// </summary>
 	//meta! id="42"
 	public class StartLunchBreakScheduler : Scheduler
 	{

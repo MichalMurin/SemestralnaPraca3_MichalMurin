@@ -4,6 +4,9 @@ using managers;
 using continualAssistants;
 namespace agents
 {
+	/// <summary>
+	/// Agent modelu
+	/// </summary>
 	//meta! id="1"
 	public class ModelAgent : Agent
 	{

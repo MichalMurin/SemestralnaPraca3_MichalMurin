@@ -12,18 +12,51 @@ using AgentSTKSimulation.StkStation.Services;
 
 namespace agents
 {
+    /// <summary>
+    /// Agent technikov
+    /// </summary>
 	//meta! id="4"
 	public class TechniciansAgent : Agent, IStatsDelegate
     {
+        /// <summary>
+        /// Servis pre spravu technikov
+        /// </summary>
         public WorkerAgentService TechniciansService { get; set; }
+        /// <summary>
+        /// Front pre zakaznikov cakajucich na prijatie
+        /// </summary>
         public Queue<StkMessage> CustomerQueueForAcceptance { get; set; }
+        /// <summary>
+        /// Front zakaznikov cakajucich na platenie
+        /// </summary>
         public Queue<StkMessage> CustomerQueueForPayment { get; set; }
+        /// <summary>
+        /// Statistika casu cakajucich v prvom rade
+        /// </summary>
         public StandartStaticstic TimeWaitingForAcceptanceStatistics { get; set; }
+        /// <summary>
+        /// Statistika poctu ludi v prvom rade
+        /// </summary>
         public WeightedAritmeticAverage AverageNumberOfCustomersInQueueForAcceptance { get; set; }
+        /// <summary>
+        /// Globalna statistika pre cas cakania v prvom rade
+        /// </summary>
         public StandartStaticstic SIMULATIONTimeWaitingForAcceptanceStatistics { get; set; }
+        /// <summary>
+        /// Globalna statistika pre pocet ludi cakajucich v prvom rade
+        /// </summary>
         public StandartStaticstic SIMULATIONAverageNumberOfCustomersInQueueForAcceptance { get; set; }
+        /// <summary>
+        /// Generator pre cas prijimania zakaznika
+        /// </summary>
         public StkGenerator.AcceptanceCarGenerator AcceptanceCarGenerator { get; set; }
+        /// <summary>
+        /// Generator casu platenia
+        /// </summary>
         public StkGenerator.PaymentTimeGenerator PaymentTimeGenerator { get; set; }
+        /// <summary>
+        /// Ignorovanie zostavajucich zakaznikov na konci dna
+        /// </summary>
         public bool IgnoreReaminingCustomers { get; set; }
         public TechniciansAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)

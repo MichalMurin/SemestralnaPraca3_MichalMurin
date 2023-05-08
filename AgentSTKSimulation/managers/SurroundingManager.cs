@@ -13,14 +13,21 @@ namespace managers
 	//meta! id="2"
 	public class SurroundingManager : Manager
     {
-        // cas v sekundach
+        /// <summary>
+		/// Cas, kedy zakaznici prestavaju prichadzat
+		/// </summary>
         public const int CUSTOMER_STOP_COMMING_TIME = ((15 - 9) * 60 + 45) * 60;
+		/// <summary>
+		/// Konstruktor manazera
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="mySim"></param>
+		/// <param name="myAgent"></param>
         public SurroundingManager(int id, Simulation mySim, Agent myAgent) :
 			base(id, mySim, myAgent)
 		{
             Init();
         }
-
         /// <summary>
         /// Resetovanie replikacnych statistik
         /// </summary>
@@ -29,7 +36,6 @@ namespace managers
             MyAgent.TimeInTheSystemStatistics.Reset();
             MyAgent.AverageNumberOfCustomersInSystem.Reset();
         }
-
         override public void PrepareReplication()
 		{
 			base.PrepareReplication();
@@ -44,7 +50,6 @@ namespace managers
 				PetriNet.Clear();
 			}
 		}
-
 		//meta! sender="ModelAgent", id="15", type="Notice"
 		public void ProcessCustomerLeft(MessageForm message)
 		{
@@ -55,7 +60,6 @@ namespace managers
             MyAgent.AverageNumberOfCustomersInSystem.Add(-1, MySim.CurrentTime);
             MyAgent.AllCustomers.Remove(cus);
         }
-
 		//meta! sender="CustomerCameScheduler", id="13", type="Finish"
 		public void ProcessFinish(MessageForm message)
 		{
@@ -72,7 +76,6 @@ namespace managers
                 StartContinualAssistant(messageForAssistnent);
             }			
         }
-
 		//meta! sender="ModelAgent", id="39", type="Notice"
 		public void ProcessInitialize(MessageForm message)
 		{
@@ -130,8 +133,11 @@ namespace managers
 				return (SurroundingAgent)base.MyAgent;
 			}
 		}
-
-
+		/// <summary>
+		/// Vytvorenie noveho zakaznika
+		/// </summary>
+		/// <param name="startTime">cas prichodu zakanznika</param>
+		/// <returns></returns>
         public Customer CreateCustomer(double startTime)
         {
             MyAgent.NumberOfCustomersInTheSystemAtAll++;

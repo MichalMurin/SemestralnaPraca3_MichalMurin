@@ -15,9 +15,24 @@ namespace agents
 	//meta! id="5"
 	public class MechanicsAgent : Agent, IStatsDelegate
     {
+        /// <summary>
+        /// Servis pre spravu mechanikov
+        /// </summary>
         public MechanicAgentService MechanicsService { get; set; }
+        /// <summary>
+        /// Parkovisko v dielni
+        /// </summary>
         public GarageParking ParkingInGarage { get; set; }
+        /// <summary>
+        /// Generator casu kontroly vozidla
+        /// </summary>
         public InspectionTimeGenerator InspectionTimeGenerator { get; set; }
+        /// <summary>
+        /// Agent mechanikov
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="mySim"></param>
+        /// <param name="parent"></param>
         public MechanicsAgent(int id, Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
         {

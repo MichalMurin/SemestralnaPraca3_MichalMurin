@@ -43,7 +43,9 @@ namespace managers
             MyAgent.CustomerQueueForPayment.Clear();
             MyAgent.TechniciansService.ClearQueues();
         }
-
+        /// <summary>
+        /// Priradenie prace zamestnancovi, ak je niektory volny
+        /// </summary>
         private void FindWorkForTechnician()
         {
             var worker = MyAgent.TechniciansService.GetWorker();
@@ -87,6 +89,11 @@ namespace managers
             message.Code = Mc.CustomerPayment;
             Response(message);
         }
+        /// <summary>
+        /// Spustenie procesu prijmania zakaznika
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="mess"></param>
         private void StartAcceptanceProcess(Worker worker, StkMessage mess)
         {
             worker.CustomerId = mess.Customer.Id;
@@ -96,7 +103,11 @@ namespace managers
             mess.Addressee = MyAgent.FindAssistant(SimId.CustomerAcceptanceProcess);
             StartContinualAssistant(mess);
         }
-
+        /// <summary>
+        /// Spustenie procesu platenia zakaznika
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="mess"></param>
         private void StartPaymentProcess(Worker worker, StkMessage mess)
         {
             worker.CustomerId = mess.Customer.Id;
@@ -137,7 +148,6 @@ namespace managers
                 FindWorkForTechnician();
             }
         }
-
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
         {
@@ -145,7 +155,6 @@ namespace managers
             {
             }
         }
-
 		//meta! sender="TechniciansLunchBreakProcess", id="58", type="Finish"
 		public void ProcessFinishTechniciansLunchBreakProcess(MessageForm message)
         {
@@ -159,7 +168,6 @@ namespace managers
             MyAgent.TechniciansService.SetWorkerFree(worker);
             FindWorkForTechnician();
         }
-
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{

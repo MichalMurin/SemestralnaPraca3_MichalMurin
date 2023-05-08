@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
-  <Class Name="AgentSTKSimulation.StkStation.Services.WorkerAgentService">
-    <Position X="17.5" Y="13.25" Width="3.25" />
+  <Class Name="AgentSTKSimulation.StkStation.Services.WorkerAgentService" Collapsed="true">
+    <Position X="20.25" Y="22.25" Width="3.25" />
     <TypeIdentifier>
       <HashCode>JAAAEAAAAAARAACEAAAICAKAAAJEAAAAAgEBAAEAAAA=</HashCode>
       <FileName>StkStation\Services\WorkerAgentService.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AgentSTKSimulation.StkStation.Services.MechanicAgentService">
-    <Position X="17.5" Y="18.75" Width="3.25" />
+  <Class Name="AgentSTKSimulation.StkStation.Services.MechanicAgentService" Collapsed="true">
+    <Position X="12.25" Y="22.5" Width="3.25" />
     <TypeIdentifier>
       <HashCode>JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAgEBIAAAAAA=</HashCode>
       <FileName>StkStation\Services\MechanicAgentService.cs</FileName>
@@ -17,7 +17,7 @@
   <Class Name="simulation.STKAgentSimulation">
     <Position X="5.25" Y="2" Width="3" />
     <TypeIdentifier>
-      <HashCode>GIAggBAQIOAAAAEAAEAABAAADAEAEAAAAAACACBABAA=</HashCode>
+      <HashCode>GIAggBAQIOAAAAEAAEAAAAAADAEAEAAAAAACACBABAA=</HashCode>
       <FileName>simulation\STKAgentSimulation.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -100,15 +100,14 @@
   </Class>
   <Class Name="agents.TechniciansAgent">
     <Position X="20.75" Y="23.25" Width="2.5" />
-    <AssociationLine Name="TechniciansService" Type="AgentSTKSimulation.StkStation.Services.WorkerAgentService" ManuallyRouted="true" FixedFromPoint="true">
+    <AssociationLine Name="TechniciansService" Type="AgentSTKSimulation.StkStation.Services.WorkerAgentService" ManuallyRouted="true" FixedToPoint="true">
       <Path>
-        <Point X="21.875" Y="23.25" />
-        <Point X="21.875" Y="15.792" />
-        <Point X="20.75" Y="15.792" />
+        <Point X="22" Y="23.25" />
+        <Point X="22" Y="22.812" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AIAAAAAAAAAAgAAEAAAQAIABAAEIAAAAAAAiDCACACA=</HashCode>
+      <HashCode>AIAAAAAAAAAAgAAEAAAQAIABAAEIAIAAAAAiDCACACA=</HashCode>
       <FileName>agents\TechniciansAgent.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -137,7 +136,7 @@
   <Class Name="agents.SurroundingAgent">
     <Position X="11.5" Y="31.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAoAgAAEAQEAAAAREAEAAAAAAEAChAAIQCA=</HashCode>
+      <HashCode>AAAAAgAAAAoAgAAEAQEAAAAREAEAAIAAAEAChAAIQCA=</HashCode>
       <FileName>agents\SurroundingAgent.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

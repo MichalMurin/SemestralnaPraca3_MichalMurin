@@ -3,6 +3,9 @@ using simulation;
 using agents;
 namespace continualAssistants
 {
+	/// <summary>
+	/// Planovac obednej prestavky mechanikov
+	/// </summary>
 	//meta! id="60"
 	public class MechanicsLunchBreakProcess : Process
 	{

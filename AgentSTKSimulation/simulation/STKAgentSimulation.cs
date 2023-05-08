@@ -3,7 +3,6 @@ using agents;
 using AgentSim.StkStation.Models;
 using AgentSim.StkStation;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System;
 using AgentSTKSimulation.simulation;
 
@@ -11,15 +10,37 @@ namespace simulation
 {
 	public class STKAgentSimulation : Simulation
 	{
+        /// <summary>
+        /// Maximalny simulacny cas
+        /// </summary>
         public static int MAX_TIME = 8 * 3600;
+        /// <summary>
+        /// Simulacny mod
+        /// </summary>
         public SimulationMode Mode { get; set; }
+        /// <summary>
+        /// Cas inicializovany na 9:00
+        /// </summary>
         private DateTime _startTime;
+        /// <summary>
+        /// Nasada generatora
+        /// </summary>
         public int Seed { get; set; }
+        /// <summary>
+        /// Informacia, ci je zapnuta validacia dat
+        /// </summary>
         public bool IsValidation { get; set; }
+        /// <summary>
+        /// Generator nasad
+        /// </summary>
         private Random _seedGenerator;
+        /// <summary>
+        /// zoznam delegatov, ktori maju globalne statistiky
+        /// </summary>
         public List<IStatsDelegate> GlobalStatsAgents { get; set; }
-        public bool CorrectReplicationRun { get; set; }
-
+        /// <summary>
+        /// Kostruktor potomka simulacneho jadra
+        /// </summary>
         public STKAgentSimulation(): base()
 		{
             _startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddHours(9);
@@ -29,14 +50,15 @@ namespace simulation
             Init();
             RegisterPrepareSimAgents();
         }
-
+        /// <summary>
+        /// Registracia delegatov s globalnymi statistikami
+        /// </summary>
         private void RegisterPrepareSimAgents()
         {
             GlobalStatsAgents.Add(SurroundingAgent);
             GlobalStatsAgents.Add(MechanicsAgent);
             GlobalStatsAgents.Add(TechniciansAgent);
         }
-
         override protected void PrepareSimulation()
 		{
 			base.PrepareSimulation();
@@ -59,14 +81,12 @@ namespace simulation
             {
                 MechanicsAgent.MechanicsService.NonCertificatedNumber = 0;
             }
-
             // Create global statistcis
         }
 
 		override protected void PrepareReplication()
 		{
 			base.PrepareReplication();
-            CorrectReplicationRun = true;
             // Reset entities, queues, local statistics, etc...
         }
 
@@ -74,43 +94,23 @@ namespace simulation
 		{
             // Collect local statistics into global, update UI, etc...
 			base.ReplicationFinished();
-            // TODO KONTROLA CI DOBEHLA REPLIKACIA KOREKTNE
-            if (CorrectReplicationRun)
+            //KONTROLA CI DOBEHLA REPLIKACIA KOREKTNE
+            if (CurrentTime > MAX_TIME - 0.1 && CurrentTime < MAX_TIME + 0.1 )
             {
                 foreach (var agent in GlobalStatsAgents)
                 {
                     agent.FinishStatsAfterReplication();
                     agent.AddGlobalStats();
-                }
-
-                //////////////////
-                //var mechanics = MechanicsAgent.MechanicsService.AllWorkers;
-                //foreach (var item in mechanics)
-                //{
-                //    if (!item.HadLunch)
-                //    {
-                //        throw new ArgumentException("Niekto nemal obed");
-                //    }
-                //}
-                //var technics = TechniciansAgent.TechniciansService.AllWorkers;
-                //foreach (var item in technics)
-                //{
-                //    if (!item.HadLunch)
-                //    {
-                //        throw new ArgumentException("Niekto nemal obed");
-                //    }
-                //}
-                /////////////////////////
-                
+                }                                
             }
             if (Mode == SimulationMode.FAST && (CurrentReplication+1) % 100 == 0)
             {
                 RefreshGui();
-            }
-
-            
+            }            
         }
-
+        /// <summary>
+        /// Refresh uzivatelskeho rozhrania
+        /// </summary>
         private void RefreshGui()
         {
             foreach (var item in Delegates)
@@ -156,7 +156,10 @@ namespace simulation
         {
             return _startTime.AddSeconds(CurrentTime);
         }
-
+        /// <summary>
+        /// Ulozenie vysledkov simulacie do csv suboru
+        /// </summary>
+        /// <param name="path">cesta k csv suboru</param>
         public void SaveCsvResults(string path)
         {
             var list = new List<string>();
@@ -200,7 +203,7 @@ namespace simulation
             list.Add($"Mzdové náklady;{salary}€");
             try
             {
-                System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
+                System.IO.File.WriteAllLines($"{path}\\RESULT_{DateTime.Now.ToString("dd.MM.yy-HH.mm.ss")}.csv", list, System.Text.Encoding.Unicode);
             }
             catch (Exception e)
             {

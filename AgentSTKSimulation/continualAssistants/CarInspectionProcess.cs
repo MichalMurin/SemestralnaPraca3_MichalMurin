@@ -6,6 +6,9 @@ using static AgentSim.StkStation.StkGenerator;
 
 namespace continualAssistants
 {
+	/// <summary>
+	/// Trieda pre simulovanie procesu kontroly vozidla mechanikom
+	/// </summary>
 	//meta! id="30"
 	public class CarInspectionProcess : Process
 	{

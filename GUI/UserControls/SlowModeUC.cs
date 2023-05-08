@@ -67,7 +67,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                     var list = (ObservableCollection<Worker>)sender;
                     list[list.Count - 1].PropertyChanged += PropertyChanged;
                 }
-                //this.Invoke((MethodInvoker)delegate { UpdateCustomerListbox(); });
             }
         }
 
@@ -208,7 +207,6 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 {
                     _simulator.ResumeSimulation();
                 }
-                _simulator.CorrectReplicationRun = false;
             }
         }
 

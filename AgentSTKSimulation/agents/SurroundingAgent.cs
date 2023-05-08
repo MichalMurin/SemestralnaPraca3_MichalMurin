@@ -10,21 +10,63 @@ using AgentSTKSimulation.simulation;
 
 namespace agents
 {
+    /// <summary>
+    /// Agent okolia
+    /// </summary>
     //meta! id="2"
     public class SurroundingAgent : Agent, IStatsDelegate
     {
+        /// <summary>
+        /// Globalna statisitka casu v systeme
+        /// </summary>
         public StandartStaticstic SIMULATIONTimeInTheSystemStatistics { get; set; }
+        /// <summary>
+        /// Globalna statistika poctu zakaznikov v systeme
+        /// </summary>
         public StandartStaticstic SIMULATIONAverageNumberOfCustomersInSystem { get; set; }
-        public ObservableCollection<Customer> AllCustomers { get; set; }
-        public int CurrentNumberOfCustomersInTheSystem { get; set; }
-        public WeightedAritmeticAverage AverageNumberOfCustomersInSystem { get; set; }
-        public StandartStaticstic TimeInTheSystemStatistics { get; set; }
+        /// <summary>
+        /// Globalna statistika pocet zakaznikov na konci dna
+        /// </summary>
         public StandartStaticstic SIMULATIONNumberOfCustomersAtOneDay { get; set; }
-        public int NumberOfCustomersInTheSystemAtAll { get; set; }
+        /// <summary>
+        /// Globalna statistika pocet zakaznikov na konci dna
+        /// </summary>
         public StandartStaticstic SIMULATIONNumberOfCustomersAtTHeEndOfDay { get; set; }
+        /// <summary>
+        /// Zoznam vsetkych zakaznikov v systeme
+        /// </summary>
+        public ObservableCollection<Customer> AllCustomers { get; set; }
+        /// <summary>
+        /// Aktualny pocet zakaznikov v systeme
+        /// </summary>
+        public int CurrentNumberOfCustomersInTheSystem { get; set; }
+        /// <summary>
+        /// Statistika pocet zakaznikov v systeme
+        /// </summary>
+        public WeightedAritmeticAverage AverageNumberOfCustomersInSystem { get; set; }
+        /// <summary>
+        /// Statistika cas v systeme
+        /// </summary>
+        public StandartStaticstic TimeInTheSystemStatistics { get; set; }
+        /// <summary>
+        /// Celkovy pocet zakaznikov za den
+        /// </summary>
+        public int NumberOfCustomersInTheSystemAtAll { get; set; }
+        /// <summary>
+        /// Generator typoc vozidla
+        /// </summary>
         public StkGenerator.CarTypeGenerator CarTypeGenerator { get; set; }
+        /// <summary>
+        /// Generator prichodu zakaznika
+        /// </summary>
         public StkGenerator.CustomerTimeGenerator CustomerTimeGen { get; set; }
+        /// <summary>
+        /// Percentualny narast prichodov zakaznikov
+        /// </summary>
         public double CustomersFlowIncreaseInPercent { get; set; }
+        /// <summary>
+        /// Ignorovanie zostavajucich zakaznikov na konci dna
+        /// </summary>
         public bool IgnoreReaminingCustomers { get; set; }
         public SurroundingAgent(int id, Simulation mySim, Agent parent) :
             base(id, mySim, parent)
