@@ -160,6 +160,7 @@ namespace simulation
         public void SaveCsvResults(string path)
         {
             var list = new List<string>();
+            var customersIncrease = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).CustomersFlowIncreaseInPercent;
             var techsNum = ((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber;
             var certificatedMechsNum = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber;
             var nonCertificatedMechsnum = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber;
@@ -177,6 +178,9 @@ namespace simulation
             var confIntervalTimeInSystem = $"<{interval.min / 60} ; {interval.max / 60}>";
             interval = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
             var confIntervaNumberOfCustomersInSystem = $"<{interval.min} ; {interval.max}>";
+            int salary = certificatedMechsNum * 2000;
+            salary += nonCertificatedMechsnum * 1500;
+            salary += techsNum * 1100;
 
             list.Add($"Počet replikácií;{replications}");
             list.Add($"Počet technikov;{techsNum}");
@@ -192,6 +196,8 @@ namespace simulation
             list.Add($"Priemerný počet voľných technikov;{freeTechs}");
             list.Add($"Priemerný počet voľných mechanikov;{freeMechs}");
             list.Add($"Priemerný počet zákazníkov za deň;{allCustomersAtDay}");
+            list.Add($"Percentuálny nárast počtu zákazníkov;{customersIncrease}");
+            list.Add($"Mzdové náklady;{salary}€");
             System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
         }
     }
