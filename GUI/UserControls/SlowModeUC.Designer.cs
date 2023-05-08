@@ -177,7 +177,7 @@
             this.techniciansCounter.Size = new System.Drawing.Size(46, 20);
             this.techniciansCounter.TabIndex = 8;
             this.techniciansCounter.Value = new decimal(new int[] {
-            4,
+            5,
             0,
             0,
             0});
@@ -200,7 +200,7 @@
             this.CertificatedMechanicCounter.Size = new System.Drawing.Size(46, 20);
             this.CertificatedMechanicCounter.TabIndex = 9;
             this.CertificatedMechanicCounter.Value = new decimal(new int[] {
-            17,
+            7,
             0,
             0,
             0});
@@ -600,7 +600,7 @@
             this.NonCertificatedMechanicsCounter.Size = new System.Drawing.Size(46, 20);
             this.NonCertificatedMechanicsCounter.TabIndex = 47;
             this.NonCertificatedMechanicsCounter.Value = new decimal(new int[] {
-            17,
+            12,
             0,
             0,
             0});

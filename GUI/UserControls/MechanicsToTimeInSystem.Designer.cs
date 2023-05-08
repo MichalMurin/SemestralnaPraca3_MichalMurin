@@ -78,7 +78,7 @@
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(46, 158);
-            this.chart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chart1.Margin = new System.Windows.Forms.Padding(2);
             this.chart1.Name = "chart1";
             series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
@@ -105,7 +105,7 @@
             // MechanicsCounterEnd
             // 
             this.MechanicsCounterEnd.Location = new System.Drawing.Point(609, 123);
-            this.MechanicsCounterEnd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MechanicsCounterEnd.Margin = new System.Windows.Forms.Padding(2);
             this.MechanicsCounterEnd.Maximum = new decimal(new int[] {
             25,
             0,
@@ -128,7 +128,7 @@
             // replicationCounterForOneRun
             // 
             this.replicationCounterForOneRun.Location = new System.Drawing.Point(380, 123);
-            this.replicationCounterForOneRun.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.replicationCounterForOneRun.Margin = new System.Windows.Forms.Padding(2);
             this.replicationCounterForOneRun.Maximum = new decimal(new int[] {
             -727379969,
             232,
@@ -171,7 +171,7 @@
             // MechanicsCounterStart
             // 
             this.MechanicsCounterStart.Location = new System.Drawing.Point(609, 91);
-            this.MechanicsCounterStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MechanicsCounterStart.Margin = new System.Windows.Forms.Padding(2);
             this.MechanicsCounterStart.Maximum = new decimal(new int[] {
             25,
             0,
@@ -194,7 +194,7 @@
             // technicsCounter
             // 
             this.technicsCounter.Location = new System.Drawing.Point(380, 91);
-            this.technicsCounter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.technicsCounter.Margin = new System.Windows.Forms.Padding(2);
             this.technicsCounter.Maximum = new decimal(new int[] {
             -727379969,
             232,
@@ -209,7 +209,7 @@
             this.technicsCounter.Size = new System.Drawing.Size(46, 20);
             this.technicsCounter.TabIndex = 27;
             this.technicsCounter.Value = new decimal(new int[] {
-            4,
+            5,
             0,
             0,
             0});
@@ -217,7 +217,7 @@
             // StopBtn
             // 
             this.StopBtn.Location = new System.Drawing.Point(548, 29);
-            this.StopBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StopBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StopBtn.Name = "StopBtn";
             this.StopBtn.Size = new System.Drawing.Size(98, 39);
             this.StopBtn.TabIndex = 26;
@@ -227,7 +227,7 @@
             // StartBtn
             // 
             this.StartBtn.Location = new System.Drawing.Point(412, 30);
-            this.StartBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.StartBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StartBtn.Name = "StartBtn";
             this.StartBtn.Size = new System.Drawing.Size(98, 37);
             this.StartBtn.TabIndex = 25;
@@ -250,7 +250,7 @@
             // 
             this.resultsListBox.FormattingEnabled = true;
             this.resultsListBox.Location = new System.Drawing.Point(831, 166);
-            this.resultsListBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.resultsListBox.Margin = new System.Windows.Forms.Padding(2);
             this.resultsListBox.Name = "resultsListBox";
             this.resultsListBox.Size = new System.Drawing.Size(174, 303);
             this.resultsListBox.TabIndex = 37;
@@ -278,7 +278,7 @@
             this.CertificatedRatio.Size = new System.Drawing.Size(46, 20);
             this.CertificatedRatio.TabIndex = 38;
             this.CertificatedRatio.Value = new decimal(new int[] {
-            1,
+            7,
             0,
             0,
             0});
@@ -296,7 +296,7 @@
             this.NonCertificatedRation.Size = new System.Drawing.Size(46, 20);
             this.NonCertificatedRation.TabIndex = 40;
             this.NonCertificatedRation.Value = new decimal(new int[] {
-            1,
+            12,
             0,
             0,
             0});
@@ -332,7 +332,7 @@
             this.Controls.Add(this.technicsCounter);
             this.Controls.Add(this.StopBtn);
             this.Controls.Add(this.StartBtn);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MechanicsToTimeInSystem";
             this.Size = new System.Drawing.Size(1076, 622);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();

@@ -212,7 +212,7 @@
             this.CertificatedMechanicsNumPad.Size = new System.Drawing.Size(94, 20);
             this.CertificatedMechanicsNumPad.TabIndex = 12;
             this.CertificatedMechanicsNumPad.Value = new decimal(new int[] {
-            17,
+            7,
             0,
             0,
             0});
@@ -245,7 +245,7 @@
             this.TechnicianNumPad.Size = new System.Drawing.Size(94, 20);
             this.TechnicianNumPad.TabIndex = 14;
             this.TechnicianNumPad.Value = new decimal(new int[] {
-            4,
+            5,
             0,
             0,
             0});
@@ -418,7 +418,7 @@
             this.NonCertificatedMechanicsNumPad.Size = new System.Drawing.Size(94, 20);
             this.NonCertificatedMechanicsNumPad.TabIndex = 30;
             this.NonCertificatedMechanicsNumPad.Value = new decimal(new int[] {
-            17,
+            12,
             0,
             0,
             0});

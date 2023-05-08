@@ -71,8 +71,8 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
 
         private void RunSimulation()
         {
-            int certificatedRatio = (int)CertificatedRatio.Value;
-            int nonCertificatedRatio = (int)NonCertificatedRation.Value;
+            double certificatedRatio = (double)CertificatedRatio.Value;
+            double nonCertificatedRatio = (double)NonCertificatedRation.Value;
             int numberOfTechnicscs = (int)technicsCounter.Value;
             int replications = (int)replicationCounterForOneRun.Value;
             int startNumberMechs = (int)MechanicsCounterStart.Value;
@@ -85,7 +85,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.ResumeSimulation();
             }
             int allMechNum = startNumberMechs;
-            int certificatedNum = allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio;
+            int certificatedNum = (int)(allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio);
             ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = certificatedNum;
             ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = allMechNum - certificatedNum;
             ((TechniciansAgent)_simulator.FindAgent(SimId.TechniciansAgent)).TechniciansService.WorkersNumber = numberOfTechnicscs;
@@ -95,7 +95,7 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 _simulator.Simulate(replications, 8*3600);
                 //
                 allMechNum++;
-                certificatedNum = allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio;
+                certificatedNum = (int)(allMechNum / (certificatedRatio + nonCertificatedRatio) * certificatedRatio);
                 ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber = certificatedNum;
                 ((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.NonCertificatedNumber = allMechNum - certificatedNum;
                 //((MechanicsAgent)_simulator.FindAgent(SimId.MechanicsAgent)).MechanicsService.WorkersNumber++;
