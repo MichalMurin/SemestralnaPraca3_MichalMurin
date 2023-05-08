@@ -198,7 +198,14 @@ namespace simulation
             list.Add($"Priemerný počet zákazníkov za deň;{allCustomersAtDay}");
             list.Add($"Percentuálny nárast počtu zákazníkov;{customersIncrease}");
             list.Add($"Mzdové náklady;{salary}€");
-            System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
+            try
+            {
+                System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

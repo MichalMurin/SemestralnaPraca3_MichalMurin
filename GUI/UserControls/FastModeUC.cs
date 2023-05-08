@@ -136,7 +136,15 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 var path = dialog.SelectedPath;
                 if (!string.IsNullOrEmpty(path))
                 {
-                    _simulator.SaveCsvResults(path);
+                    try
+                    {
+                        _simulator.SaveCsvResults(path);
+
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Nepodarilo sa ulozit subor", "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             else

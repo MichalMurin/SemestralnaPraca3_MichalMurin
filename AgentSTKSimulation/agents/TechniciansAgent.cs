@@ -87,9 +87,7 @@ namespace agents
                 {
                     TimeWaitingForAcceptanceStatistics.AddValue(STKAgentSimulation.MAX_TIME - mess.Customer.StartWaitingTime);
                 }
-            }
-            
-
+            }            
             AverageNumberOfCustomersInQueueForAcceptance.Add(0, STKAgentSimulation.MAX_TIME);
             TechniciansService.AvergaeNumberOfFreeWorkers.Add(0, STKAgentSimulation.MAX_TIME);
         }
