@@ -25,6 +25,7 @@ namespace agents
         public StkGenerator.CarTypeGenerator CarTypeGenerator { get; set; }
         public StkGenerator.CustomerTimeGenerator CustomerTimeGen { get; set; }
         public double CustomersFlowIncreaseInPercent { get; set; }
+        public bool IgnoreReaminingCustomers { get; set; }
         public SurroundingAgent(int id, Simulation mySim, Agent parent) :
             base(id, mySim, parent)
         {
@@ -41,6 +42,7 @@ namespace agents
             CurrentNumberOfCustomersInTheSystem = 0;
             NumberOfCustomersInTheSystemAtAll = 0;
             CustomersFlowIncreaseInPercent = 0;
+            IgnoreReaminingCustomers = false;
             Init();
         }
 
@@ -84,10 +86,13 @@ namespace agents
 
         public void FinishStatsAfterReplication()
         {
-            // zaratame do casu ostavajucich ludi v prevadzke
-            foreach (var customer in AllCustomers)
+            if (!IgnoreReaminingCustomers)
             {
-                TimeInTheSystemStatistics.AddValue(STKAgentSimulation.MAX_TIME - customer.StartWaitingTime);
+                // zaratame do casu ostavajucich ludi v prevadzke
+                foreach (var customer in AllCustomers)
+                {
+                    TimeInTheSystemStatistics.AddValue(STKAgentSimulation.MAX_TIME - customer.StartWaitingTime);
+                }
             }
             AverageNumberOfCustomersInSystem.Add(0, STKAgentSimulation.MAX_TIME);
         }

@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.header = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.IgnoreCusomersCheckbox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -55,7 +56,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1111, 51);
+            this.panel1.Size = new System.Drawing.Size(1169, 51);
             this.panel1.TabIndex = 0;
             // 
             // header
@@ -74,6 +75,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.IgnoreCusomersCheckbox);
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.label2);
@@ -88,8 +90,21 @@
             this.panel2.Location = new System.Drawing.Point(0, 51);
             this.panel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1111, 61);
+            this.panel2.Size = new System.Drawing.Size(1169, 61);
             this.panel2.TabIndex = 1;
+            // 
+            // IgnoreCusomersCheckbox
+            // 
+            this.IgnoreCusomersCheckbox.AutoSize = true;
+            this.IgnoreCusomersCheckbox.BackColor = System.Drawing.Color.White;
+            this.IgnoreCusomersCheckbox.Location = new System.Drawing.Point(949, 13);
+            this.IgnoreCusomersCheckbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.IgnoreCusomersCheckbox.Name = "IgnoreCusomersCheckbox";
+            this.IgnoreCusomersCheckbox.Size = new System.Drawing.Size(203, 17);
+            this.IgnoreCusomersCheckbox.TabIndex = 11;
+            this.IgnoreCusomersCheckbox.Text = "IGNORE REMAINING CUSTOMERS";
+            this.IgnoreCusomersCheckbox.UseVisualStyleBackColor = false;
+            this.IgnoreCusomersCheckbox.CheckedChanged += new System.EventHandler(this.IgnoreRemaingCustomersCheckbox_changed);
             // 
             // label3
             // 
@@ -211,14 +226,14 @@
             this.panelContainer.Location = new System.Drawing.Point(0, 112);
             this.panelContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(1111, 578);
+            this.panelContainer.Size = new System.Drawing.Size(1169, 636);
             this.panelContainer.TabIndex = 2;
             // 
             // STKAgentGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1111, 690);
+            this.ClientSize = new System.Drawing.Size(1169, 748);
             this.Controls.Add(this.panelContainer);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -253,6 +268,7 @@
         private System.Windows.Forms.NumericUpDown CustomersFlowNumPad;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox IgnoreCusomersCheckbox;
     }
 }
 

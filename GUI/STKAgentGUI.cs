@@ -132,5 +132,11 @@ namespace SemestralnaPraca3_MichalMurin
             double flow = (double)CustomersFlowNumPad.Value;
             _simulator.SurroundingAgent.CustomersFlowIncreaseInPercent = flow;
         }
+
+        private void IgnoreRemaingCustomersCheckbox_changed(object sender, EventArgs e)
+        {
+            _simulator.SurroundingAgent.IgnoreReaminingCustomers = IgnoreCusomersCheckbox.Checked;
+            _simulator.TechniciansAgent.IgnoreReaminingCustomers = IgnoreCusomersCheckbox.Checked;
+        }
     }
 }
