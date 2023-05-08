@@ -171,6 +171,7 @@ namespace simulation
             var freeMechs = ((MechanicsAgent)FindAgent(SimId.MechanicsAgent)).MechanicsService.AvergaeFreeWorkersGlobal().ToString();
             var avgCustomersInFirstQueue = ((TechniciansAgent)FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
             var avgCustomersInSystemNumber = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            var allCustomersAtDay = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONNumberOfCustomersAtOneDay.GetAverage().ToString();
             //interval spolahlivosti
             (double min, double max) interval = ((SurroundingAgent)FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
             var confIntervalTimeInSystem = $"<{interval.min / 60} ; {interval.max / 60}>";
@@ -190,6 +191,7 @@ namespace simulation
             list.Add($"Priemerný počet zákazníkov v prevádzke na konci dňa;{avgCusAtEndOfDay}");
             list.Add($"Priemerný počet voľných technikov;{freeTechs}");
             list.Add($"Priemerný počet voľných mechanikov;{freeMechs}");
+            list.Add($"Priemerný počet zákazníkov za deň;{allCustomersAtDay}");
             System.IO.File.WriteAllLines(path + "\\" + "RESULT.csv", list, System.Text.Encoding.Unicode);
         }
     }

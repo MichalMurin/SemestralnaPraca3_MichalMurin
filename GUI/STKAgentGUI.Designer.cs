@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.header = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.CustomersFlowNumPad = new System.Windows.Forms.NumericUpDown();
@@ -41,7 +42,6 @@
             this.FastModeBtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CustomersFlowNumPad)).BeginInit();
@@ -91,6 +91,16 @@
             this.panel2.Size = new System.Drawing.Size(1111, 61);
             this.panel2.TabIndex = 1;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(918, 14);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(15, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "%";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -113,6 +123,11 @@
             // CustomersFlowNumPad
             // 
             this.CustomersFlowNumPad.DecimalPlaces = 2;
+            this.CustomersFlowNumPad.Increment = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
             this.CustomersFlowNumPad.Location = new System.Drawing.Point(840, 12);
             this.CustomersFlowNumPad.Margin = new System.Windows.Forms.Padding(2);
             this.CustomersFlowNumPad.Name = "CustomersFlowNumPad";
@@ -198,16 +213,6 @@
             this.panelContainer.Name = "panelContainer";
             this.panelContainer.Size = new System.Drawing.Size(1111, 578);
             this.panelContainer.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(918, 14);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(15, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "%";
             // 
             // STKAgentGUI
             // 

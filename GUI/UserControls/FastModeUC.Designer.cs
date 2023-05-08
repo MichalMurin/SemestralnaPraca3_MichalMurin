@@ -61,6 +61,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.MzdoveNakladyLbl = new System.Windows.Forms.Label();
             this.saveCsvBtn = new System.Windows.Forms.Button();
+            this.AvgCustomersAtOneDayLbl = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.replicationsNumpad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CertificatedMechanicsNumPad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TechnicianNumPad)).BeginInit();
@@ -441,7 +443,7 @@
             // 
             // saveCsvBtn
             // 
-            this.saveCsvBtn.Location = new System.Drawing.Point(24, 354);
+            this.saveCsvBtn.Location = new System.Drawing.Point(31, 379);
             this.saveCsvBtn.Name = "saveCsvBtn";
             this.saveCsvBtn.Size = new System.Drawing.Size(223, 28);
             this.saveCsvBtn.TabIndex = 34;
@@ -449,10 +451,32 @@
             this.saveCsvBtn.UseVisualStyleBackColor = true;
             this.saveCsvBtn.Click += new System.EventHandler(this.saveCsvBtn_Click);
             // 
+            // AvgCustomersAtOneDayLbl
+            // 
+            this.AvgCustomersAtOneDayLbl.AutoSize = true;
+            this.AvgCustomersAtOneDayLbl.Location = new System.Drawing.Point(238, 345);
+            this.AvgCustomersAtOneDayLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.AvgCustomersAtOneDayLbl.Name = "AvgCustomersAtOneDayLbl";
+            this.AvgCustomersAtOneDayLbl.Size = new System.Drawing.Size(10, 13);
+            this.AvgCustomersAtOneDayLbl.TabIndex = 36;
+            this.AvgCustomersAtOneDayLbl.Text = "-";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(18, 345);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(175, 13);
+            this.label17.TabIndex = 35;
+            this.label17.Text = "Priemerny pocet zakaznikov za den";
+            // 
             // FastModeUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.AvgCustomersAtOneDayLbl);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.saveCsvBtn);
             this.Controls.Add(this.MzdoveNakladyLbl);
             this.Controls.Add(this.label15);
@@ -534,5 +558,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label MzdoveNakladyLbl;
         private System.Windows.Forms.Button saveCsvBtn;
+        private System.Windows.Forms.Label AvgCustomersAtOneDayLbl;
+        private System.Windows.Forms.Label label17;
     }
 }

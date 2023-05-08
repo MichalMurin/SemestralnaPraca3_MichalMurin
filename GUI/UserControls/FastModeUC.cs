@@ -41,8 +41,9 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
             FreeMechanicsLbl.Text = ((MechanicsAgent)simulation.FindAgent(SimId.MechanicsAgent)).MechanicsService.AvergaeFreeWorkersGlobal().ToString();
             AverageNumberOfCustomersInFirstQueueLbl.Text = ((TechniciansAgent)simulation.FindAgent(SimId.TechniciansAgent)).SIMULATIONAverageNumberOfCustomersInQueueForAcceptance.GetAverage().ToString();
             AvgNumberOfCustomersInSystem.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetAverage().ToString();
+            AvgCustomersAtOneDayLbl.Text = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONNumberOfCustomersAtOneDay.GetAverage().ToString();
             //interval spolahlivosti
-           (double min, double max) interval = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
+            (double min, double max) interval = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONTimeInTheSystemStatistics.GetConfidenceInterval(0.9);
             ConfidenceIntervalTimeInSystemLbl.Text = $"<{interval.min / 60} ; {interval.max / 60}>";
             interval = ((SurroundingAgent)simulation.FindAgent(SimId.SurroundingAgent)).SIMULATIONAverageNumberOfCustomersInSystem.GetConfidenceInterval(0.95);
             ConfidenceIntervalNumberOfCustomersInSystemLbl.Text = $"<{interval.min} ; {interval.max}>";
@@ -133,7 +134,10 @@ namespace SemestralnaPraca3_MichalMurin.UserControls
                 var dialog = new FolderBrowserDialog();
                 dialog.ShowDialog();
                 var path = dialog.SelectedPath;
-                _simulator.SaveCsvResults(path);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    _simulator.SaveCsvResults(path);
+                }
             }
             else
             {

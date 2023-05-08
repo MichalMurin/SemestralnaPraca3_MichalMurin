@@ -29,14 +29,6 @@ namespace managers
             MyAgent.TimeInTheSystemStatistics.Reset();
             MyAgent.AverageNumberOfCustomersInSystem.Reset();
         }
-        /// <summary>
-        /// Resetovanie simulacnych statistik
-        /// </summary>
-        private void ResetSimulationStats()
-        {
-            MyAgent.SIMULATIONTimeInTheSystemStatistics.Reset();
-            MyAgent.SIMULATIONAverageNumberOfCustomersInSystem.Reset();
-        }
 
         override public void PrepareReplication()
 		{

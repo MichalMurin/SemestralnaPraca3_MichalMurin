@@ -19,6 +19,7 @@ namespace agents
         public int CurrentNumberOfCustomersInTheSystem { get; set; }
         public WeightedAritmeticAverage AverageNumberOfCustomersInSystem { get; set; }
         public StandartStaticstic TimeInTheSystemStatistics { get; set; }
+        public StandartStaticstic SIMULATIONNumberOfCustomersAtOneDay { get; set; }
         public int NumberOfCustomersInTheSystemAtAll { get; set; }
         public StandartStaticstic SIMULATIONNumberOfCustomersAtTHeEndOfDay { get; set; }
         public StkGenerator.CarTypeGenerator CarTypeGenerator { get; set; }
@@ -33,12 +34,12 @@ namespace agents
             // Ststistiky pre viac replikacii
             SIMULATIONTimeInTheSystemStatistics = new StandartStaticstic();
             SIMULATIONAverageNumberOfCustomersInSystem = new StandartStaticstic();
+            SIMULATIONNumberOfCustomersAtOneDay = new StandartStaticstic();
+            SIMULATIONNumberOfCustomersAtTHeEndOfDay = new StandartStaticstic();
 
             AllCustomers = new ObservableCollection<Customer>();
             CurrentNumberOfCustomersInTheSystem = 0;
             NumberOfCustomersInTheSystemAtAll = 0;
-            // Ststistiky pre viac replikacii
-            SIMULATIONNumberOfCustomersAtTHeEndOfDay = new StandartStaticstic();
             CustomersFlowIncreaseInPercent = 0;
             Init();
         }
@@ -64,6 +65,7 @@ namespace agents
             SIMULATIONAverageNumberOfCustomersInSystem.AddValue(AverageNumberOfCustomersInSystem.GetAverage());
             SIMULATIONTimeInTheSystemStatistics.AddValue(TimeInTheSystemStatistics.GetAverage());
             SIMULATIONNumberOfCustomersAtTHeEndOfDay.AddValue(CurrentNumberOfCustomersInTheSystem);
+            SIMULATIONNumberOfCustomersAtOneDay.AddValue(NumberOfCustomersInTheSystemAtAll);
         }
 
         public void ResetGlobalStats()
@@ -71,6 +73,7 @@ namespace agents
             SIMULATIONAverageNumberOfCustomersInSystem.Reset();
             SIMULATIONNumberOfCustomersAtTHeEndOfDay.Reset();
             SIMULATIONTimeInTheSystemStatistics.Reset();
+            SIMULATIONNumberOfCustomersAtOneDay.Reset();
         }
 
         public void CreateGenerator(StkGenerator generators)
