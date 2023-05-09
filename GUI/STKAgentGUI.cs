@@ -133,10 +133,14 @@ namespace SemestralnaPraca3_MichalMurin
             _simulator.SurroundingAgent.CustomersFlowIncreaseInPercent = flow;
         }
 
-        private void IgnoreRemaingCustomersCheckbox_changed(object sender, EventArgs e)
+        private void IgnoreRemaingCustomersInQueueCheckbox_changed(object sender, EventArgs e)
         {
-            _simulator.SurroundingAgent.IgnoreReaminingCustomers = IgnoreCusomersCheckbox.Checked;
-            _simulator.TechniciansAgent.IgnoreReaminingCustomers = IgnoreCusomersCheckbox.Checked;
+            _simulator.TechniciansAgent.IgnoreReaminingCustomers = IgnoreReaminingInQueueCheckbox.Checked;
+        }
+
+        private void IgnoreRemainingInSystemCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            _simulator.SurroundingAgent.IgnoreReaminingCustomers = IgnoreRemainingInSystemCheckbox.Checked;
         }
     }
 }

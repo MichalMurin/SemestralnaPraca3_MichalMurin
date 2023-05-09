@@ -1,28 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="AgentSTKSimulation.StkStation.Services.WorkerAgentService" Collapsed="true">
-    <Position X="20.25" Y="22.25" Width="3.25" />
+    <Position X="35" Y="31" Width="3.25" />
     <TypeIdentifier>
       <HashCode>JAAAEAAAAAARAACEAAAICAKAAAJEAAAAAgEBAAEAAAA=</HashCode>
       <FileName>StkStation\Services\WorkerAgentService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AgentSTKSimulation.StkStation.Services.MechanicAgentService" Collapsed="true">
-    <Position X="12.25" Y="22.5" Width="3.25" />
+    <Position X="35" Y="32.5" Width="3.25" />
     <TypeIdentifier>
       <HashCode>JAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAgEBIAAAAAA=</HashCode>
       <FileName>StkStation\Services\MechanicAgentService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="simulation.STKAgentSimulation">
-    <Position X="5.25" Y="2" Width="3" />
+    <Position X="41.5" Y="27.5" Width="3" />
     <TypeIdentifier>
       <HashCode>GIAggBAQIOAAAAEAAEAAAAAADAEAEAAAAAACACBABAA=</HashCode>
       <FileName>simulation\STKAgentSimulation.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="STKAgent" />
+      <Property Name="SurroundingAgent" />
+      <Property Name="TechniciansAgent" />
+      <Property Name="ModelAgent" />
+      <Property Name="MechanicsAgent" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.TechniciansLunchBreakProcess">
-    <Position X="21" Y="28.25" Width="2.25" />
+    <Position X="39.75" Y="38" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\TechniciansLunchBreakProcess.cs</FileName>
@@ -32,7 +39,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.StartLunchBreakScheduler">
-    <Position X="18" Y="35.5" Width="2.25" />
+    <Position X="49.75" Y="34.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\StartLunchBreakScheduler.cs</FileName>
@@ -42,7 +49,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.MechanicsLunchBreakProcess">
-    <Position X="14.25" Y="27.25" Width="2.25" />
+    <Position X="34" Y="37" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\MechanicsLunchBreakProcess.cs</FileName>
@@ -52,12 +59,14 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.CustomerPaymentProcess">
-    <Position X="23.5" Y="28.25" Width="2.25" />
+    <Position X="42.25" Y="38" Width="2.25" />
     <AssociationLine Name="MyAgent" Type="agents.TechniciansAgent" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="24.625" Y="28.25" />
-        <Point X="24.625" Y="25.341" />
-        <Point X="23.25" Y="25.341" />
+        <Point X="43.375" Y="38" />
+        <Point X="43.375" Y="35.091" />
+        <Point X="42.802" Y="35.091" Type="JumpStart" />
+        <Point X="42.635" Y="35.091" Type="JumpEnd" />
+        <Point X="42" Y="35.091" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -69,7 +78,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.CustomerCameScheduler">
-    <Position X="11.5" Y="36.75" Width="2.25" />
+    <Position X="45.75" Y="37.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\CustomerCameScheduler.cs</FileName>
@@ -79,7 +88,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.CustomerAcceptanceProcess">
-    <Position X="18" Y="28.25" Width="2.5" />
+    <Position X="36.75" Y="38" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\CustomerAcceptanceProcess.cs</FileName>
@@ -89,7 +98,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="continualAssistants.CarInspectionProcess">
-    <Position X="11.5" Y="27.25" Width="2.25" />
+    <Position X="31.25" Y="37" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAQAAAAAAAAAAAAAIAAAAAEEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>continualAssistants\CarInspectionProcess.cs</FileName>
@@ -99,11 +108,14 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="agents.TechniciansAgent">
-    <Position X="20.75" Y="23.25" Width="2.5" />
+    <Position X="39.5" Y="33" Width="2.5" />
     <AssociationLine Name="TechniciansService" Type="AgentSTKSimulation.StkStation.Services.WorkerAgentService" ManuallyRouted="true" FixedToPoint="true">
       <Path>
-        <Point X="22" Y="23.25" />
-        <Point X="22" Y="22.812" />
+        <Point X="39.5" Y="35.06" />
+        <Point X="39.125" Y="35.06" />
+        <Point X="39.125" Y="31.937" />
+        <Point X="36.75" Y="31.937" />
+        <Point X="36.75" Y="31.562" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -116,30 +128,136 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="agents.MechanicsAgent">
-    <Position X="12.5" Y="23.75" Width="2.75" />
+    <Position X="32.25" Y="33.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAgAAAAAACAAABAAEAAAAAAAICBAAAQCA=</HashCode>
       <FileName>agents\MechanicsAgent.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="MechanicsService" />
+      <Property Name="ParkingInGarage" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="agents.STKAgent">
-    <Position X="18.25" Y="33" Width="2" />
+    <Position X="50" Y="32.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAA=</HashCode>
       <FileName>agents\STKAgent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="agents.SurroundingAgent">
-    <Position X="11.5" Y="31.25" Width="2.5" />
+    <Position X="46.5" Y="32.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAoAgAAEAQEAAAAREAEAAIAAAEAChAAIQCA=</HashCode>
       <FileName>agents\SurroundingAgent.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="agents.ModelAgent">
+    <Position X="53.25" Y="32.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>agents\ModelAgent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="managers.MechanicsManager">
+    <Position X="32" Y="39.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAQAAAAAAEACAAEAQAFQAIEEQAAAAAACAAAAAAA=</HashCode>
+      <FileName>managers\MechanicsManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MyAgent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="managers.ModelManager">
+    <Position X="53.25" Y="34.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAQAAAAAAAAAAAAAAAAAAAEEAAAABAACAAAAAAA=</HashCode>
+      <FileName>managers\ModelManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MyAgent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="managers.STKManager">
+    <Position X="51" Y="37" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAIAAAQAAAAAAAAAABgAAAAQAAFEEAAAAAACAAAAAAA=</HashCode>
+      <FileName>managers\STKManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MyAgent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="managers.SurroundingManager">
+    <Position X="48.25" Y="37.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQQAAAQAAAAABgAAAAAAAEUQAAAAAACAAAAAAA=</HashCode>
+      <FileName>managers\SurroundingManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MyAgent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="managers.TechniciansManager">
+    <Position X="38.25" Y="40.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAKQAAAAAAAAAAAAAACMAAIFGUAAAAACCBAAAAAA=</HashCode>
+      <FileName>managers\TechniciansManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MyAgent" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="simulation.StkMessage">
+    <Position X="28" Y="33.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAEAAhAAAAAAAAAEAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>simulation\StkMessage.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Worker" />
+      <Property Name="Customer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DISS_S2.StkStation.Customer" Collapsed="true">
+    <Position X="27.25" Y="32" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACAAAAEAAAAAAEYAAAAAAAgAEAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>StkStation\Models\Customer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AgentSim.StkStation.Models.Technician" Collapsed="true">
+    <Position X="30.25" Y="30.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StkStation\Models\Technician.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgentSim.StkStation.Models.Mechanic" Collapsed="true">
+    <Position X="27.75" Y="30.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>StkStation\Models\Mechanic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgentSim.StkStation.Models.Worker" Collapsed="true">
+    <Position X="29" Y="32" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IggCAAAAAAAAAAAAIAAAAABAgAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>StkStation\Models\Worker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AgentSim.StkStation.Models.GarageParking" Collapsed="true">
+    <Position X="31.25" Y="32" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAYAgBgAAAAEAgAAIAACAAAgEAIAABAAIAAYMAAAA=</HashCode>
+      <FileName>StkStation\Models\GarageParking.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
